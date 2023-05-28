@@ -19,7 +19,7 @@ webhook_handler = WebhookHandler('LlcraQZMrH5dj81FA7Cr61wjDwdIAGvxrAohTctu0ukg69
 
 @app.route("/")
 def home():
-    return ""
+    return "LINE BOT API Server is running."
 
 @app.route("/callback", methods=['POST'])
 def callback():

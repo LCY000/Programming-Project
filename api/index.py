@@ -1,4 +1,5 @@
 from flask import Flask, request, abort
+import ToDo_task
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -9,8 +10,6 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
-
-
 
 app = Flask(__name__)
 
@@ -42,10 +41,17 @@ def callback():
 
 @webhook_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    user_id = event.source.user_id
+    message = event.message.text
+
+
     line_bot_api.reply_message(
         event.reply_token,
-        TextSendMessage(text=event.message.text))
+        TextSendMessage(text=message))
 
 
 if __name__ == "__main__":
     app.run()
+
+
+

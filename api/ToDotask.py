@@ -3,12 +3,12 @@ import datetime
 class ToDotask:
 
     def __init__(self,text):
-        self.__text= text
-        self.__created_time=datetime.datetime.now()
-        self.__reminder_time = datetime.datetime()
+        self.text= text
+        self.created_time=datetime.datetime.now()
+        self.reminder_time = datetime.datetime()
     
     def get_text (self):
-        return self.__text
+        return self.text
     
     def set_text (self,message):
-        self.__text = message
+        self.text = message

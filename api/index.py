@@ -71,7 +71,7 @@ def handle_normal_state(user_id, user_message, event):
 
     if user_message == '加新的待辦事項':
         user_state[user_id] = UserState.ADD_TODO
-        reply_message = '請輸入待辦事項內容。in normal_state'+ 'state=' + str(user_state[user_id].value)
+        reply_message = '請輸入待辦事項內容。in normal_state '+ 'state=' + str(user_state[user_id].value)
     elif user_message == '顯示待辦清單':
         # todoList = getTodoList(user_id)
         message = createTodoListMessage(user_id,user_todo_list)
@@ -86,7 +86,7 @@ def handle_normal_state(user_id, user_message, event):
 def handle_add_todo_state(user_id, user_message):
     if user_message == '結束待辦事項':
         user_state[user_id] = UserState.NORMAL
-        reply_message = '已結束新增待辦事項。 in add_todo'
+        reply_message = '已結束新增待辦事項。 in add_todo A '+ 'state=' + str(user_state[user_id].value)
     else:
         # 創建一個新的待辦事項
         new_task = ToDotask(user_message)

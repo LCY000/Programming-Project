@@ -142,7 +142,7 @@ def handle_message(event):
         user_todo_list[user_id] = []
 
     if user_message=='印':
-        if user_todo_list[user_id].lenght >= 1:
+        if len(user_todo_list[user_id]) >= 1:
             test = user_todo_list[user_id][0].get_text()
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=test))
         else:

@@ -47,15 +47,29 @@ def handle_message(event):
                 # 結束新增待辦事項狀態
                 user_state[user_id] = 'normal'
                 reply_message = '已結束新增待辦事項。'
+            elif user_message == '顯示待辦清單':
+
+                reply_message = '顯示待辦清單。'
+
+                # 取得待辦事項清單
+                todoList = getTodoList()
+
+                # 建立訊息窗格，條列顯示待辦事項清單
+                message = createTodoListMessage(todoList)
+
+                # 回覆訊息給使用者
+                line_bot_api.reply_message(event.reply_token, message)
+                return
             else:
-                # 創建一個新的待辦事項
                 reply_message = '進入新增狀態。'
+
+                # 創建一個新的待辦事項
                 new_task = ToDo_task.ToDo_task(user_message)
                 
                 # 將待辦事項加入列表
                 addTodoList(new_task)
 
-                reply_message = '已新增待辦事項：{}'.format(user_message)
+                reply_message = '已新增待辦事項：{}'.format(user_message)           
         else:
             reply_message = '請輸入正確的指令。'
             user_state[user_id] = 'normal'

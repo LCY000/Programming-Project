@@ -49,6 +49,7 @@ def handle_message(event):
                 reply_message = '已結束新增待辦事項。'
             else:
                 # 創建一個新的待辦事項
+                reply_message = '進入新增狀態。'
                 new_task = ToDo_task.ToDo_task(user_message)
                 
                 # 將待辦事項加入列表
@@ -67,7 +68,6 @@ def handle_message(event):
         else:
             if user_message == '顯示待辦清單':
 
-                user_state[user_id] = 'check_task'
                 reply_message = '顯示待辦清單。'
 
                 # 取得待辦事項清單

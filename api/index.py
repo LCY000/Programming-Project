@@ -146,7 +146,7 @@ def handle_message(event):
             test = user_todo_list[user_id][0].get_text()
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=test))
         else:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="清單沒有東西"))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=user_todo_list))
 
 
     # 檢查使用者的狀態

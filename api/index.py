@@ -31,6 +31,8 @@ def getTodoList():
 # 處理接收到的訊息事件
 @webhook_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+    global todoList
+    
     user_id = event.source.user_id
     user_message = event.message.text
 

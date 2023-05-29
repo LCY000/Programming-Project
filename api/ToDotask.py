@@ -1,6 +1,6 @@
 import datetime
 
-class ToDo_task:
+class ToDotask:
 
     def __init__(self,text):
         self.__text= text
@@ -10,4 +10,5 @@ class ToDo_task:
     def get_text (self):
         return self.__text
     
-    
+    def set_text (self,message):
+        self.__text = message

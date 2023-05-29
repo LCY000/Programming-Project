@@ -1,6 +1,7 @@
 from flask import Flask, request, abort
-from api import ToDo_task
+from api.ToDotask import ToDotask
 import datetime
+from typing import List
 from enum import Enum
 
 from linebot import (
@@ -12,58 +13,37 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage, FlexSendMessage
 )
-# 1209
+
 app = Flask(__name__)
 
 line_bot_api = LineBotApi('LlcraQZMrH5dj81FA7Cr61wjDwdIAGvxrAohTctu0ukg69/WZVtMyJXVAgMylX7L7HbY1R22i9CqSqqOQ00iRUaqSs2A1Nblbu4iz4fub3xRhKw8JEj7D0mIBCYT9aN8eV1M2BXD1fJxl8s8ny915wdB04t89/1O/w1cDnyilFU=')
 webhook_handler = WebhookHandler('8f948b2d6deda1511f4570128cd231a0')
 
-# 使用者狀態的列舉類型
-class UserState(Enum):
-    NORMAL = 0
-    ADD_TODO = 1
+@app.route("/")
+def home():
+    return "LINE BOT API Server is running."
+ 
+@app.route("/callback", methods=['POST'])
+def callback():
+    # get X-Line-Signature header value
+    signature = request.headers['X-Line-Signature']
 
-# 用戶的待辦事項
-user_todo_list = {}
+    # get request body as text
+    body = request.get_data(as_text=True)
+    app.logger.info("Request body: " + body)
 
-# 追蹤使用者的狀態
-user_state = {}
+    # handle webhook body
+    try:
+        webhook_handler.handle(body, signature)
+    except InvalidSignatureError:
+        print("Invalid signature. Please check your channel access token/channel secret.")
+        abort(400)
 
-# 將待辦事項加入列表
-def addTodoList(user_id,task):
-    user_todo_list[user_id].append(task)
+    return 'OK'
 
-# 取得待辦事項清單
-def getTodoList(user_id):
-    return user_todo_list[user_id]
+############################################
 
 
-# 處理正常狀態下的訊息
-def handle_normal_state(user_id, user_message, event):
-    if user_message == '加新的待辦事項':
-        user_state[user_id] = UserState.ADD_TODO
-        reply_message = '請輸入待辦事項內容。in normal_state'
-    elif user_message == '顯示待辦清單':
-        todoList = getTodoList(user_id)
-        message = createTodoListMessage(todoList)
-        line_bot_api.reply_message(event.reply_token, message)
-    else:
-        reply_message = '請輸入正確的指令。'
-
-    return reply_message
-
-# 處理新增待辦事項狀態下的訊息
-def handle_add_todo_state(user_id, user_message):
-    if user_message == '結束待辦事項':
-        user_state[user_id] = UserState.NORMAL
-        reply_message = '已結束新增待辦事項。 in add_todo'
-    else:
-        # 創建一個新的待辦事項
-        new_task = user_message
-        addTodoList(new_task)
-        reply_message = '已新增待辦事項：{}'.format(user_message)
-
-    return reply_message
 
 # 處理接收到的訊息事件
 @webhook_handler.add(MessageEvent, message=TextMessage)
@@ -92,12 +72,64 @@ def handle_message(event):
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
 
 
+# 使用者狀態的列舉類型
+class UserState(Enum):
+    NORMAL = 0
+    ADD_TODO = 1
 
-def createTodoListMessage(todoList):
+# 用戶的待辦事項
+user_todo_list = {}
+
+# 追蹤使用者的狀態
+user_state = {}
+
+# 將待辦事項加入列表
+def addTodoList(user_id,task):
+    user_todo_list[user_id].append(task)
+
+# 取得待辦事項清單
+def getTodoList(user_id):
+    return user_todo_list[user_id]
+
+
+# 處理正常狀態下的訊息
+def handle_normal_state(user_id, user_message, event):
+    if user_message == '加新的待辦事項':
+        user_state[user_id] = UserState.ADD_TODO
+        reply_message = '請輸入待辦事項內容。in normal_state'
+    elif user_message == '顯示待辦清單':
+        todoList = getTodoList(user_id)
+        message = createTodoListMessage(user_id,user_todo_list)
+        line_bot_api.reply_message(event.reply_token, message)
+    else:
+        reply_message = '請輸入正確的指令。'
+
+    return reply_message
+
+
+# 新增待辦事項狀態下的訊息
+def handle_add_todo_state(user_id, user_message):
+    if user_message == '結束待辦事項':
+        user_state[user_id] = UserState.NORMAL
+        reply_message = '已結束新增待辦事項。 in add_todo'
+    else:
+        # 創建一個新的待辦事項
+        new_task = ToDotask(user_message)
+        addTodoList(user_id,new_task)
+        reply_message = '已新增待辦事項：{}'.format(user_message)
+
+    return reply_message
+
+
+
+
+
+def createTodoListMessage(user_id,user_todo_list):
     # 建立待辦事項清單的條列項目
+    todoList=user_todo_list[user_id]
     list_items = []
     for todo in todoList:
-        item = {"type" : "text", "text" : str(todo)}
+        item = {"type" : "text", "text" : str(todo.get_text())}
         list_items.append(item)
 
     # 建立Flex Message物件，用於顯示待辦事項清單
@@ -115,30 +147,9 @@ def createTodoListMessage(todoList):
             }
         }
     )
-
     return flex_message
 
-@app.route("/")
-def home():
-    return "LINE BOT API Server is running."
- 
-@app.route("/callback", methods=['POST'])
-def callback():
-    # get X-Line-Signature header value
-    signature = request.headers['X-Line-Signature']
 
-    # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
-
-    # handle webhook body
-    try:
-        webhook_handler.handle(body, signature)
-    except InvalidSignatureError:
-        print("Invalid signature. Please check your channel access token/channel secret.")
-        abort(400)
-
-    return 'OK'
 
 if __name__ == "__main__":
     app.run()

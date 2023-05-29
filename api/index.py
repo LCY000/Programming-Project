@@ -17,14 +17,34 @@ app = Flask(__name__)
 line_bot_api = LineBotApi('LlcraQZMrH5dj81FA7Cr61wjDwdIAGvxrAohTctu0ukg69/WZVtMyJXVAgMylX7L7HbY1R22i9CqSqqOQ00iRUaqSs2A1Nblbu4iz4fub3xRhKw8JEj7D0mIBCYT9aN8eV1M2BXD1fJxl8s8ny915wdB04t89/1O/w1cDnyilFU=')
 webhook_handler = WebhookHandler('8f948b2d6deda1511f4570128cd231a0')
 
+@app.route("/")
+def home():
+    return "LINE BOT API Server is running."
+ 
+@app.route("/callback", methods=['POST'])
+def callback():
+    # get X-Line-Signature header value
+    signature = request.headers['X-Line-Signature']
+
+    # get request body as text
+    body = request.get_data(as_text=True)
+    app.logger.info("Request body: " + body)
+
+    # handle webhook body
+    try:
+        webhook_handler.handle(body, signature)
+    except InvalidSignatureError:
+        print("Invalid signature. Please check your channel access token/channel secret.")
+        abort(400)
+
+    return 'OK'
+
+
+
+
+
 # 用戶的待辦事項
 user_todo_list = {}
-
-# 將待辦事項加入列表
-def addTodoList(user_id,task):
-    user_todo_list[user_id].append(task)
-
-
 
 # 追蹤使用者的狀態
 user_state = {}
@@ -32,14 +52,16 @@ user_state = {}
 # 處理接收到的訊息事件
 @webhook_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-   
 
     user_id = event.source.user_id
     user_message = event.message.text
-    
+
     if user_id not in user_todo_list:
         # 如果是新的使用者，創建一個新的待辦事項清單
         user_todo_list[user_id] = []
+
+
+
 
     # 檢查使用者的狀態
     if user_id in user_state:
@@ -104,6 +126,19 @@ def handle_message(event):
 
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
 
+
+
+
+# 將待辦事項加入待辦清單
+def addTodoList(user_id,task):
+    user_todo_list[user_id].append(task)
+# 獲取該用戶的待辦清單
+def getTodoList(user_id):
+    return user_todo_list[user_id]
+
+# 檢查使用者狀態
+def 
+
 def createTodoListMessage(todoList):
     # 建立待辦事項清單的條列項目
     list_items = []
@@ -129,27 +164,12 @@ def createTodoListMessage(todoList):
 
     return flex_message
 
-@app.route("/")
-def home():
-    return "LINE BOT API Server is running."
- 
-@app.route("/callback", methods=['POST'])
-def callback():
-    # get X-Line-Signature header value
-    signature = request.headers['X-Line-Signature']
 
-    # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
 
-    # handle webhook body
-    try:
-        webhook_handler.handle(body, signature)
-    except InvalidSignatureError:
-        print("Invalid signature. Please check your channel access token/channel secret.")
-        abort(400)
 
-    return 'OK'
+
+
+
 
 if __name__ == "__main__":
     app.run()

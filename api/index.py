@@ -43,35 +43,6 @@ def callback():
 
 ############################################
 
-
-
-# 處理接收到的訊息事件
-@webhook_handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    global user_todo_list, user_state
-
-    user_id = event.source.user_id
-    user_message = event.message.text
-    
-    if user_id not in user_todo_list:
-        # 如果是新的使用者，創建一個新的待辦事項清單
-        user_todo_list[user_id] = []
-
-
-    # 檢查使用者的狀態
-    if user_id in user_state:
-        state = user_state[user_id]
-        if state == UserState.ADD_TODO:
-              reply_message = handle_add_todo_state(user_id, user_message)
-        else:
-            reply_message = handle_normal_state(user_id, user_message, event)
-    else:
-        reply_message = handle_normal_state(user_id, user_message, event)
-        user_state[user_id] = UserState.NORMAL
-
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
-
-
 # 使用者狀態的列舉類型
 class UserState(Enum):
     NORMAL = 0
@@ -92,13 +63,15 @@ def getTodoList(user_id):
     return user_todo_list[user_id]
 
 
+
+
 # 處理正常狀態下的訊息
 def handle_normal_state(user_id, user_message, event):
     if user_message == '加新的待辦事項':
         user_state[user_id] = UserState.ADD_TODO
         reply_message = '請輸入待辦事項內容。in normal_state'
     elif user_message == '顯示待辦清單':
-        todoList = getTodoList(user_id)
+        # todoList = getTodoList(user_id)
         message = createTodoListMessage(user_id,user_todo_list)
         line_bot_api.reply_message(event.reply_token, message)
     else:
@@ -149,6 +122,35 @@ def createTodoListMessage(user_id,user_todo_list):
     )
     return flex_message
 
+
+
+
+
+# 處理接收到的訊息事件
+@webhook_handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    global user_todo_list, user_state
+
+    user_id = event.source.user_id
+    user_message = event.message.text
+    
+    if user_id not in user_todo_list:
+        # 如果是新的使用者，創建一個新的待辦事項清單
+        user_todo_list[user_id] = []
+
+
+    # 檢查使用者的狀態
+    if user_id in user_state:
+        state = user_state[user_id]
+        if state == UserState.ADD_TODO:
+              reply_message = handle_add_todo_state(user_id, user_message)
+        else:
+            reply_message = handle_normal_state(user_id, user_message, event)
+    else:
+        reply_message = handle_normal_state(user_id, user_message, event)
+        user_state[user_id] = UserState.NORMAL
+
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
 
 
 if __name__ == "__main__":

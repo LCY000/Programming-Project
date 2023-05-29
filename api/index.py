@@ -28,29 +28,56 @@ def addTodoList(task):
 def getTodoList():
     return todoList
 
+# 追蹤使用者的狀態
+user_state = {}
+
 # 處理接收到的訊息事件
 @webhook_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    global todoList
+    global todoList, user_state
 
     user_id = event.source.user_id
     user_message = event.message.text
     
-    if user_message == '加新的待辦事項':
-        # 創建一個新的待辦事項
-        new_task = ToDo_task.ToDo_task("新的待辦事項內容")
-        
-        # 將待辦事項加入列表
-        addTodoList(new_task)
+    # 檢查使用者的狀態
+    if user_id in user_state:
+        # 使用者處於新增待辦事項的狀態
+        if user_state[user_id] == 'adding_task':
+            if user_message == '結束待辦事項':
+                # 結束新增待辦事項狀態
+                user_state[user_id] = 'normal'
+                reply_message = '已結束新增待辦事項。'
+            else:
+                # 創建一個新的待辦事項
+                new_task = ToDo_task(user_message)
+                
+                # 將待辦事項加入列表
+                addTodoList(new_task)
 
-        # 取得待辦事項清單
-        todoList = getTodoList()
+                reply_message = '已新增待辦事項：{}'.format(user_message)
+        else:
+            reply_message = '請輸入正確的指令。'
+    else:
+        # 檢查一般的使用者訊息
+        if user_message == '加新的待辦事項':
+            # 進入新增待辦事項狀態
+            user_state[user_id] = 'adding_task'
+            reply_message = '請輸入待辦事項內容。'
+        else:
+            if user_message == '待辦事項清單':
+                # 取得待辦事項清單
+                todoList = getTodoList()
 
-        # 建立訊息窗格，條列顯示待辦事項清單
-        message = createTodoListMessage(todoList)
+                # 建立訊息窗格，條列顯示待辦事項清單
+                message = createTodoListMessage(todoList)
 
-        # 回覆訊息給使用者
-        line_bot_api.reply_message(event.reply_token, message)
+                # 回覆訊息給使用者
+                line_bot_api.reply_message(event.reply_token, message)
+                return
+            else:
+                reply_message = '請輸入正確的指令。'
+
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
 
 def createTodoListMessage(todoList):
     # 建立待辦事項清單的條列項目

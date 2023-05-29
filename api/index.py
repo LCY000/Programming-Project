@@ -35,31 +35,28 @@ def handle_message(event):
     user_message = event.message.text
 
     if user_message == '加新的待辦事項':
-        add_items()
+        # 創建一個新的待辦事項
+        new_task = ToDo_task("新的待辦事項內容")
+        
+        # 將待辦事項加入列表
+        addTodoList(new_task)
 
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text= user_message))
-    
-# 新增待辦事項
-def add_items(event):
+        # 取得待辦事項清單
+        todoList = getTodoList()
 
-    # 創建一個新的待辦事項
-    new_task = ToDo_task("新的待辦事項內容")
+        # 建立訊息窗格，條列顯示待辦事項清單
+        message = createTodoListMessage(todoList)
 
-    # 將待辦事項加入列表
-    addTodoList(new_task)
-
-    # 取得待辦事項清單
-    todoList = getTodoList()
-
-    # 建立訊息窗格，條列顯示待辦事項清單
-    message = createTodoListMessage(todoList)
-
-    # 回覆訊息給使用者
-    line_bot_api.reply_message(event.reply_token, message)
+        # 回覆訊息給使用者
+        line_bot_api.reply_message(event.reply_token, message)
 
 def createTodoListMessage(todoList):
+    # 建立待辦事項清單的條列項目
+    list_items = []
+    for todo in todoList:
+        item = {"type" : "text", "text" : todo.get_text()}
+        list_items.append(item)
+
     # 建立Flex Message物件，用於顯示待辦事項清單
     flex_message = FlexSendMessage(
         alt_text = "待辦事項清單",
@@ -67,15 +64,17 @@ def createTodoListMessage(todoList):
             "type" : "bubble",
             "body" : {
                 "type" : "box",
-                "layout" : "vetical",
+                "layout" : "vertical",
                 "contents" : [
                     {"type" : "text", "text" : "待辦事項清單", "weight" : "bold", "size" : "lg"},
                     # 根據待辦事項清單建立條列項目
                     # 可以使用迴圈遍歷待辦事項清單，建立對應的條列項目
+                    *list_items # 將條列項目展開添加到 "contents" 中
                 ]
             }
         }
     )
+
     return flex_message
 
 @app.route("/")

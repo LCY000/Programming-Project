@@ -74,6 +74,7 @@ def handle_normal_state(user_id, user_message, event):
         reply_message = '請輸入待辦事項內容。in normal_state'+ 'state='+user_state[user_id]
     elif user_message == '顯示待辦清單':
         # todoList = getTodoList(user_id)
+        user_state[user_id] = UserState.NORMAL
         message = createTodoListMessage(user_id,user_todo_list)
         line_bot_api.reply_message(event.reply_token, message)
     else:

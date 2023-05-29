@@ -38,19 +38,15 @@ def handle_message(event):
 
     user_id = event.source.user_id
     user_message = event.message.text
-    user_state[user_id] = 'normal'
-
-    # 使用者的狀態預設為 normal
-    if user_state[user_id] == 'normal':
-        reply_message = 'normal'
-
-        # 當使用者為新增待辦事項狀態時
+    
+    # 檢查使用者的狀態
+    if user_id in user_state:
+        # 使用者處於新增待辦事項的狀態
         if user_state[user_id] == 'adding_task':
             if user_message == '結束待辦事項':
                 # 結束新增待辦事項狀態
                 user_state[user_id] = 'normal'
                 reply_message = '已結束新增待辦事項。'
-                return
             else:
                 # 創建一個新的待辦事項
                 new_task = ToDo_task.ToDo_task(user_message)
@@ -58,11 +54,12 @@ def handle_message(event):
                 # 將待辦事項加入列表
                 addTodoList(new_task)
 
-                reply_message = f'已新增待辦事項：{user_message}'
+                reply_message = '已新增待辦事項：{}'.format(user_message)
         else:
-            reply_message = '請輸入正確的命令。'
+            reply_message = '請輸入正確的指令。'
             user_state[user_id] = 'normal'
     else:
+        # 檢查一般的使用者訊息
         if user_message == '加新的待辦事項':
             # 進入新增待辦事項狀態
             user_state[user_id] = 'adding_task'

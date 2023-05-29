@@ -23,18 +23,23 @@ class UserState(Enum):
     NORMAL = 0
     ADD_TODO = 1
 
-# 待辦事項列表
-todoList = []
+# # 待辦事項列表
+# todoList = []
+
+# 用戶的待辦事項
+user_todo_list = {}
+
+# 追蹤使用者的狀態
+user_state = {}
 
 # 將待辦事項加入列表
-def addTodoList(task):
-    todoList.append(task)
+def addTodoList(user_id,task):
+    user_todo_list[user_id].append(task)
 
 # 取得待辦事項清單
-def getTodoList():
-    return todoList
+def getTodoList(user_id):
+    return user_todo_list[user_id]
 
-user_state = {}
 
 # 處理正常狀態下的訊息
 def handle_normal_state(user_id, user_message, event):
@@ -66,11 +71,16 @@ def handle_add_todo_state(user_id, user_message):
 # 處理接收到的訊息事件
 @webhook_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    global todoList, user_state
+    global user_todo_list, user_state
 
     user_id = event.source.user_id
     user_message = event.message.text
     
+    if user_id not in user_todo_list:
+        # 如果是新的使用者，創建一個新的待辦事項清單
+        user_todo_list[user_id] = []
+
+
     # 檢查使用者的狀態
     if user_id in user_state:
         state = user_state[user_id]
@@ -84,76 +94,7 @@ def handle_message(event):
 
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
 
-# # 處理接收到的訊息事件
-# @webhook_handler.add(MessageEvent, message=TextMessage)
-# def handle_message(event):
-#     global todoList, user_state, state
 
-#     user_id = event.source.user_id
-#     user_message = event.message.text
-    
-#     # 檢查使用者的狀態
-#     if user_id in user_state:
-#         # 使用者處於新增待辦事項的狀態
-#         if state == 1:
-#             if user_message == '結束待辦事項':
-#                 reply_message = '已結束新增待辦事項。'
-#                 # 結束新增待辦事項狀態
-#                 user_state[user_id] = 'normal'
-#             elif user_message == '顯示待辦清單':
-
-#                 reply_message = '顯示待辦清單。'
-
-#                 # 取得待辦事項清單
-#                 todoList = getTodoList()
-
-#                 # 建立訊息窗格，條列顯示待辦事項清單
-#                 message = createTodoListMessage(todoList)
-
-#                 # 回覆訊息給使用者
-#                 line_bot_api.reply_message(event.reply_token, message)
-#                 return
-#             elif user_message == '加新的待辦事項':
-                
-#                 reply_message = '進入新增狀態。'
-
-#                 # 創建一個新的待辦事項
-#                 new_task = ToDo_task.ToDo_task(user_message)
-                
-#                 # 將待辦事項加入列表
-#                 addTodoList(new_task)
-
-#                 reply_message = '已新增待辦事項：{}'.format(user_message)           
-#         else:
-#             reply_message = '請輸入正確的指令。'
-#             user_state[user_id] = {}
-#             state = 0
-#     else:
-#         # 檢查一般的使用者訊息
-#         if user_message == '加新的待辦事項':
-#             # 進入新增待辦事項狀態
-#             user_state[user_id] = 'normal'
-#             state = 1
-#             reply_message = '請輸入待辦事項內容。'
-#         else:
-#             if user_message == '顯示待辦清單':
-
-#                 reply_message = '顯示待辦清單。'
-
-#                 # 取得待辦事項清單
-#                 todoList = getTodoList()
-
-#                 # 建立訊息窗格，條列顯示待辦事項清單
-#                 message = createTodoListMessage(todoList)
-
-#                 # 回覆訊息給使用者
-#                 line_bot_api.reply_message(event.reply_token, message)
-#                 return
-#             else:
-#                 reply_message = '請輸入正確的指令。'
-#                 user_state[user_id] = {}
-
-#     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
 
 def createTodoListMessage(todoList):
     # 建立待辦事項清單的條列項目

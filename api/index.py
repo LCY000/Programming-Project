@@ -64,7 +64,7 @@ def handle_message(event):
             user_state[user_id] = 'adding_task'
             reply_message = '請輸入待辦事項內容。'
         else:
-            if user_message == '待辦事項清單':
+            if user_message == '顯示待辦清單':
                 # 取得待辦事項清單
                 todoList = getTodoList()
 
@@ -88,14 +88,14 @@ def createTodoListMessage(todoList):
 
     # 建立Flex Message物件，用於顯示待辦事項清單
     flex_message = FlexSendMessage(
-        alt_text = "待辦事項清單",
+        alt_text = "顯示待辦清單",
         contents = {
             "type" : "bubble",
             "body" : {
                 "type" : "box",
                 "layout" : "vertical",
                 "contents" : [
-                    {"type" : "text", "text" : "待辦事項清單", "weight" : "bold", "size" : "lg"},
+                    {"type" : "text", "text" : "顯示待辦清單", "weight" : "bold", "size" : "lg"},
                     *list_items # 將條列項目展開添加到 "contents" 中
                 ]
             }

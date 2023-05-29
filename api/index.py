@@ -23,9 +23,6 @@ class UserState(Enum):
     NORMAL = 0
     ADD_TODO = 1
 
-# # 待辦事項列表
-# todoList = []
-
 # 用戶的待辦事項
 user_todo_list = {}
 
@@ -47,7 +44,7 @@ def handle_normal_state(user_id, user_message, event):
         user_state[user_id] = UserState.ADD_TODO
         reply_message = '請輸入待辦事項內容。in normal_state'
     elif user_message == '顯示待辦清單':
-        todoList = getTodoList()
+        todoList = getTodoList(user_id)
         message = createTodoListMessage(todoList)
         line_bot_api.reply_message(event.reply_token, message)
     else:

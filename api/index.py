@@ -137,7 +137,7 @@ def handle_message(event):
     user_id = event.source.user_id
     user_message = event.message.text
     
-    stateTEMP = user_state[user_id]+'\n'
+    stateTEMP = str(user_state[user_id].value)+'\n'
 
     if user_id not in user_todo_list:
         # 如果是新的使用者，創建一個新的待辦事項清單

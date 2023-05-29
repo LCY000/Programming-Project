@@ -65,6 +65,10 @@ def handle_message(event):
             reply_message = '請輸入待辦事項內容。'
         else:
             if user_message == '顯示待辦清單':
+
+                user_message[user_id] = 'check_task'
+                reply_message = '顯示待辦清單。'
+
                 # 取得待辦事項清單
                 todoList = getTodoList()
 

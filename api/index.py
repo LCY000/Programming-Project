@@ -30,11 +30,11 @@ def getTodoList():
 
 # 追蹤使用者的狀態
 user_state = {}
-
+state = 0
 # 處理接收到的訊息事件
 @webhook_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    global todoList, user_state
+    global todoList, user_state, state
 
     user_id = event.source.user_id
     user_message = event.message.text
@@ -42,11 +42,11 @@ def handle_message(event):
     # 檢查使用者的狀態
     if user_id in user_state:
         # 使用者處於新增待辦事項的狀態
-        if user_state[user_id] == 'adding_task':
+        if state == 1:
             if user_message == '結束待辦事項':
+                reply_message = '已結束新增待辦事項。'
                 # 結束新增待辦事項狀態
                 user_state[user_id] = 'normal'
-                reply_message = '已結束新增待辦事項。'
             elif user_message == '顯示待辦清單':
 
                 reply_message = '顯示待辦清單。'
@@ -60,7 +60,8 @@ def handle_message(event):
                 # 回覆訊息給使用者
                 line_bot_api.reply_message(event.reply_token, message)
                 return
-            else:
+            elif user_message == '加新的待辦事項':
+                
                 reply_message = '進入新增狀態。'
 
                 # 創建一個新的待辦事項
@@ -72,12 +73,14 @@ def handle_message(event):
                 reply_message = '已新增待辦事項：{}'.format(user_message)           
         else:
             reply_message = '請輸入正確的指令。'
-            user_state[user_id] = 'normal'
+            user_state[user_id] = {}
+            state = 0
     else:
         # 檢查一般的使用者訊息
         if user_message == '加新的待辦事項':
             # 進入新增待辦事項狀態
-            user_state[user_id] = 'adding_task'
+            user_state[user_id] = 'normal'
+            state = 1
             reply_message = '請輸入待辦事項內容。'
         else:
             if user_message == '顯示待辦清單':
@@ -95,7 +98,7 @@ def handle_message(event):
                 return
             else:
                 reply_message = '請輸入正確的指令。'
-                user_state[user_id] = 'normal'
+                user_state[user_id] = {}
 
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
 

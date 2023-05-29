@@ -67,6 +67,8 @@ def getTodoList(user_id):
 
 # 處理正常狀態下的訊息
 def handle_normal_state(user_id, user_message, event):
+    global user_state
+    
     if user_message == '加新的待辦事項':
         user_state[user_id] = UserState.ADD_TODO
         reply_message = '請輸入待辦事項內容。in normal_state'

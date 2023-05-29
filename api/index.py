@@ -90,7 +90,7 @@ def handle_add_todo_state(user_id, user_message):
         reply_message = reply_message+'  已結束新增待辦事項。 in add_todo A '+ 'state=' + str(user_state[user_id].value)
     else:
         # 創建一個新的待辦事項
-        new_task = ToDotask(user_message)
+        new_task = ToDotask(text = user_message)
         addTodoList(user_id,new_task)
         reply_message = '已新增待辦事項：{}'.format(user_message)
 

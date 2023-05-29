@@ -150,8 +150,8 @@ def handle_message(event):
             message = "使用者待辦事項清單：\n"
             for user_id, todo_list in user_todo_list.items():
                 message += f"\n使用者ID: {user_id}\n"
-            for todo in todo_list:
-                message += f"- {todo.get_text()}\n"
+                for todo in todo_list:
+                    message += f"- {todo.get_text()}\n"
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
 
 

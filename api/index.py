@@ -77,7 +77,7 @@ def handle_normal_state(user_id, user_message, event):
         message = createTodoListMessage(user_id,user_todo_list)
         line_bot_api.reply_message(event.reply_token, message)
     else:
-        reply_message = '請輸入正確的指令。'
+        reply_message = '請輸入正確的指令。'+'state='+user_state[user_id]
 
     return reply_message
 

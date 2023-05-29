@@ -144,13 +144,17 @@ def handle_message(event):
     # 檢查使用者的狀態
     if user_id in user_state:
         state = user_state[user_id]
-        match state:
-            case UserState.ADD_TODO:
-                reply_message = handle_add_todo_state(user_id, user_message)
-            case UserState.NORMAL:
-                reply_message = handle_normal_state(user_id, user_message, event)
-            case _:
-                reply_message = "錯誤01"
+        if state == UserState.ADD_TODO:
+              reply_message = handle_add_todo_state(user_id, user_message)
+        else:
+            reply_message = handle_normal_state(user_id, user_message, event)
+        # match state:
+        #     case UserState.ADD_TODO:
+        #         reply_message = handle_add_todo_state(user_id, user_message)
+        #     case UserState.NORMAL:
+        #         reply_message = handle_normal_state(user_id, user_message, event)
+        #     case _:
+        #         reply_message = "錯誤01"
     else:
         reply_message = handle_normal_state(user_id, user_message, event)
         user_state[user_id] = UserState.NORMAL

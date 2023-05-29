@@ -136,8 +136,6 @@ def handle_message(event):
 
     user_id = event.source.user_id
     user_message = event.message.text
-    
-    stateTEMP = str(user_state[user_id].value)+'\n'
 
     if user_id not in user_todo_list:
         # 如果是新的使用者，創建一個新的待辦事項清單
@@ -175,9 +173,7 @@ def handle_message(event):
         reply_message = handle_normal_state(user_id, user_message, event)
         user_state[user_id] = UserState.NORMAL
 
-    stateTEMP += reply_message
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=stateTEMP))
-    # line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
+    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
 
 
 if __name__ == "__main__":

@@ -47,6 +47,7 @@ def handle_message(event):
                 # 結束新增待辦事項狀態
                 user_state[user_id] = 'normal'
                 reply_message = '已結束新增待辦事項。'
+                return
             else:
                 # 創建一個新的待辦事項
                 new_task = ToDo_task.ToDo_task(user_message)
@@ -54,7 +55,7 @@ def handle_message(event):
                 # 將待辦事項加入列表
                 addTodoList(new_task)
 
-                reply_message = '已新增待辦事項：{}'.format(user_message)
+                reply_message = f'已新增待辦事項：{user_message}'
         else:
             reply_message = '請輸入正確的指令。'
     else:

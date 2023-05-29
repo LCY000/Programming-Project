@@ -32,7 +32,7 @@ def getTodoList():
 @webhook_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     global todoList
-    
+
     user_id = event.source.user_id
     user_message = event.message.text
 
@@ -56,7 +56,7 @@ def createTodoListMessage(todoList):
     # 建立待辦事項清單的條列項目
     list_items = []
     for todo in todoList:
-        item = {"type" : "text", "text" : todo}
+        item = {"type" : "text", "text" : str(todo)}
         list_items.append(item)
 
     # 建立Flex Message物件，用於顯示待辦事項清單

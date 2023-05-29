@@ -40,7 +40,7 @@ user_state = {}
 def handle_normal_state(user_id, user_message, event):
     if user_message == '加新的待辦事項':
         user_state[user_id] = UserState.ADD_TODO
-        reply_message = '請輸入待辦事項內容。'
+        reply_message = '請輸入待辦事項內容。in normal_state'
     elif user_message == '顯示待辦清單':
         todoList = getTodoList()
         message = createTodoListMessage(todoList)
@@ -54,10 +54,10 @@ def handle_normal_state(user_id, user_message, event):
 def handle_add_todo_state(user_id, user_message):
     if user_message == '結束待辦事項':
         user_state[user_id] = UserState.NORMAL
-        reply_message = '已結束新增待辦事項。'
+        reply_message = '已結束新增待辦事項。 in add_todo'
     else:
         # 創建一個新的待辦事項
-        new_task = ToDo_task.ToDo_task(user_message)
+        new_task = user_message
         addTodoList(new_task)
         reply_message = '已新增待辦事項：{}'.format(user_message)
 
@@ -159,7 +159,7 @@ def createTodoListMessage(todoList):
     # 建立待辦事項清單的條列項目
     list_items = []
     for todo in todoList:
-        item = {"type" : "text", "text" : todo.get_text()}
+        item = {"type" : "text", "text" : str(todo)}
         list_items.append(item)
 
     # 建立Flex Message物件，用於顯示待辦事項清單

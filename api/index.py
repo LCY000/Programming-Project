@@ -1,5 +1,5 @@
 from flask import Flask, request, abort
-from api import ToDotask
+from api.ToDotask import ToDotask
 import datetime
 from typing import List
 from enum import Enum
@@ -56,13 +56,15 @@ user_state = {}
 
 # 將待辦事項加入列表
 def addTodoList(user_id,task):
-    user_todo_list[user_id].append(task)
+
+    if user_id not in user_todo_list:
+        user_todo_list[user_id] = []
+
+    user_todo_list[user_id].append(task) 
 
 # 取得待辦事項清單
 def getTodoList(user_id):
     return user_todo_list[user_id]
-
-
 
 
 # 處理正常狀態下的訊息
@@ -71,13 +73,13 @@ def handle_normal_state(user_id, user_message, event):
 
     if user_message == '加新的待辦事項':
         user_state[user_id] = UserState.ADD_TODO
-        reply_message = '請輸入待辦事項內容。in normal_state '+ 'state=' + str(user_state[user_id].value)
+        reply_message = f'請輸入待辦事項內容。in normal_state state = {user_state[user_id].value}'
     elif user_message == '顯示待辦清單':
         # todoList = getTodoList(user_id)
         message = createTodoListMessage(user_id,user_todo_list)
         line_bot_api.reply_message(event.reply_token, message)
     else:
-        reply_message = '請輸入正確的指令。'+ 'state=' + str(user_state[user_id].value)
+        reply_message = f'請輸入正確的指令。in normal_state state= {user_state[user_id].value}'
 
     return reply_message
 
@@ -90,14 +92,11 @@ def handle_add_todo_state(user_id, user_message):
         reply_message = reply_message+'  已結束新增待辦事項。 in add_todo A '+ 'state=' + str(user_state[user_id].value)
     else:
         # 創建一個新的待辦事項
-        new_task = ToDotask.ToDotask(text = user_message)
+        new_task = ToDotask(text = user_message)
         addTodoList(user_id,new_task)
         reply_message = '已新增待辦事項：{}'.format(user_message)
 
     return reply_message
-
-
-
 
 
 def createTodoListMessage(user_id,user_todo_list):
@@ -124,10 +123,6 @@ def createTodoListMessage(user_id,user_todo_list):
         }
     )
     return flex_message
-
-
-
-
 
 # 處理接收到的訊息事件
 @webhook_handler.add(MessageEvent, message=TextMessage)

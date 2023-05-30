@@ -123,7 +123,7 @@ def createTodoListMessage(user_id,user_todo_list):
     todoList = user_todo_list[user_id]
     list_items = []
     for todo in todoList:
-        item = {"type" : "text", "text" : str(i + '. ' + todo.get_text())} 
+        item = {"type" : "text", "text" : str(str(i) + '. ' + todo.get_text())} 
         list_items.append(item)
         i += 1
 

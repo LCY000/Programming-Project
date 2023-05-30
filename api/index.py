@@ -23,8 +23,8 @@ class ToDotask:
 
     def __init__(self,text):
         self.text= text
-        self.created_time=datetime.datetime.now()
-        self.reminder_time = datetime.datetime()
+        # self.created_time=datetime.datetime.now()
+        # self.reminder_time = datetime.datetime()
 
     def get_text (self):
         return self.text
@@ -110,8 +110,7 @@ def handle_add_todo_state(user_id, user_message):
         # reply_message = '我進來新增狀態囉。\n'
 
         # 創建一個新的待辦事項
-        messageFromUser = user_message
-        new_task = ToDotask(messageFromUser)
+        new_task = ToDotask(user_message)
         addTodoList(user_id,new_task)
         reply_message = 'add_todo_state-已新增待辦事項：{}'.format(user_message)
         
@@ -123,7 +122,7 @@ def createTodoListMessage(user_id,user_todo_list):
     todoList = user_todo_list[user_id]
     list_items = []
     for todo in todoList:
-        item = {"type" : "text", "text" : str(todo)} 
+        item = {"type" : "text", "text" : str(todo.get_text())} 
         list_items.append(item)
 
     # 建立Flex Message物件，用於顯示待辦事項清單

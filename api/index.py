@@ -86,7 +86,7 @@ def handle_normal_state(user_id, user_message, event):
 
 # 新增待辦事項狀態下的訊息
 def handle_add_todo_state(user_id, user_message):
-    reply_message = '' # 提供預設值
+    reply_message = 'in add_todo。\n' # 提供預設值
 
     if user_message == '結束待辦事項':
         reply_message = 'state=' + str(user_state[user_id].value) +'\n'

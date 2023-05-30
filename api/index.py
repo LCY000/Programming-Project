@@ -1,5 +1,5 @@
 from flask import Flask, request, abort
-from api.ToDotask import ToDotask
+# from api.ToDotask import ToDotask
 import datetime
 from typing import List
 from enum import Enum
@@ -18,6 +18,19 @@ app = Flask(__name__)
 
 line_bot_api = LineBotApi('LlcraQZMrH5dj81FA7Cr61wjDwdIAGvxrAohTctu0ukg69/WZVtMyJXVAgMylX7L7HbY1R22i9CqSqqOQ00iRUaqSs2A1Nblbu4iz4fub3xRhKw8JEj7D0mIBCYT9aN8eV1M2BXD1fJxl8s8ny915wdB04t89/1O/w1cDnyilFU=')
 webhook_handler = WebhookHandler('8f948b2d6deda1511f4570128cd231a0')
+
+class ToDotask:
+
+    def __init__(self,text):
+        self.text= text
+        self.created_time=datetime.datetime.now()
+        self.reminder_time = datetime.datetime()
+
+    def get_text (self):
+        return self.text
+    
+    def set_text (self,message):
+        self.text = message
 
 @app.route("/")
 def home():
@@ -97,7 +110,7 @@ def handle_add_todo_state(user_id, user_message):
         # reply_message = '我進來新增狀態囉。\n'
 
         # 創建一個新的待辦事項
-        new_task = user_message # ToDotask(text = user_message)
+        new_task = ToDotask(text = user_message)
         addTodoList(user_id,new_task)
         reply_message = 'add_todo_state-已新增待辦事項：{}'.format(user_message)
         
@@ -109,7 +122,7 @@ def createTodoListMessage(user_id,user_todo_list):
     todoList = user_todo_list[user_id]
     list_items = []
     for todo in todoList:
-        item = {"type" : "text", "text" : str(todo)} # .get_text()
+        item = {"type" : "text", "text" : str(todo.get_text())} 
         list_items.append(item)
 
     # 建立Flex Message物件，用於顯示待辦事項清單

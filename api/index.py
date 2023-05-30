@@ -122,7 +122,7 @@ def createTodoListMessage(user_id,user_todo_list):
     todoList = user_todo_list[user_id]
     list_items = []
     for todo in todoList:
-        item = {"type" : "text", "text" : str(todo.get_text())} 
+        item = {"type" : "text", "text" : str(todo)} 
         list_items.append(item)
 
     # 建立Flex Message物件，用於顯示待辦事項清單

@@ -100,7 +100,7 @@ def handle_add_todo_state(user_id, user_message):
     new_task = ToDotask(user_message)
     addTodoList(user_id,new_task)
     user_state[user_id] = UserState.NORMAL
-    reply_message = 'add_todo_state-已新增待辦事項：{}'.format(user_message)
+    reply_message = '已新增待辦事項：\n{}'.format(user_message)
         
     return reply_message
 

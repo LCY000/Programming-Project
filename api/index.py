@@ -165,8 +165,9 @@ def handle_message(event):
         #     case _:
         #         reply_message = "錯誤01"
     else:
-        reply_message = handle_normal_state(user_id, user_message, event)
         user_state[user_id] = UserState.NORMAL
+        reply_message = handle_normal_state(user_id, user_message, event)
+        
 
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
 

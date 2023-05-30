@@ -88,7 +88,6 @@ def handle_normal_state(user_id, user_message, event):
         user_state[user_id] = UserState.ADD_TODO
         reply_message = f'請輸入待辦事項內容。in normal_state state = {user_state[user_id].value}'
     elif user_message == '顯示待辦清單':
-        # todoList = getTodoList(user_id)
         message = createTodoListMessage(user_id,user_todo_list)
         line_bot_api.reply_message(event.reply_token, message)
     else:
@@ -173,17 +172,17 @@ def handle_message(event):
     # 檢查使用者的狀態
     if user_id in user_state:
         state = user_state[user_id]
-        if state == UserState.ADD_TODO:
-              reply_message = handle_add_todo_state(user_id, user_message)
-        else:
-            reply_message = handle_normal_state(user_id, user_message, event)
-        # match state:
-        #     case UserState.ADD_TODO:
-        #         reply_message = handle_add_todo_state(user_id, user_message)
-        #     case UserState.NORMAL:
-        #         reply_message = handle_normal_state(user_id, user_message, event)
-        #     case _:
-        #         reply_message = "錯誤01"
+        # if state == UserState.ADD_TODO:
+        #       reply_message = handle_add_todo_state(user_id, user_message)
+        # else:
+        #     reply_message = handle_normal_state(user_id, user_message, event)
+        match state:
+            case UserState.ADD_TODO:
+                reply_message = handle_add_todo_state(user_id, user_message)
+            case UserState.NORMAL:
+                reply_message = handle_normal_state(user_id, user_message, event)
+            case _:
+                reply_message = "錯誤01"
     else:
         user_state[user_id] = UserState.NORMAL
         reply_message = handle_normal_state(user_id, user_message, event)

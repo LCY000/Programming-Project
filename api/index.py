@@ -101,10 +101,10 @@ def handle_add_todo_state(user_id, user_message):
 
 def createTodoListMessage(user_id,user_todo_list):
     # 建立待辦事項清單的條列項目
-    todoList=user_todo_list[user_id]
+    todoList = user_todo_list[user_id]
     list_items = []
     for todo in todoList:
-        item = {"type" : "text", "text" : str(todo.get_text())}
+        item = {"type" : "text", "text" : str(todo)}
         list_items.append(item)
 
     # 建立Flex Message物件，用於顯示待辦事項清單

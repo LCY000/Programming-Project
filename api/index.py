@@ -110,7 +110,8 @@ def handle_add_todo_state(user_id, user_message):
         # reply_message = '我進來新增狀態囉。\n'
 
         # 創建一個新的待辦事項
-        new_task = ToDotask(text = user_message)
+        messageFromUser = user_message
+        new_task = ToDotask(messageFromUser)
         addTodoList(user_id,new_task)
         reply_message = 'add_todo_state-已新增待辦事項：{}'.format(user_message)
         

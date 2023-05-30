@@ -41,7 +41,7 @@ def callback():
 
     return 'OK'
 
-############################################
+#----------------------------------------- 分隔線 -----------------------------------------#
 
 # 使用者狀態的列舉類型
 class UserState(Enum):
@@ -92,10 +92,10 @@ def handle_add_todo_state(user_id, user_message):
         reply_message = reply_message+'  已結束新增待辦事項。 in add_todo A '+ 'state=' + str(user_state[user_id].value)
     else:
         # 創建一個新的待辦事項
-        reply_message('我進來新增狀態囉。\n')
+        reply_message = '我進來新增狀態囉。\n'
         new_task = ToDotask(text = user_message)
         addTodoList(user_id,new_task)
-        reply_message = 'add_todo_state-已新增待辦事項：{}'.format(new_task.get_text())
+        reply_message = 'add_todo_state-已新增待辦事項：{}'.format(user_message)
 
     return reply_message
 

@@ -150,7 +150,6 @@ def handle_message(event):
     user_message = event.message.text
 
     if user_id not in user_todo_list:
-        
         def check_todo_list_file(user_id):
             filename = f'user_data/{user_id}.json'
             return os.path.isfile(filename)

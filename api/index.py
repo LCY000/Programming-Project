@@ -89,7 +89,7 @@ def handle_normal_state(user_id, user_message, event):
         if user_id not in user_todo_list:
             reply_message = "無待辦事項。"
         else:
-            user_todo_list[user_id] = load_from_json(f'user_data\{user_id}.json') # 從.json檔讀取資料
+            user_todo_list[user_id] = load_from_json(f'user_data/{user_id}.json') # 從.json檔讀取資料
             message = createTodoListMessage(user_id,user_todo_list[user_id])
             line_bot_api.reply_message(event.reply_token, message)
     else:
@@ -109,7 +109,7 @@ def handle_add_todo_state(user_id, user_message):
     reply_message = '已新增待辦事項：\n{}'.format(user_message)
     
     
-    save_to_json(user_todo_list, f'user_data\{user_id}.json')  # 將資料寫入檔案    
+    save_to_json(user_todo_list, f'user_data/{user_id}.json')  # 將資料寫入檔案    
 
     return reply_message
 

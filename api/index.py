@@ -1,6 +1,6 @@
 from flask import Flask, request, abort
-from api.ToDotask import ToDotask
-import datetime
+from api.ToDotask import ToDotask, ToDotaskEncoder
+import json
 from typing import List
 from enum import Enum
 
@@ -66,6 +66,14 @@ def addTodoList(user_id,task):
 def getTodoList(user_id):
     return user_todo_list[user_id]
 
+def save_to_json(data, filename):
+    with open(filename, 'w') as file:
+        json.dump(data, file, cls = ToDotaskEncoder)
+
+def load_from_json(filename):
+    with open(filename, 'r') as file:
+        data = json.load(file)
+    return data
 
 # 處理正常狀態下的訊息
 def handle_normal_state(user_id, user_message, event):
@@ -75,8 +83,13 @@ def handle_normal_state(user_id, user_message, event):
         user_state[user_id] = UserState.ADD_TODO
         reply_message = f'請輸入待辦事項內容。\nin normal_state state = {user_state[user_id].value}'
     elif user_message == '顯示待辦清單':
-        message = createTodoListMessage(user_id,user_todo_list)
-        line_bot_api.reply_message(event.reply_token, message)
+
+        if user_id not in user_todo_list:
+            reply_message = "無待辦事項。"
+        else:
+            user_todo_list[user_id] = load_from_json(f'userData{user_id}.json')
+            message = createTodoListMessage(user_id,user_todo_list[user_id])
+            line_bot_api.reply_message(event.reply_token, message)
     else:
         reply_message = f'請輸入正確的指令。in normal_state state= {user_state[user_id].value}'
 
@@ -87,31 +100,25 @@ def handle_normal_state(user_id, user_message, event):
 def handle_add_todo_state(user_id, user_message):
     reply_message = '' # 提供預設值
 
-    # if user_message == '結束待辦事項':
-    #     reply_message = 'state=' + str(user_state[user_id].value) +'\n'
-    #     user_state[user_id] = UserState.NORMAL
-    #     reply_message = reply_message+'已結束新增待辦事項。 in add_todo A '+ 'state=' + str(user_state[user_id].value)
-    # else:
-    
-    # 測試訊息
-    # reply_message = '我進來新增狀態囉。\n'
-
     # 創建一個新的待辦事項
     new_task = ToDotask(user_message)
     addTodoList(user_id,new_task)
     user_state[user_id] = UserState.NORMAL
     reply_message = '已新增待辦事項：\n{}'.format(user_message)
-        
+    
+    
+    save_to_json(user_todo_list, f'userData{user_id}.json')  # 將資料寫入檔案    
+
     return reply_message
 
 
 def createTodoListMessage(user_id,user_todo_list):
     i = 1
     # 建立待辦事項清單的條列項目
-    todoList = user_todo_list[user_id]
+    todoList = user_todo_list
     list_items = []
     for todo in todoList:
-        item = {"type" : "text", "text" : str(str(i) + '. ' + todo.get_text())} 
+        item = {"type" : "text", "text" : str(str(i) + '. ' + todo['text'])} 
         list_items.append(item)
         i += 1
 

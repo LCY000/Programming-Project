@@ -150,11 +150,13 @@ def handle_message(event):
     user_message = event.message.text
 
     if user_id not in user_todo_list:
-        user_todo_list[user_id] = load_from_json(f'user_data/{user_id}.json') # 從.json檔讀取資料
+        
         def check_todo_list_file(user_id):
             filename = f'user_data/{user_id}.json'
             return os.path.isfile(filename)
-        if not check_todo_list_file(user_id):
+        if check_todo_list_file(user_id):
+            user_todo_list[user_id] = load_from_json(f'user_data/{user_id}.json') # 從.json檔讀取資料
+        else:
             # 如果是新的使用者，創建一個新的待辦事項清單
             user_todo_list[user_id] = []
 

@@ -77,7 +77,7 @@ def addTodoList(user_id,task):
 
 # 處理正常狀態下的訊息
 def handle_normal_state(user_id, user_message, event):
-    global user_state
+    global user_state, reply_message
 
     if user_message == '新增 待辦事項':
         user_state[user_id] = UserState.ADD_TODO
@@ -141,7 +141,7 @@ def createTodoListMessage(user_id,user_todo_list):
 @webhook_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     global user_todo_list, user_state
-    reply_message="初始預設"
+    reply_message="初始預設1"
 
     user_id = event.source.user_id
     user_message = event.message.text

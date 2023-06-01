@@ -87,7 +87,7 @@ def handle_normal_state(user_id, user_message, event):
         if user_id not in user_todo_list:
             reply_message = "無待辦事項。"
         else:
-            message = createTodoListMessage(user_id,user_todo_list[user_id])
+            message = createTodoListMessage(user_id,user_todo_list)
             line_bot_api.reply_message(event.reply_token, message)
     else:
         reply_message = f'請輸入正確的指令。in normal_state state= {user_state[user_id].value}'
@@ -113,7 +113,7 @@ def handle_add_todo_state(user_id, user_message):
 def createTodoListMessage(user_id,user_todo_list):
     i = 1
     # 建立待辦事項清單的條列項目
-    todoList = user_todo_list
+    todoList = user_todo_list[user_id]
     list_items = []
     for todo in todoList:
         item = {"type" : "text", "text" : str(str(i) + '. ' + todo['text'])} 

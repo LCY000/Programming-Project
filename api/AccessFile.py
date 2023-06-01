@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+import json
 
 # 建立 MongoDB 連線
 def create_mongodb_connection():
@@ -14,22 +15,27 @@ def read_user_data(user_id):
     db = client['your_database_name']
     collection = db['your_collection_name']
     
-    # 查詢使用者的文件
+    # 查找使用者的文件
     user_data = collection.find_one({'user_id': user_id})
     
-    # 關閉 MongoDB 連線
-    client.close()
-    
-    # 檢查結果是否為空
     if user_data is None:
         # 使用者的文件不存在
         return None
     
-    # 返回使用者的資料
-    return user_data
+    # 將 JSON 字符串轉換回物件列表
+    data_json = user_data['data']
+    data = json.loads(data_json)
+    
+    # 關閉 MongoDB 連線
+    client.close()
+    
+    return data
 
 # 寫入使用者資料
 def write_user_data(user_id, data):
+    # 將物件列表轉換為 JSON 字符串
+    data_json = json.dumps(data)
+    
     # 建立 MongoDB 連線
     client = create_mongodb_connection()
     
@@ -42,11 +48,11 @@ def write_user_data(user_id, data):
     
     if existing_data is None:
         # 使用者的文件不存在，創建一個新文件
-        user_data = {'user_id': user_id, 'data': data}
+        user_data = {'user_id': user_id, 'data': data_json}
         collection.insert_one(user_data)
     else:
         # 使用者的文件已存在，更新資料
-        collection.update_one({'user_id': user_id}, {'$set': {'data': data}})
+        collection.update_one({'user_id': user_id}, {'$set': {'data': data_json}})
     
     # 關閉 MongoDB 連線
     client.close()

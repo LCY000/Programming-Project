@@ -64,20 +64,20 @@ def addTodoList(user_id,task):
 
     user_todo_list[user_id].append(task) 
 
-# 取得待辦事項清單
-def getTodoList(user_id):
-    return user_todo_list[user_id]
+# # 取得待辦事項清單
+# def getTodoList(user_id):
+#     return user_todo_list[user_id]
 
-# 寫檔進.json檔
-def save_to_json(data, filename):
-    with open(filename, 'w') as file:
-        json.dump(data, file, cls = ToDotaskEncoder)
+# # 寫檔進.json檔
+# def save_to_json(data, filename):
+#     with open(filename, 'w') as file:
+#         json.dump(data, file, cls = ToDotaskEncoder)
 
-# 讀取 .json檔
-def load_from_json(filename):
-    with open(filename, 'r') as file:
-        data = json.load(file)
-    return data
+# # 讀取 .json檔
+# def load_from_json(filename):
+#     with open(filename, 'r') as file:
+#         data = json.load(file)
+#     return data
 
 # 處理正常狀態下的訊息
 def handle_normal_state(user_id, user_message, event):
@@ -107,11 +107,10 @@ def handle_add_todo_state(user_id, user_message):
     new_task = ToDotask(user_message)
     addTodoList(user_id,new_task)
     user_state[user_id] = UserState.NORMAL
-    reply_message = '已新增待辦事項：\n{}'.format(user_message)
+    reply_message = '已新增待辦事項：\n{}'.format(user_message)   
     
-    
-    save_to_json(user_todo_list, os.path.join('user_data', f'{user_id}.json'))  # 將資料寫入檔案    
-
+    AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
+    # save_to_json(user_todo_list, os.path.join('user_data', f'{user_id}.json'))      # 將資料寫入檔案
     return reply_message
 
 
@@ -151,11 +150,12 @@ def handle_message(event):
     user_message = event.message.text
 
     if user_id not in user_todo_list:
-        def check_todo_list_file(user_id):
-            filename = os.path.join('user_data', f'{user_id}.json')
-            return os.path.isfile(filename)
-        if check_todo_list_file(user_id):
-            user_todo_list[user_id] = load_from_json(os.path.join('user_data', f'{user_id}.json')) # 從.json檔讀取資料
+        user_data = AccessFile.read_user_data(user_id)
+        # def check_todo_list_file(user_id):
+        #     filename = os.path.join('user_data', f'{user_id}.json')
+        #     return os.path.isfile(filename)
+        if user_data is not None:
+            user_todo_list[user_id] = user_data     #讀取的資料寫入字典
         else:
             # 如果是新的使用者，創建一個新的待辦事項清單
             user_todo_list[user_id] = []

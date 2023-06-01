@@ -113,7 +113,7 @@ def handle_add_todo_state(user_id, user_message):
 def createTodoListMessage(user_id,user_todo_list):
     i = 1
     # 建立待辦事項清單的條列項目
-    todoList = user_todo_list
+    todoList = user_todo_list[user_id]
     list_items = []
     for todo in todoList:
         item = {"type" : "text", "text" : str(str(i) + '. ' + todo['text'])} 

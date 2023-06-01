@@ -57,13 +57,6 @@ user_todo_list = {}
 # 追蹤使用者的狀態
 user_state = {}
 
-# 將待辦事項加入列表
-def addTodoList(user_id,task):
-    global user_todo_list
-    if user_id not in user_todo_list:
-        user_todo_list[user_id] = []
-
-    user_todo_list[user_id].append(task) 
 
 # 處理正常狀態下的訊息
 def handle_normal_state(user_id, user_message, event):
@@ -88,7 +81,8 @@ def handle_add_todo_state(user_id, user_message):
 
     # 創建一個新的待辦事項
     new_task = {'text' : user_message}
-    addTodoList(user_id,new_task)
+    user_todo_list[user_id].append(new_task)
+    
     user_state[user_id] = UserState.NORMAL
     reply_message = '已新增待辦事項：\n{}'.format(user_message)   
     

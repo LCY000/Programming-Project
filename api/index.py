@@ -137,19 +137,16 @@ def handle_message(event):
         else:
             # 如果是新的使用者，創建一個新的待辦事項清單
             user_todo_list[user_id] = []
-
-    # 檢查使用者的狀態
-    if user_id in user_state:
-        state = user_state[user_id]
-        if state == UserState.ADD_TODO:
-              reply_message = handle_add_todo_state(user_id, user_message)
-        else:
-            reply_message = handle_normal_state(user_id, user_message, event)
-
-    else:
         user_state[user_id] = UserState.NORMAL
+
+
+    # 檢查使用者的狀態 (處於哪個功能狀態下)
+    state = user_state[user_id]
+    if state == UserState.ADD_TODO:
+            reply_message = handle_add_todo_state(user_id, user_message)
+    else:
         reply_message = handle_normal_state(user_id, user_message, event)
-        
+
 
     if reply_message:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))

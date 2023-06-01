@@ -64,10 +64,6 @@ def addTodoList(user_id,task):
 
     user_todo_list[user_id].append(task) 
 
-# # 取得待辦事項清單
-# def getTodoList(user_id):
-#     return user_todo_list[user_id]
-
 # # 寫檔進.json檔
 # def save_to_json(data, filename):
 #     with open(filename, 'w') as file:

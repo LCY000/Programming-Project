@@ -1,6 +1,7 @@
 from flask import Flask, request, abort
 # from api.ToDotask import ToDotask, ToDotaskEncoder
 from api import AccessFile
+from api import Function
 import json
 from typing import List
 from enum import Enum
@@ -98,7 +99,7 @@ def handle_add_todo_state(user_id, user_message):
 
 def createTodoListMessage(user_id,user_todo_list):
     if user_todo_list[user_id] == []:
-        list_items = [{"type" : "text", "text" : "\n無待辦事項", "flex": 1}]
+        list_items = [{"type" : "text", "text" : "無待辦事項"}]
     else:
         i = 1
         # 建立待辦事項清單的條列項目

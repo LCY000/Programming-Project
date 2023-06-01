@@ -1,3 +1,4 @@
 Flask==2.2.2
+pymongo==3.12.0
 line-bot-sdk
 openai

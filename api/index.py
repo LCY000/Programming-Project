@@ -1,5 +1,5 @@
 from flask import Flask, request, abort
-from api.ToDotask import ToDotask, ToDotaskEncoder
+# from api.ToDotask import ToDotask, ToDotaskEncoder
 from api import AccessFile
 import json
 from typing import List
@@ -100,7 +100,7 @@ def handle_add_todo_state(user_id, user_message):
     reply_message = '' # 提供預設值
 
     # 創建一個新的待辦事項
-    new_task = ToDotask(user_message)
+    new_task = {'text' : user_message}
     addTodoList(user_id,new_task)
     user_state[user_id] = UserState.NORMAL
     reply_message = '已新增待辦事項：\n{}'.format(user_message)   

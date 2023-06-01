@@ -12,8 +12,7 @@
       "methods": ["GET", "POST"],
       "headers": {
         "Access-Control-Allow-Origin": "*"
-      },
-      "timeout": 10
+      }
     }
   ]
 }

@@ -1,6 +1,8 @@
 from pymongo import MongoClient
 import json
 
+from api.ToDotask import ToDotaskEncoder
+
 # 建立 MongoDB 連線
 def create_mongodb_connection():
     client = MongoClient('mongodb+srv://vercel01:xagqPVm8Ne9dkOQi@userdata.p0fqlpw.mongodb.net/?retryWrites=true&w=majority')
@@ -34,7 +36,7 @@ def read_user_data(user_id):
 # 寫入使用者資料
 def write_user_data(user_id, data):
     # 將物件列表轉換為 JSON 字符串
-    data_json = json.dumps(data)
+    data_json = json.dumps(data,cls = ToDotaskEncoder)
     
     # 建立 MongoDB 連線
     client = create_mongodb_connection()

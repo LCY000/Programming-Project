@@ -68,6 +68,7 @@ def handle_normal_state(user_id, user_message, event):
     if user_message == '新增 待辦事項':
         user_state[user_id] = UserState.ADD_TODO
         reply_message = f'請輸入待辦事項內容。'
+        # 還需製作一個取消新增訊息的功能......
 
     elif user_message == '顯示 待辦清單':
         message = Function.createTodoListMessage(user_id,user_todo_list)

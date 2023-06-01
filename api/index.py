@@ -143,30 +143,30 @@ def handle_message(event):
     global user_todo_list, user_state
 
     user_id = event.source.user_id
-    user_message = event.message.text
+    # user_message = event.message.text
 
-    if user_id not in user_todo_list:
-        user_data = AccessFile.read_user_data(user_id)
-        # def check_todo_list_file(user_id):
-        #     filename = os.path.join('user_data', f'{user_id}.json')
-        #     return os.path.isfile(filename)
-        if user_data is not None:
-            user_todo_list[user_id] = user_data     #讀取的資料寫入字典
-        else:
-            # 如果是新的使用者，創建一個新的待辦事項清單
-            user_todo_list[user_id] = []
+    # if user_id not in user_todo_list:
+    #     user_data = AccessFile.read_user_data(user_id)
+    #     # def check_todo_list_file(user_id):
+    #     #     filename = os.path.join('user_data', f'{user_id}.json')
+    #     #     return os.path.isfile(filename)
+    #     if user_data is not None:
+    #         user_todo_list[user_id] = user_data     #讀取的資料寫入字典
+    #     else:
+    #         # 如果是新的使用者，創建一個新的待辦事項清單
+    #         user_todo_list[user_id] = []
 
-    # 檢查使用者的狀態
-    if user_id in user_state:
-        state = user_state[user_id]
-        if state == UserState.ADD_TODO:
-              reply_message = handle_add_todo_state(user_id, user_message)
-        else:
-            reply_message = handle_normal_state(user_id, user_message, event)
+    # # 檢查使用者的狀態
+    # if user_id in user_state:
+    #     state = user_state[user_id]
+    #     if state == UserState.ADD_TODO:
+    #           reply_message = handle_add_todo_state(user_id, user_message)
+    #     else:
+    #         reply_message = handle_normal_state(user_id, user_message, event)
 
-    else:
-        user_state[user_id] = UserState.NORMAL
-        reply_message = handle_normal_state(user_id, user_message, event)
+    # else:
+    #     user_state[user_id] = UserState.NORMAL
+    #     reply_message = handle_normal_state(user_id, user_message, event)
         
 
     line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))

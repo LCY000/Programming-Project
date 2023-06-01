@@ -15,7 +15,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage
+    MessageEvent, TextMessage, TextSendMessage, RichMenu
 )
 
 app = Flask(__name__)
@@ -68,6 +68,8 @@ def handle_normal_state(user_id, user_message, event):
     if user_message == '新增 待辦事項':
         user_state[user_id] = UserState.ADD_TODO
         reply_message = f'請輸入待辦事項內容。'
+        # 關閉圖文選單
+        line_bot_api.unlink_rich_menu_from_user(user_id)
         # 還需製作一個取消新增訊息的功能......
 
     elif user_message == '顯示 待辦清單':
@@ -108,6 +110,8 @@ def handle_message(event):
     if state == UserState.ADD_TODO:
             reply_message,user_todo_list = Function.handle_add_todo_state(user_id, user_message,user_todo_list)
             user_state[user_id] = UserState.NORMAL
+            # 開啟圖文選單
+            line_bot_api.link_rich_menu_to_user(user_id)
     
     # 等待新增功能中......
 

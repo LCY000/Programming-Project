@@ -3,21 +3,7 @@ from api.index import UserState
 from linebot.models import FlexSendMessage
 
 
-# 【新增】  新增待辦事項狀態下的訊息
-def handle_add_todo_state(user_id, user_message,user_todo_list):
-    reply_message = '' # 提供預設值
-
-    # 創建一個新的待辦事項
-    new_task = {'text' : user_message}
-    user_todo_list[user_id].append(new_task)
-    
-    AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
-
-    reply_message = '已新增待辦事項：\n{}'.format(user_message)    
-    return reply_message, user_todo_list
-
-
-# 【新增】  新增待辦事項狀態下的訊息
+# 【顯示清單】  回傳顯示清單的訊息
 def createTodoListMessage(user_id,user_todo_list):
     if user_todo_list[user_id] == []:
         list_items = [{"type" : "text", "text" : "無待辦事項"}]
@@ -47,3 +33,21 @@ def createTodoListMessage(user_id,user_todo_list):
         }
     )
     return flex_message
+
+
+
+# 【新增】  新增待辦事項狀態下的訊息
+def handle_add_todo_state(user_id, user_message,user_todo_list):
+    reply_message = '' # 提供預設值
+
+    # 創建一個新的待辦事項
+    new_task = {'text' : user_message}
+    user_todo_list[user_id].append(new_task)
+    
+    AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
+
+    reply_message = '已新增待辦事項：\n{}'.format(user_message)    
+    return reply_message, user_todo_list
+
+
+

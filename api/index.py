@@ -141,6 +141,7 @@ def createTodoListMessage(user_id,user_todo_list):
 @webhook_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     global user_todo_list, user_state
+    reply_message="初始預設"
 
     user_id = event.source.user_id
     user_message = event.message.text

@@ -69,6 +69,7 @@ def handle_normal_state(user_id, user_message, event):
     elif user_message == '顯示 待辦清單':
         message = createTodoListMessage(user_id,user_todo_list)
         line_bot_api.reply_message(event.reply_token, message)
+        reply_message = None
     else:
         reply_message = f'無此指令\n請輸入正確的指令。'
 

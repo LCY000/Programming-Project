@@ -156,20 +156,6 @@ def handle_message(event):
             # 如果是新的使用者，創建一個新的待辦事項清單
             user_todo_list[user_id] = []
 
-    # 單純在偵錯
-    if user_message=='印':
-        if len(user_todo_list[user_id]) >= 1:
-            test = user_todo_list[user_id][0].get_text()
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=test))
-        else:
-            message = "使用者待辦事項清單：\n"
-            for user_id, todo_list in user_todo_list.items():
-                message += f"\n使用者ID: {user_id}\n"
-                for todo in todo_list:
-                    message += f"- {todo.get_text()}\n"
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
-
-
     # 檢查使用者的狀態
     if user_id in user_state:
         state = user_state[user_id]

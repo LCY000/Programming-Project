@@ -1,5 +1,4 @@
 from api import AccessFile
-from api.index import UserState
 from linebot.models import FlexSendMessage
 
 

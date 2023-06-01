@@ -73,6 +73,8 @@ def handle_normal_state(user_id, user_message, event):
         line_bot_api.reply_message(event.reply_token, message)
         reply_message = None
 
+    # 等待新增功能中......
+
     else:
         reply_message = f'無此指令\n請輸入正確的指令。'
 
@@ -149,11 +151,15 @@ def handle_message(event):
     if state == UserState.ADD_TODO:
             reply_message,user_todo_list = Function.handle_add_todo_state(user_id, user_message,user_todo_list)
             user_state[user_id] = UserState.NORMAL
+    
+    # 等待新增功能中......
+
     else:
         reply_message = handle_normal_state(user_id, user_message, event)
         # 要是已輸出待辦清單，則直接結束
         if reply_message is None:
             return
+
 
     # 輸出回覆訊息 (預防突發意外，保險偵錯)
     if reply_message:
@@ -161,6 +167,8 @@ def handle_message(event):
     else:
         # 處理空訊息的情況
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="空訊息"))
+
+
 
 
 if __name__ == "__main__":

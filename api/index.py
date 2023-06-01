@@ -70,7 +70,7 @@ def handle_normal_state(user_id, user_message, event):
         message = createTodoListMessage(user_id,user_todo_list)
         line_bot_api.reply_message(event.reply_token, message)
     else:
-        reply_message = f'無此指令!\n請輸入正確的指令。'
+        reply_message = f'無此指令\n請輸入正確的指令。'
 
     return reply_message
 
@@ -147,12 +147,12 @@ def handle_message(event):
     else:
         reply_message = handle_normal_state(user_id, user_message, event)
 
-
+    # 輸出回覆訊息 (預防突發意外，保險偵錯)
     if reply_message:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
     else:
         # 處理空訊息的情況
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="收到空訊息!"))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="空訊息"))
 
 
 if __name__ == "__main__":

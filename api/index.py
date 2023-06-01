@@ -92,13 +92,13 @@ def handle_add_todo_state(user_id, user_message):
     reply_message = '已新增待辦事項：\n{}'.format(user_message)   
     
     AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
-    # save_to_json(user_todo_list, os.path.join('user_data', f'{user_id}.json'))      # 將資料寫入檔案
+    
     return reply_message
 
 
 def createTodoListMessage(user_id,user_todo_list):
     if user_todo_list[user_id] == []:
-        list_items = [{"type" : "text", "text" : "\n無待辦事項"}]
+        list_items = [{"type" : "text", "text" : "\n無待辦事項", "flex": 1}]
     else:
         i = 1
         # 建立待辦事項清單的條列項目
@@ -137,9 +137,6 @@ def handle_message(event):
 
     if user_id not in user_todo_list:
         user_data = AccessFile.read_user_data(user_id)
-        # def check_todo_list_file(user_id):
-        #     filename = os.path.join('user_data', f'{user_id}.json')
-        #     return os.path.isfile(filename)
         if user_data is not None:
             user_todo_list[user_id] = user_data     #讀取的資料寫入字典
         else:

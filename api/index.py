@@ -2,6 +2,7 @@ from flask import Flask, request, abort
 # from api.ToDotask import ToDotask, ToDotaskEncoder
 from api import AccessFile
 from api import Function
+
 import json
 from typing import List
 from enum import Enum
@@ -14,7 +15,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, FlexSendMessage
+    MessageEvent, TextMessage, TextSendMessage
 )
 
 app = Flask(__name__)
@@ -58,7 +59,7 @@ user_todo_list = {}
 user_state = {}
 
 
-# 處理正常狀態下的訊息
+# 處理在主選單下的訊息 (user_state=NORMAL)
 def handle_normal_state(user_id, user_message, event):
     global user_state
     reply_message="初始預設2"
@@ -66,61 +67,63 @@ def handle_normal_state(user_id, user_message, event):
     if user_message == '新增 待辦事項':
         user_state[user_id] = UserState.ADD_TODO
         reply_message = f'請輸入待辦事項內容。'
+
     elif user_message == '顯示 待辦清單':
-        message = createTodoListMessage(user_id,user_todo_list)
+        message = Function.createTodoListMessage(user_id,user_todo_list)
         line_bot_api.reply_message(event.reply_token, message)
         reply_message = None
+
     else:
         reply_message = f'無此指令\n請輸入正確的指令。'
 
     return reply_message
 
 
-# 新增待辦事項狀態下的訊息
-def handle_add_todo_state(user_id, user_message):
-    reply_message = '' # 提供預設值
+# # 新增待辦事項狀態下的訊息
+# def handle_add_todo_state(user_id, user_message):
+#     reply_message = '' # 提供預設值
 
-    # 創建一個新的待辦事項
-    new_task = {'text' : user_message}
-    user_todo_list[user_id].append(new_task)
+#     # 創建一個新的待辦事項
+#     new_task = {'text' : user_message}
+#     user_todo_list[user_id].append(new_task)
     
-    user_state[user_id] = UserState.NORMAL
-    reply_message = '已新增待辦事項：\n{}'.format(user_message)   
+#     user_state[user_id] = UserState.NORMAL
+#     reply_message = '已新增待辦事項：\n{}'.format(user_message)   
     
-    AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
+#     AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
     
-    return reply_message
+#     return reply_message
 
 
-def createTodoListMessage(user_id,user_todo_list):
-    if user_todo_list[user_id] == []:
-        list_items = [{"type" : "text", "text" : "無待辦事項"}]
-    else:
-        i = 1
-        # 建立待辦事項清單的條列項目
-        todoList = user_todo_list[user_id]
-        list_items = []
-        for todo in todoList:
-            item = {"type" : "text", "text" : str(str(i) + '. ' + todo['text'])} 
-            list_items.append(item)
-            i += 1
+# def createTodoListMessage(user_id,user_todo_list):
+#     if user_todo_list[user_id] == []:
+#         list_items = [{"type" : "text", "text" : "無待辦事項"}]
+#     else:
+#         i = 1
+#         # 建立待辦事項清單的條列項目
+#         todoList = user_todo_list[user_id]
+#         list_items = []
+#         for todo in todoList:
+#             item = {"type" : "text", "text" : str(str(i) + '. ' + todo['text'])} 
+#             list_items.append(item)
+#             i += 1
 
-    # 建立Flex Message物件，用於顯示待辦事項清單
-    flex_message = FlexSendMessage(
-        alt_text = "待辦事項清單",
-        contents = {
-            "type" : "bubble",
-            "body" : {
-                "type" : "box",
-                "layout" : "vertical",
-                "contents" : [
-                    {"type" : "text", "text" : "待辦事項清單", "weight" : "bold", "size" : "lg"},
-                    *list_items # 將條列項目展開添加到 "contents" 中
-                ]
-            }
-        }
-    )
-    return flex_message
+#     # 建立Flex Message物件，用於顯示待辦事項清單
+#     flex_message = FlexSendMessage(
+#         alt_text = "待辦事項清單",
+#         contents = {
+#             "type" : "bubble",
+#             "body" : {
+#                 "type" : "box",
+#                 "layout" : "vertical",
+#                 "contents" : [
+#                     {"type" : "text", "text" : "待辦事項清單", "weight" : "bold", "size" : "lg"},
+#                     *list_items # 將條列項目展開添加到 "contents" 中
+#                 ]
+#             }
+#         }
+#     )
+#     return flex_message
 
 # 處理接收到的訊息事件
 @webhook_handler.add(MessageEvent, message=TextMessage)
@@ -144,9 +147,13 @@ def handle_message(event):
     # 檢查使用者的狀態 (處於哪個功能狀態下)
     state = user_state[user_id]
     if state == UserState.ADD_TODO:
-            reply_message = handle_add_todo_state(user_id, user_message)
+            reply_message,user_todo_list = Function.handle_add_todo_state(user_id, user_message,user_todo_list)
+            user_state[user_id] = UserState.NORMAL
     else:
         reply_message = handle_normal_state(user_id, user_message, event)
+        # 要是已輸出待辦清單，則直接結束
+        if reply_message is None:
+            return
 
     # 輸出回覆訊息 (預防突發意外，保險偵錯)
     if reply_message:

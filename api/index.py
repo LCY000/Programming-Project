@@ -58,7 +58,7 @@ user_state = {}
 
 # 將待辦事項加入列表
 def addTodoList(user_id,task):
-
+    global user_todo_list
     if user_id not in user_todo_list:
         user_todo_list[user_id] = []
 

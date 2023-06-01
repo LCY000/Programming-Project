@@ -13,9 +13,6 @@
       "headers": {
         "Access-Control-Allow-Origin": "*"
       },
-      "body-parser": {
-        "sizeLimit": "10mb"
-      },
       "timeout": 10
     }
   ]

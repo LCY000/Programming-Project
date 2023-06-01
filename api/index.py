@@ -65,12 +65,12 @@ def handle_normal_state(user_id, user_message, event):
 
     if user_message == '新增 待辦事項':
         user_state[user_id] = UserState.ADD_TODO
-        reply_message = f'請輸入待辦事項內容。\nin normal_state state = {user_state[user_id].value}'
+        reply_message = f'請輸入待辦事項內容。'
     elif user_message == '顯示 待辦清單':
         message = createTodoListMessage(user_id,user_todo_list)
         line_bot_api.reply_message(event.reply_token, message)
     else:
-        reply_message = f'請輸入正確的指令。in normal_state state= {user_state[user_id].value}'
+        reply_message = f'無此指令!\n請輸入正確的指令。'
 
     return reply_message
 

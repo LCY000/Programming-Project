@@ -13,14 +13,10 @@
       "headers": {
         "Access-Control-Allow-Origin": "*"
       },
-      "config": {
-        "api": {
-          "body-parser": {
-            "sizeLimit": "10mb"
-          },
-          "timeout": 15
-        }
-      }
+      "body-parser": {
+        "sizeLimit": "10mb"
+      },
+      "timeout": 10
     }
   ]
 }

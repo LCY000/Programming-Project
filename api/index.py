@@ -64,17 +64,6 @@ def addTodoList(user_id,task):
 
     user_todo_list[user_id].append(task) 
 
-# # 寫檔進.json檔
-# def save_to_json(data, filename):
-#     with open(filename, 'w') as file:
-#         json.dump(data, file, cls = ToDotaskEncoder)
-
-# # 讀取 .json檔
-# def load_from_json(filename):
-#     with open(filename, 'r') as file:
-#         data = json.load(file)
-#     return data
-
 # 處理正常狀態下的訊息
 def handle_normal_state(user_id, user_message, event):
     global user_state, reply_message

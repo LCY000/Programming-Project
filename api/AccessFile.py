@@ -24,11 +24,10 @@ def read_user_data(user_id):
         # 使用者的文件不存在
         return None
     
-    # # 將 JSON 字符串轉換回物件列表
-    # data_json = user_data['data']
-    # data = json.loads(data_json)
-    data = user_data
-
+    # 將 JSON 字符串轉換回物件列表
+    data_json = user_data['data']
+    data = json.loads(data_json)
+    
     # 關閉 MongoDB 連線
     client.close()
     
@@ -36,9 +35,8 @@ def read_user_data(user_id):
 
 # 寫入使用者資料
 def write_user_data(user_id, data):
-    
-    # # 將物件列表轉換為 JSON 字符串
-    # data_json = json.dumps(data,cls = ToDotaskEncoder)
+    # 將物件列表轉換為 JSON 字符串
+    data_json = json.dumps(data,cls = ToDotaskEncoder)
     
     # 建立 MongoDB 連線
     client = create_mongodb_connection()
@@ -52,11 +50,11 @@ def write_user_data(user_id, data):
     
     if existing_data is None:
         # 使用者的文件不存在，創建一個新文件
-        user_data = {'user_id': user_id, 'data': data}
+        user_data = {'user_id': user_id, 'data': data_json}
         collection.insert_one(user_data)
     else:
         # 使用者的文件已存在，更新資料
-        collection.update_one({'user_id': user_id}, {'$set': {'data': data}})
+        collection.update_one({'user_id': user_id}, {'$set': {'data': data_json}})
     
     # 關閉 MongoDB 連線
     client.close()

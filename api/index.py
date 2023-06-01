@@ -98,7 +98,7 @@ def handle_add_todo_state(user_id, user_message):
 
 def createTodoListMessage(user_id,user_todo_list):
     if user_todo_list[user_id] == []:
-        list_items = {"type" : "text", "text" : '\n無待辦事項'}
+        list_items = [{"type" : "text", "text" : '\n無待辦事項'}]
     else:
         i = 1
         # 建立待辦事項清單的條列項目
@@ -159,7 +159,11 @@ def handle_message(event):
         reply_message = handle_normal_state(user_id, user_message, event)
         
 
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
+    if reply_message:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
+    else:
+        # 處理空訊息的情況
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="收到空訊息!"))
 
 
 if __name__ == "__main__":

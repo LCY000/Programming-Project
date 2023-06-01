@@ -77,7 +77,8 @@ def handle_normal_state(user_id, user_message, event):
         if user_todo_list[user_id] == []:
             reply_message = "無待辦事項。"
         else:
-            reply_message = createTodoListMessage(user_id,user_todo_list)
+            message = (user_id,user_todo_list)
+            line_bot_api.reply_message(event.reply_token, message)
     else:
         reply_message = f'請輸入正確的指令。in normal_state state= {user_state[user_id].value}'
 

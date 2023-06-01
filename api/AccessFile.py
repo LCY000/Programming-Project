@@ -14,8 +14,8 @@ def read_user_data(user_id):
     client = create_mongodb_connection()
     
     # 選擇資料庫和集合
-    db = client['your_database_name']
-    collection = db['your_collection_name']
+    db = client['Project']
+    collection = db['UserData']
     
     # 查找使用者的文件
     user_data = collection.find_one({'user_id': user_id})
@@ -42,8 +42,8 @@ def write_user_data(user_id, data):
     client = create_mongodb_connection()
     
     # 選擇資料庫和集合
-    db = client['your_database_name']
-    collection = db['your_collection_name']
+    db = client['Project']
+    collection = db['UserData']
     
     # 檢查使用者的文件是否已存在
     existing_data = collection.find_one({'user_id': user_id})

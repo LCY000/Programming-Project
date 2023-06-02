@@ -3,8 +3,6 @@ from flask import Flask, request, abort
 from api import AccessFile
 from api import Function
 
-import json
-from typing import List
 from enum import Enum
 import os
 
@@ -20,8 +18,9 @@ from linebot.models import (
 
 app = Flask(__name__)
 
-line_bot_api = LineBotApi('LlcraQZMrH5dj81FA7Cr61wjDwdIAGvxrAohTctu0ukg69/WZVtMyJXVAgMylX7L7HbY1R22i9CqSqqOQ00iRUaqSs2A1Nblbu4iz4fub3xRhKw8JEj7D0mIBCYT9aN8eV1M2BXD1fJxl8s8ny915wdB04t89/1O/w1cDnyilFU=')
-webhook_handler = WebhookHandler('8f948b2d6deda1511f4570128cd231a0')
+
+line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))
+webhook_handler = WebhookHandler(os.environ.get('CHANNEL_SECRET'))
 
 @app.route("/")
 def home():

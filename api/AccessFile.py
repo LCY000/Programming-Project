@@ -1,11 +1,12 @@
 from pymongo import MongoClient
 import json
+import os
 
 from api.ToDotask import ToDotaskEncoder
 
 # 建立 MongoDB 連線
 def create_mongodb_connection():
-    client = MongoClient('mongodb+srv://vercel01:xagqPVm8Ne9dkOQi@userdata.p0fqlpw.mongodb.net/?retryWrites=true&w=majority')
+    client = MongoClient(os.environ.get('MONGODB_URI'))
     return client
 
 # 讀取使用者資料

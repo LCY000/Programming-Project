@@ -62,7 +62,7 @@ user_state = {}
 
 reminder_time = datetime.time(0,0,0)
 
-def check_reminder(user_id):
+def check_reminder(user_id, reminder_time):
     # 检查提醒时间并发送消息
     if Function.check_reminder_time(reminder_time):
         message = '提醒：您有待辦事項需要處理！'
@@ -121,7 +121,7 @@ def handle_normal_state(user_id, user_message, event):
 # 接收訊息 
 @webhook_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    global user_todo_list, user_state
+    global user_todo_list, user_state, reminder_time
     reply_message="初始預設1"
 
     user_id = event.source.user_id
@@ -155,7 +155,7 @@ def handle_message(event):
             user_state[user_id] = UserState.NORMAL
 
     elif state == UserState.SETTING:
-            reply_message = Function.setting_state(user_message, user_id, user_todo_list)
+            reply_message = Function.setting_state(user_message, user_id, user_todo_list, reminder_time)
             user_state[user_id] = UserState.NORMAL
 
     else:
@@ -164,7 +164,7 @@ def handle_message(event):
         if reply_message is None:
             return
     
-    check_reminder(user_id)
+    check_reminder(user_id, reminder_time)
 
     # 輸出回覆訊息 (預防突發意外，保險偵錯)
     if reply_message:

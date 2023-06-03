@@ -80,7 +80,7 @@ def setting_state(user_message, user_id, user_todo_list, user_state):
             
             if len(user_todo_list[user_id]) > 0:
                 user_state[user_id] = index.UserState.SETTING_REMIND_TIME
-                reply_message = '設定固定提醒時間。\n\n請輸入題型時間 (hh:mm:ss)'
+                reply_message = '設定固定提醒時間。\n\n請輸入提醒時間 (hh:mm:ss)'
             else:
                 reply_message = '\u2757 目前無待辦事項 \u2757\n\n已回到主選單狀態。'
             

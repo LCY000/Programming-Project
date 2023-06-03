@@ -190,5 +190,9 @@ def handle_message(event):
 
 if __name__ == "__main__":
 
+    # 建立一個新的執行緒來執行 start_reminder_check() 函數
+    reminder_thread = threading.Thread(target=start_reminder_check)
+    reminder_thread.daemon = True  # 將執行緒設置為守護執行緒，以便在主執行緒結束時自動退出
+    reminder_thread.start()  # 啟動執行緒
+
     app.run()
-    start_reminder_check()

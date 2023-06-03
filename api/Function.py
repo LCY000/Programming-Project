@@ -78,7 +78,7 @@ def setting_state(user_message, user_id, user_todo_list):
         if number == 1:
             
             if len(user_todo_list[user_id]) > 0:
-                reminder_time = datetime.time(17,5,55)
+                reminder_time = datetime.time(18,0,3)
                 reply_message = set_reminder_time(reminder_time)
 
             else:

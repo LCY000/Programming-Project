@@ -112,6 +112,8 @@ def handle_message(event):
     if user_message == '取消' or user_message == '0':
         user_state[user_id] = UserState.NORMAL
         reply_message = '取消已成功\n已重新回到主選單' # 強制取消當下的狀態，回到主選單
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
+        return
 
     # 檢查使用者的狀態 (處於哪個功能狀態下)
     state = user_state[user_id]

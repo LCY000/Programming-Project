@@ -163,10 +163,9 @@ def handle_message(event):
 
     elif state == UserState.SETTING_REMIND_TIME:
             try:
-                reply_message = '請輸入時間 (hh:mm:ss)'
                 hour, minute, second = map(int, user_message.split(':'))
                 reminder_time = datetime.time(hour, minute, second)
-                reply_message = '提醒時間已更新。'
+                reply_message = f'提醒時間已更新。{reminder_time.strftime("%H:%M:%S")}'
                 # 更新提醒时间
                 check_reminder(user_id, reminder_time)
             except:

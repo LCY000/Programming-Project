@@ -128,6 +128,8 @@ def handle_message(event):
     elif state == UserState.DEL_TODO:
             reply_message,user_todo_list = Function.handle_del_todo_state(user_id, user_message,user_todo_list)
             user_state[user_id] = UserState.NORMAL
+            # if reply_message == '已結束完成功能':
+            #     user_state[user_id] = UserState.NORMAL
 
     else:
         reply_message = handle_normal_state(user_id, user_message, event)

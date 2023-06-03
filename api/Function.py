@@ -70,13 +70,6 @@ def handle_del_todo_state(user_id, user_message, user_todo_list):
         else:
             reply_message = f'未找到此待辦事項' # 如果沒有找到對應的待辦事項內容，則回傳此訊息
 
-        # # 遍歷用戶的待辦事項列表
-        # for task in user_todo_list[user_id]:
-        #     if task['text'] == user_message:
-        #         user_todo_list[user_id].remove(task)  # 刪除匹配的待辦事項內容
-        #         AccessFile.write_user_data(user_id, user_todo_list[user_id]) # 將更新後的待辦清單寫入資料庫
-        #         reply_message = '已完成待辦事項：\n{}'.format(user_message)
-        #         break
     else:
         reply_message = '\u2757 請輸入正確的數字編號' # 如果沒有找到對應的待辦事項內容，則回傳此訊息
 

@@ -57,8 +57,8 @@ def handle_add_todo_state(user_id, user_message,user_todo_list):
 def handle_del_todo_state(user_id, user_message, user_todo_list):
     reply_message = '' # 提供預設值
 
-    if user_message == '0':
-        reply_message = '已取消完成功能' # 如果使用者輸入0 即代表取消完成功能並回到一般狀態
+    if user_message == '結束' or user_message == '1':
+        reply_message = '已結束完成功能' # 如果使用者輸入1 即代表取消完成功能並回到一般狀態
 
     else:
         # 遍歷用戶的待辦事項列表

@@ -72,7 +72,9 @@ def start_reminder_check():
     # 每隔一段时间执行一次检查
     interval = 60  # 检查间隔（单位：秒）
     threading.Timer(interval, start_reminder_check).start()
-    check_reminder()
+
+    for user_id in user_todo_list:
+        check_reminder(user_id, reminder_time)
 
 # 處理在主選單下的訊息 (user_state=NORMAL)
 def handle_normal_state(user_id, user_message, event):
@@ -156,6 +158,11 @@ def handle_message(event):
 
     elif state == UserState.SETTING:
             reply_message = Function.setting_state(user_message, user_id, user_todo_list, reminder_time)
+
+            if reminder_time:  # 假设在设置状态下有一个变量用于判断是否更改了提醒时间
+                # 更新提醒时间
+                check_reminder(user_id, reminder_time)
+
             user_state[user_id] = UserState.NORMAL
 
     else:

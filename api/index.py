@@ -78,7 +78,7 @@ def handle_normal_state(user_id, user_message, event):
         # 未做功能: 待辦清單是空的情況
 
         user_state[user_id] = UserState.DEL_TODO
-        reply_message = f'請輸入完成待辦事項的編號'
+        reply_message = f'請輸入完成的待辦事項編號'
         i = 1
         for todo in user_todo_list[user_id]:
             reply_message += f"\n{i}. {todo['text']}"

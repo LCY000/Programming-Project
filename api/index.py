@@ -60,8 +60,8 @@ user_todo_list = {}
 
 # 追蹤使用者的狀態
 user_state = {}
-
-reminder_time = datetime.time(0,0,0)
+reminder_times = {}
+# reminder_time = datetime.time(0,0,0)
 
 # 判斷當前時間是否為提醒時間
 def check_reminder_time(reminder_time):
@@ -83,7 +83,7 @@ def start_reminder_check():
     threading.Timer(interval, start_reminder_check).start()
 
     for user_id in user_todo_list:
-        check_reminder(user_id, reminder_time)
+        check_reminder(user_id, reminder_times[user_id])
 
 
 # 處理在主選單下的訊息 (user_state=NORMAL)
@@ -173,10 +173,11 @@ def handle_message(event):
     elif state == UserState.SETTING_REMIND_TIME:
             try:
                 hour, minute, second = map(int, user_message.split(':'))
-                reminder_time = datetime.time(hour, minute, second)
-                reply_message = f'提醒時間已更新。{reminder_time.strftime("%H:%M:%S")}'
+                # reminder_time = datetime.time(hour, minute, second)
+                reminder_times[user_id] = datetime.time(hour, minute, second)
+                reply_message = f'提醒時間已更新。{reminder_times[user_id].strftime("%H:%M:%S")}'
                 # 更新提醒时间
-                check_reminder(user_id, reminder_time)
+                check_reminder(user_id, reminder_times[user_id])
             except:
                 reply_message = '輸入的時間格式不正確。'
 
@@ -204,5 +205,4 @@ if __name__ == "__main__":
     reminder_thread.daemon = False  # 將執行緒設置為守護執行緒，以便在主執行緒結束時自動退出
     reminder_thread.start()  # 啟動執行緒
 
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    app.run()

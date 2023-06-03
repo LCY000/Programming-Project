@@ -65,8 +65,8 @@ reminder_time = datetime.time(0,0,0)
 
 # 判斷當前時間是否為提醒時間
 def check_reminder_time(reminder_time):
-    now = datetime.datetime.now()
-    if now.time() >= reminder_time:
+    now = datetime.time.now()
+    if now >= reminder_time:
         return True
     else:
         return False

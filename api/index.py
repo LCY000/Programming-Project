@@ -91,7 +91,7 @@ def handle_normal_state(user_id, user_message, event):
     elif user_message == '設定':
         # 進入設定狀態
         user_state[user_id] = UserState.SETTING
-        reply_message = f'\u2699\ufe0f 設定'
+        reply_message = f'設定'
         setting_items = ['設定固定提醒時間']
         i = 1
         for item in setting_items:

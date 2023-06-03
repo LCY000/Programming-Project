@@ -63,9 +63,17 @@ user_state = {}
 
 reminder_time = datetime.time(0,0,0)
 
+# 判斷當前時間是否為提醒時間
+def check_reminder_time(reminder_time):
+    now = datetime.datetime.now()
+    if now.time() >= reminder_time:
+        return True
+    else:
+        return False
+
 def check_reminder(user_id, reminder_time):
     # 检查提醒时间并发送消息
-    if Function.check_reminder_time(reminder_time):
+    if check_reminder_time(reminder_time):
         message = '提醒：您有待辦事項需要處理！'
         line_bot_api.push_message(user_id, TextSendMessage(text=message))
 
@@ -75,9 +83,8 @@ def start_reminder_check():
     threading.Timer(interval, start_reminder_check).start()
 
     for user_id in user_todo_list:
-        check_reminder(user_id, reminder_time.time())
-    
-    start_reminder_check()
+        check_reminder(user_id, reminder_time)
+
 
 # 處理在主選單下的訊息 (user_state=NORMAL)
 def handle_normal_state(user_id, user_message, event):

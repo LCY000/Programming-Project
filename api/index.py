@@ -76,6 +76,8 @@ def start_reminder_check():
 
     for user_id in user_todo_list:
         check_reminder(user_id, reminder_time.time())
+    
+    start_reminder_check()
 
 # 處理在主選單下的訊息 (user_state=NORMAL)
 def handle_normal_state(user_id, user_message, event):

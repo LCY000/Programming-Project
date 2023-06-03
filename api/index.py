@@ -53,6 +53,7 @@ class UserState(Enum):
     ADD_TODO = 1
     DEL_TODO = 2
     SETTING = 3
+    SETTING_REMIND_TIME = 4
 
 # 用戶的待辦事項
 user_todo_list = {}
@@ -157,11 +158,19 @@ def handle_message(event):
             user_state[user_id] = UserState.NORMAL
 
     elif state == UserState.SETTING:
-            reply_message = Function.setting_state(user_message, user_id, user_todo_list, reminder_time)
+            reply_message = Function.setting_state(user_message, user_id, user_todo_list, user_state)
+            user_state[user_id] = UserState.NORMAL
 
-            if reminder_time:  # 假设在设置状态下有一个变量用于判断是否更改了提醒时间
+    elif state == UserState.SETTING_REMIND_TIME:
+            try:
+                reply_message = '請輸入時間 (hh:mm:ss)'
+                hour, minute, second = map(int, user_message.split(':'))
+                reminder_time = datetime.time(hour, minute, second)
+                reply_message = '提醒時間已更新。'
                 # 更新提醒时间
                 check_reminder(user_id, reminder_time)
+            except:
+                reply_message = '輸入的時間格式不正確。'
 
             user_state[user_id] = UserState.NORMAL
 
@@ -171,7 +180,7 @@ def handle_message(event):
         if reply_message is None:
             return
     
-    check_reminder(user_id, reminder_time)
+    # check_reminder(user_id, reminder_time)
 
     # 輸出回覆訊息 (預防突發意外，保險偵錯)
     if reply_message:

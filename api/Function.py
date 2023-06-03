@@ -1,6 +1,7 @@
 from api import AccessFile
 from linebot.models import FlexSendMessage
 import datetime
+from api.index import UserState
 
 # 【顯示清單】  回傳顯示清單的訊息
 def createTodoListMessage(user_id,user_todo_list):
@@ -69,8 +70,8 @@ def handle_del_todo_state(user_id, user_message, user_todo_list):
 
     return reply_message, user_todo_list
 
-def setting_state(user_message, user_id, user_todo_list, reminder_time):
-    reminder_time = datetime.time(23,59,59)
+def setting_state(user_message, user_id, user_todo_list, user_state):
+    # reminder_time = datetime.time(23,59,59)
 
     if user_message.isdigit():
         number = int(user_message)
@@ -78,8 +79,8 @@ def setting_state(user_message, user_id, user_todo_list, reminder_time):
         if number == 1:
             
             if len(user_todo_list[user_id]) > 0:
-                reminder_time = datetime.time(19,5,0)
-                reply_message = f'固定提醒時間已設定完成：{reminder_time.strftime("%H:%M:%S")}'
+                user_state[user_id] = UserState.SETTING_REMIND_TIME
+                reply_message = '請設定固定提醒時間。'
             else:
                 reply_message = '\u2757 目前無待辦事項 \u2757\n\n已回到主選單狀態。'
             
@@ -89,7 +90,7 @@ def setting_state(user_message, user_id, user_todo_list, reminder_time):
     else:
         reply_message = '\u2757 請輸入正確的數字編號 \u2757\n\n已回到主選單狀態。' # 如果沒有找到對應的待辦事項內容，則回傳此訊息
 
-    return reply_message, reminder_time
+    return reply_message
 
 def set_reminder_time(reminder_time):
     

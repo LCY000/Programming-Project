@@ -154,7 +154,7 @@ def handle_message(event):
 
     if Function.check_reminder_time(reminder_time):
         message = '提醒：您有待辦事項需要處理！'
-        line_bot_api.push_message(user_id, TextSendMessage(text=message))
+        line_bot_api.push_message(user_id, TextSendMessage(text=message),reminder_time)
 
 
     # 輸出回覆訊息 (預防突發意外，保險偵錯)

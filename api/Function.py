@@ -76,9 +76,9 @@ def setting_state(user_message, user_id, user_todo_list):
 
         if number == 1:
             
-            if len(user_todo_list[user_id] > 0):
-                reminder_time = datetime.time(17,5,35)
-                set_reminder_time(reminder_time)
+            if len(user_todo_list[user_id]) > 0:
+                reminder_time = datetime.time(17,5,45)
+                reply_message, reminder_time = set_reminder_time(reminder_time)
 
             else:
                 reply_message = '\u2757 目前無待辦事項 \u2757\n\n已回到主選單狀態。'

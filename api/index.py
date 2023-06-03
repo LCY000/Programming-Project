@@ -179,8 +179,6 @@ def handle_message(event):
         if reply_message is None:
             return
     
-    # check_reminder(user_id, reminder_time)
-
     # 輸出回覆訊息 (預防突發意外，保險偵錯)
     if reply_message:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))

@@ -92,9 +92,9 @@ def setting_state(user_message, user_id, user_todo_list, user_state):
 
     return reply_message, user_state[user_id]
 
-def set_reminder_time(reminder_time):
+# def set_reminder_time(reminder_time):
 
-    return reminder_time
+#     return reminder_time
 
 # 判斷當前時間是否為提醒時間
 def check_reminder_time(reminder_time):

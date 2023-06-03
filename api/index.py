@@ -60,7 +60,7 @@ user_todo_list = {}
 # 追蹤使用者的狀態
 user_state = {}
 
-reminder_time = Function.set_reminder_time()
+reminder_time = datetime.time(0,0,0)
 
 # 處理在主選單下的訊息 (user_state=NORMAL)
 def handle_normal_state(user_id, user_message, event):

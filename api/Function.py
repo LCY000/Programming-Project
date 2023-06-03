@@ -77,8 +77,8 @@ def setting_state(user_message, user_id, user_todo_list):
         if number == 1:
             
             if len(user_todo_list[user_id]) > 0:
-                reminder_time = datetime.time(17,5,45)
-                reply_message, reminder_time = set_reminder_time(reminder_time)
+                reminder_time = datetime.time(17,5,50)
+                reply_message = set_reminder_time(reminder_time)
 
             else:
                 reply_message = '\u2757 目前無待辦事項 \u2757\n\n已回到主選單狀態。'
@@ -93,7 +93,7 @@ def setting_state(user_message, user_id, user_todo_list):
 
 def set_reminder_time(reminder_time):
     reply_message = f'固定提醒時間已設定為每天 {reminder_time.strftime("%H:%M:%S")}。'
-    return reply_message, reminder_time
+    return reply_message
 
 # 判斷當前時間是否為提醒時間
 def check_reminder_time(reminder_time):

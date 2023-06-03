@@ -189,7 +189,6 @@ def handle_message(event):
 
 
 if __name__ == "__main__":
-
-    start_reminder_check()
-
+    
     app.run()
+    start_reminder_check()

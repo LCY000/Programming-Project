@@ -53,12 +53,12 @@ def handle_add_todo_state(user_id, user_message,user_todo_list):
 
     return reply_message, user_todo_list
 
-
+# 【完成】  完成待辦事項狀態下的訊息
 def handle_del_todo_state(user_id, user_message, user_todo_list):
     reply_message = '' # 提供預設值
 
     if user_message == '0':
-        reply_message = '已取消完成功能' # 如果使用者輸入0 即代表取消刪除功能並回到一般狀態
+        reply_message = '已取消完成功能' # 如果使用者輸入0 即代表取消完成功能並回到一般狀態
 
     else:
         # 遍歷用戶的待辦事項列表
@@ -66,9 +66,9 @@ def handle_del_todo_state(user_id, user_message, user_todo_list):
             if task['text'] == user_message:
                 user_todo_list[user_id].remove(task)  # 刪除匹配的待辦事項內容
                 AccessFile.write_user_data(user_id, user_todo_list[user_id]) # 將更新後的待辦清單寫入資料庫
-                reply_message = '已刪除待辦事項：\n{}'.format(user_message)
+                reply_message = '已完成待辦事項：\n{}'.format(user_message)
                 break
         else:
-            reply_message = '未找到待辦事項：\n{}'.format(user_message)
+            reply_message = '未找到待辦事項：\n{}'.format(user_message) # 如果沒有找到對應的待辦事項內容，則回傳此訊息
 
     return reply_message, user_todo_list

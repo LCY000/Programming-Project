@@ -67,7 +67,6 @@ def handle_del_todo_state(user_id, user_message, user_todo_list):
             reply_message = f"已完成: {user_todo_list[user_id][number-1]['text']}"
             del user_todo_list[user_id][number-1]  # 刪除匹配的待辦事項內容
             
-        
         else:
             reply_message = f'未找到此待辦事項' # 如果沒有找到對應的待辦事項內容，則回傳此訊息
 

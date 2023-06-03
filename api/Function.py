@@ -48,7 +48,7 @@ def handle_add_todo_state(user_id, user_message,user_todo_list):
 
     AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
 
-    reply_message = '已新增待辦事項：\n{}'.format(user_message)
+    reply_message = '已新增待辦事項：\n{}\n\n已回到主選單'.format(user_message)
 
     return reply_message, user_todo_list
 
@@ -64,7 +64,7 @@ def handle_del_todo_state(user_id, user_message, user_todo_list):
 
         number= int(user_message)
         if number > 0 and number <= len(user_todo_list[user_id]):
-            reply_message = f"已完成: {user_todo_list[user_id][number-1]['text']}"
+            reply_message = f"已完成: {user_todo_list[user_id][number-1]['text']}\n\n已回到主選單"
             del user_todo_list[user_id][number-1]  # 刪除匹配的待辦事項內容
             
         else:

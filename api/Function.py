@@ -40,7 +40,6 @@ def handle_add_todo_state(user_id, user_message,user_todo_list):
     reply_message = '' # 提供預設值
     
     if user_message == '結束' or user_message == '1':
-        user_state[user_id] = UserState.NORMAL
         reply_message = '已結束新增功能' # 如果使用者輸入1 即代表取消新增功能並回到一般狀態
 
     else:

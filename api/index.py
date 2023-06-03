@@ -4,7 +4,7 @@ from api import AccessFile
 from api import Function
 
 from enum import Enum
-import os, datetime
+import os, datetime, threading
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -61,6 +61,18 @@ user_todo_list = {}
 user_state = {}
 
 reminder_time = datetime.time(0,0,0)
+
+def check_reminder(user_id):
+    # 检查提醒时间并发送消息
+    if Function.check_reminder_time(reminder_time):
+        message = '提醒：您有待辦事項需要處理！'
+        line_bot_api.push_message(user_id, TextSendMessage(text=message))
+
+def start_reminder_check():
+    # 每隔一段时间执行一次检查
+    interval = 60  # 检查间隔（单位：秒）
+    threading.Timer(interval, start_reminder_check).start()
+    check_reminder()
 
 # 處理在主選單下的訊息 (user_state=NORMAL)
 def handle_normal_state(user_id, user_message, event):
@@ -151,12 +163,8 @@ def handle_message(event):
         # 要是已輸出待辦清單，則直接結束
         if reply_message is None:
             return
-
-    if Function.check_reminder_time(reminder_time):
-        message = '提醒：您有待辦事項需要處理！'
-        # reminder_time_str = reminder_time.strftime("%H:%M:%S")
-        line_bot_api.push_message(user_id, TextSendMessage(text=message))
-
+    
+    check_reminder(user_id)
 
     # 輸出回覆訊息 (預防突發意外，保險偵錯)
     if reply_message:
@@ -168,4 +176,7 @@ def handle_message(event):
 
 
 if __name__ == "__main__":
+
+    start_reminder_check()
+
     app.run()

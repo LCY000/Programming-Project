@@ -54,4 +54,21 @@ def handle_add_todo_state(user_id, user_message,user_todo_list):
     return reply_message, user_todo_list
 
 
+def handle_del_todo_state(user_id, user_message, user_todo_list):
+    reply_message = '' # 提供預設值
 
+    if user_message == '0':
+        reply_message = '已取消完成功能' # 如果使用者輸入0 即代表取消刪除功能並回到一般狀態
+
+    else:
+        # 遍歷用戶的待辦事項列表
+        for task in user_todo_list[user_id]:
+            if task['text'] == user_message:
+                user_todo_list[user_id].remove(task)  # 刪除匹配的待辦事項內容
+                AccessFile.write_user_data(user_id, user_todo_list[user_id]) # 將更新後的待辦清單寫入資料庫
+                reply_message = '已刪除待辦事項：\n{}'.format(user_message)
+                break
+        else:
+            reply_message = '未找到待辦事項：\n{}'.format(user_message)
+
+    return reply_message, user_todo_list

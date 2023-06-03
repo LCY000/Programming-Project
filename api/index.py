@@ -51,6 +51,7 @@ def callback():
 class UserState(Enum):
     NORMAL = 0
     ADD_TODO = 1
+    DEL_TODO = 2
 
 # 用戶的待辦事項
 user_todo_list = {}
@@ -67,14 +68,15 @@ def handle_normal_state(user_id, user_message, event):
     if user_message == '新增 待辦事項':
         user_state[user_id] = UserState.ADD_TODO
         reply_message = f'請輸入待辦事項內容。'
-        # 還需製作一個取消新增訊息的功能......
 
     elif user_message == '顯示 待辦清單':
         message = Function.createTodoListMessage(user_id,user_todo_list)
         line_bot_api.reply_message(event.reply_token, message)
         reply_message = None
-
-    # 等待新增功能中......
+    
+    elif user_message == '完成 待辦事項':   # 刪除功能建立於 06-03 12:03 ver1
+        user_state[user_id] = UserState.DEL_TODO
+        reply_message = f'請輸入要刪除的待辦事項內容。'
 
     else:
         reply_message = f'無此指令\n請輸入正確的指令。'
@@ -107,8 +109,10 @@ def handle_message(event):
     if state == UserState.ADD_TODO:
             reply_message,user_todo_list = Function.handle_add_todo_state(user_id, user_message,user_todo_list)
             user_state[user_id] = UserState.NORMAL
-    
-    # 等待新增功能中......
+    # (New) 刪除功能
+    elif state == UserState.DEL_TODO:
+            reply_message,user_todo_list = Function.handle_del_todo_state(user_id, user_message,user_todo_list)
+            user_state[user_id] = UserState.NORMAL
 
     else:
         reply_message = handle_normal_state(user_id, user_message, event)

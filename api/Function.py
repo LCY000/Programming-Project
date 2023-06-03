@@ -39,9 +39,6 @@ def createTodoListMessage(user_id,user_todo_list):
 def handle_add_todo_state(user_id, user_message,user_todo_list):
     reply_message = '' # 提供預設值
     
-    # if user_message == '結束' or user_message == '1':
-    #     reply_message = '已結束新增功能' # 如果使用者輸入1 即代表取消新增功能並回到一般狀態
-
     # 創建一個新的待辦事項
     new_task = {'text' : user_message}
     user_todo_list[user_id].append(new_task)
@@ -55,9 +52,6 @@ def handle_add_todo_state(user_id, user_message,user_todo_list):
 # 【完成】  完成待辦事項狀態下的訊息
 def handle_del_todo_state(user_id, user_message, user_todo_list):
     reply_message = '' # 提供預設值
-
-    # if user_message == '結束' or user_message == '1':
-    #     reply_message = '已結束完成功能' # 如果使用者輸入1 即代表取消完成功能並回到一般狀態
 
     # 驗證是否是輸入編號
     if user_message.isdigit():
@@ -74,3 +68,21 @@ def handle_del_todo_state(user_id, user_message, user_todo_list):
         reply_message = '\u2757 請輸入正確的數字編號\n已回到主選單狀態。' # 如果沒有找到對應的待辦事項內容，則回傳此訊息
 
     return reply_message, user_todo_list
+
+def setting_state(user_message):
+
+    if user_message.isdigit():
+        number = int(user_message)
+
+        if number > 0 and number <= 1:
+            match number:
+                case 1:
+                    reply_message = '進入選項1。'
+        
+        else:
+            reply_message = f'未找到此設定選項\n已回到主選單狀態。'
+
+    else:
+        reply_message = '\u2757 請輸入正確的數字編號\n已回到主選單狀態。' # 如果沒有找到對應的待辦事項內容，則回傳此訊息
+
+    return reply_message

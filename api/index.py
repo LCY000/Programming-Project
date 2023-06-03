@@ -52,6 +52,7 @@ class UserState(Enum):
     NORMAL = 0
     ADD_TODO = 1
     DEL_TODO = 2
+    SETTING = 3
 
 # 用戶的待辦事項
 user_todo_list = {}
@@ -86,6 +87,16 @@ def handle_normal_state(user_id, user_message, event):
         for todo in user_todo_list[user_id]:
             reply_message += f"\n{i}. {todo['text']}"
             i+= 1
+    
+    elif user_message == '設定':
+        # 進入設定狀態
+        user_state[user_id] = UserState.SETTING
+        reply_message = f'\u2699\ufe0f 設定'
+        setting_items = ['設定固定提醒時間']
+        i = 1
+        for item in setting_items:
+            reply_message += f"\n{i}. {item}"
+            i += 1
 
     else:
         reply_message = f'無此指令\n請輸入正確的指令。'
@@ -124,15 +135,15 @@ def handle_message(event):
     if state == UserState.ADD_TODO:
             reply_message,user_todo_list = Function.handle_add_todo_state(user_id, user_message,user_todo_list)
             user_state[user_id] = UserState.NORMAL
-            # if reply_message == '已結束新增功能':
-            #     user_state[user_id] = UserState.NORMAL
 
     # (New) 刪除功能
     elif state == UserState.DEL_TODO:
             reply_message,user_todo_list = Function.handle_del_todo_state(user_id, user_message,user_todo_list)
             user_state[user_id] = UserState.NORMAL
-            # if reply_message == '已結束完成功能':
-            #     user_state[user_id] = UserState.NORMAL
+
+    elif state == UserState.SETTING:
+            reply_message = Function.setting_state(user_message)
+            user_state[user_id] = UserState.NORMAL
 
     else:
         reply_message = handle_normal_state(user_id, user_message, event)

@@ -70,6 +70,7 @@ def handle_del_todo_state(user_id, user_message, user_todo_list):
     return reply_message, user_todo_list
 
 def setting_state(user_message, user_id, user_todo_list):
+    reminder_time = datetime.time(0,0,0)
 
     if user_message.isdigit():
         number = int(user_message)
@@ -77,7 +78,7 @@ def setting_state(user_message, user_id, user_todo_list):
         if number == 1:
             
             if len(user_todo_list[user_id]) > 0:
-                reminder_time = datetime.time(17,5,50)
+                reminder_time = datetime.time(17,5,55)
                 reply_message = set_reminder_time(reminder_time)
 
             else:

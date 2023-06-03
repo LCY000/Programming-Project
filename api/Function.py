@@ -1,7 +1,7 @@
 from api import AccessFile
 from linebot.models import FlexSendMessage
 import datetime
-from api.index import UserState
+from api import index
 
 # 【顯示清單】  回傳顯示清單的訊息
 def createTodoListMessage(user_id,user_todo_list):
@@ -79,7 +79,7 @@ def setting_state(user_message, user_id, user_todo_list, user_state):
         if number == 1:
             
             if len(user_todo_list[user_id]) > 0:
-                user_state[user_id] = UserState.SETTING_REMIND_TIME
+                user_state[user_id] = index.UserState.SETTING_REMIND_TIME
                 reply_message = '請設定固定提醒時間。'
             else:
                 reply_message = '\u2757 目前無待辦事項 \u2757\n\n已回到主選單狀態。'

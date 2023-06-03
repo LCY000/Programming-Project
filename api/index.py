@@ -159,7 +159,7 @@ def handle_message(event):
 
     elif state == UserState.SETTING:
             reply_message, user_state[user_id] = Function.setting_state(user_message, user_id, user_todo_list, user_state)
-            user_state[user_id] = UserState.NORMAL
+            # user_state[user_id] = UserState.NORMAL
 
     elif state == UserState.SETTING_REMIND_TIME:
             try:

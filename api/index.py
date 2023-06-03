@@ -76,7 +76,7 @@ def handle_normal_state(user_id, user_message, event):
     
     elif user_message == '完成 待辦事項':   # 刪除功能建立於 06-03 12:03 ver1
         user_state[user_id] = UserState.DEL_TODO
-        reply_message = f'請輸入要完成的號碼或內容。'
+        reply_message = f'請輸入要完成的編號或待辦內容。'
         i = 1
         for todo in user_todo_list[user_id]:
             reply_message += f"\n{i}. {todo['text']}"

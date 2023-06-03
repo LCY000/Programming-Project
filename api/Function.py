@@ -69,20 +69,18 @@ def handle_del_todo_state(user_id, user_message, user_todo_list):
 
     return reply_message, user_todo_list
 
-# def setting_state(user_message):
+def setting_state(user_message):
 
-#     if user_message.isdigit():
-#         number = int(user_message)
+    if user_message.isdigit():
+        number = int(user_message)
 
-#         if number > 0 and number <= 1:
-#             match number:
-#                 case 1:
-#                     reply_message = '進入選項1。'
-        
-#         else:
-#             reply_message = f'未找到此設定選項\n已回到主選單狀態。'
+        if number == 1:
+            reply_message = '已進入選項1'
+            
+        else:
+            reply_message = f'未找到此設定選項\n已回到主選單狀態。'
 
-#     else:
-#         reply_message = '\u2757 請輸入正確的數字編號\n已回到主選單狀態。' # 如果沒有找到對應的待辦事項內容，則回傳此訊息
+    else:
+        reply_message = '\u2757 請輸入正確的數字編號\n已回到主選單狀態。' # 如果沒有找到對應的待辦事項內容，則回傳此訊息
 
-#     return reply_message
+    return reply_message

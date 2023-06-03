@@ -204,4 +204,5 @@ if __name__ == "__main__":
     reminder_thread.daemon = False  # 將執行緒設置為守護執行緒，以便在主執行緒結束時自動退出
     reminder_thread.start()  # 啟動執行緒
 
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)

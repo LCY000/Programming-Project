@@ -67,7 +67,7 @@ def handle_normal_state(user_id, user_message, event):
 
     if user_message == '新增 待辦事項':
         user_state[user_id] = UserState.ADD_TODO
-        reply_message = f'請輸入待辦事項內容。'
+        reply_message = f'請輸入待辦事項內容。\n(如不繼續新增請輸入「結束」或「1」)'
 
     elif user_message == '顯示 待辦清單':
         message = Function.createTodoListMessage(user_id,user_todo_list)
@@ -103,12 +103,15 @@ def handle_message(event):
             user_todo_list[user_id] = []
         user_state[user_id] = UserState.NORMAL
 
+    if user_message == '取消' or user_message == '0':
+        user_state[user_id] = UserState.NORMAL
+        reply_message = '取消已成功\n已重新回到主選單' # 強制取消當下的狀態，回到主選單
 
     # 檢查使用者的狀態 (處於哪個功能狀態下)
     state = user_state[user_id]
     if state == UserState.ADD_TODO:
             reply_message,user_todo_list = Function.handle_add_todo_state(user_id, user_message,user_todo_list)
-            user_state[user_id] = UserState.NORMAL
+            # user_state[user_id] = UserState.NORMAL
     # (New) 刪除功能
     elif state == UserState.DEL_TODO:
             reply_message,user_todo_list = Function.handle_del_todo_state(user_id, user_message,user_todo_list)

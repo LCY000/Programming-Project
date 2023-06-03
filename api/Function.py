@@ -39,8 +39,8 @@ def createTodoListMessage(user_id,user_todo_list):
 def handle_add_todo_state(user_id, user_message,user_todo_list):
     reply_message = '' # 提供預設值
     
-    if user_message == '0':
-        reply_message = '已取消新增功能' # 如果使用者輸入0 即代表取消新增功能並回到一般狀態
+    if user_message == '結束' or user_message == '1':
+        reply_message = '已結束新增功能' # 如果使用者輸入1 即代表取消新增功能並回到一般狀態
 
     else:
         # 創建一個新的待辦事項
@@ -49,7 +49,7 @@ def handle_add_todo_state(user_id, user_message,user_todo_list):
     
         AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
 
-        reply_message = '已新增待辦事項：\n{}'.format(user_message)
+        reply_message = '已新增待辦事項：\n{}\n\n請輸入下一個要新增的待辦事項'.format(user_message)
 
     return reply_message, user_todo_list
 

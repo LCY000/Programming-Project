@@ -59,14 +59,24 @@ def handle_del_todo_state(user_id, user_message, user_todo_list):
     # if user_message == '結束' or user_message == '1':
     #     reply_message = '已結束完成功能' # 如果使用者輸入1 即代表取消完成功能並回到一般狀態
 
-    # 遍歷用戶的待辦事項列表
-    for task in user_todo_list[user_id]:
-        if task['text'] == user_message:
-            user_todo_list[user_id].remove(task)  # 刪除匹配的待辦事項內容
-            AccessFile.write_user_data(user_id, user_todo_list[user_id]) # 將更新後的待辦清單寫入資料庫
-            reply_message = '已完成待辦事項：\n{}'.format(user_message)
-            break
+    # 驗證是否是輸入編號
+    if user_message.isdigit():
+
+        number= int(user_message)
+        if number > 0 and number <= len(user_todo_list[user_id]):
+            del user_todo_list[user_id][number-1]  # 刪除匹配的待辦事項內容
+        
+        else:
+            reply_message = f'未找到此待辦事項' # 如果沒有找到對應的待辦事項內容，則回傳此訊息
+
+        # # 遍歷用戶的待辦事項列表
+        # for task in user_todo_list[user_id]:
+        #     if task['text'] == user_message:
+        #         user_todo_list[user_id].remove(task)  # 刪除匹配的待辦事項內容
+        #         AccessFile.write_user_data(user_id, user_todo_list[user_id]) # 將更新後的待辦清單寫入資料庫
+        #         reply_message = '已完成待辦事項：\n{}'.format(user_message)
+        #         break
     else:
-        reply_message = '未找到待辦事項：\n{}'.format(user_message) # 如果沒有找到對應的待辦事項內容，則回傳此訊息
+        reply_message = '請輸入待辦事項的編號' # 如果沒有找到對應的待辦事項內容，則回傳此訊息
 
     return reply_message, user_todo_list

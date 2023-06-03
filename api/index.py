@@ -4,7 +4,7 @@ from api import AccessFile
 from api import Function
 
 from enum import Enum
-import os
+import os, datetime
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -60,6 +60,7 @@ user_todo_list = {}
 # 追蹤使用者的狀態
 user_state = {}
 
+reminder_time = datetime.time(0,0,0)
 
 # 處理在主選單下的訊息 (user_state=NORMAL)
 def handle_normal_state(user_id, user_message, event):
@@ -142,7 +143,7 @@ def handle_message(event):
             user_state[user_id] = UserState.NORMAL
 
     elif state == UserState.SETTING:
-            reply_message = Function.setting_state(user_message)
+            reply_message = Function.setting_state(user_message, user_id, user_todo_list)
             user_state[user_id] = UserState.NORMAL
 
     else:
@@ -151,6 +152,10 @@ def handle_message(event):
         if reply_message is None:
             return
 
+    if Function.check_reminder_time(reminder_time):
+        message = '提醒：您有待辦事項需要處理！'
+        line_bot_api.push_message(user_id, TextSendMessage(text=message))
+
 
     # 輸出回覆訊息 (預防突發意外，保險偵錯)
     if reply_message:
@@ -158,7 +163,6 @@ def handle_message(event):
     else:
         # 處理空訊息的情況
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="空訊息"))
-
 
 
 

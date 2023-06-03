@@ -66,7 +66,7 @@ def handle_del_todo_state(user_id, user_message, user_todo_list):
         if number > 0 and number <= len(user_todo_list[user_id]):
             reply_message = f"已完成: {user_todo_list[user_id][number-1]['text']}\n\n已回到主選單"
             del user_todo_list[user_id][number-1]  # 刪除匹配的待辦事項內容
-            
+            AccessFile.write_user_data(user_id,user_todo_list[user_id]) # 將數據傳入資料庫
         else:
             reply_message = f'未找到此待辦事項\n已回到主選單狀態。' # 如果沒有找到對應的待辦事項內容，則回傳此訊息
 

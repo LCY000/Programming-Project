@@ -39,17 +39,16 @@ def createTodoListMessage(user_id,user_todo_list):
 def handle_add_todo_state(user_id, user_message,user_todo_list):
     reply_message = '' # 提供預設值
     
-    if user_message == '結束' or user_message == '1':
-        reply_message = '已結束新增功能' # 如果使用者輸入1 即代表取消新增功能並回到一般狀態
+    # if user_message == '結束' or user_message == '1':
+    #     reply_message = '已結束新增功能' # 如果使用者輸入1 即代表取消新增功能並回到一般狀態
 
-    else:
-        # 創建一個新的待辦事項
-        new_task = {'text' : user_message}
-        user_todo_list[user_id].append(new_task)
-    
-        AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
+    # 創建一個新的待辦事項
+    new_task = {'text' : user_message}
+    user_todo_list[user_id].append(new_task)
 
-        reply_message = '已新增待辦事項：\n{}\n\n請輸入下一個要新增的待辦事項'.format(user_message)
+    AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
+
+    reply_message = '已新增待辦事項：\n{}\n\n請輸入下一個要新增的待辦事項'.format(user_message)
 
     return reply_message, user_todo_list
 
@@ -57,18 +56,17 @@ def handle_add_todo_state(user_id, user_message,user_todo_list):
 def handle_del_todo_state(user_id, user_message, user_todo_list):
     reply_message = '' # 提供預設值
 
-    if user_message == '結束' or user_message == '1':
-        reply_message = '已結束完成功能' # 如果使用者輸入1 即代表取消完成功能並回到一般狀態
+    # if user_message == '結束' or user_message == '1':
+    #     reply_message = '已結束完成功能' # 如果使用者輸入1 即代表取消完成功能並回到一般狀態
 
+    # 遍歷用戶的待辦事項列表
+    for task in user_todo_list[user_id]:
+        if task['text'] == user_message:
+            user_todo_list[user_id].remove(task)  # 刪除匹配的待辦事項內容
+            AccessFile.write_user_data(user_id, user_todo_list[user_id]) # 將更新後的待辦清單寫入資料庫
+            reply_message = '已完成待辦事項：\n{}'.format(user_message)
+            break
     else:
-        # 遍歷用戶的待辦事項列表
-        for task in user_todo_list[user_id]:
-            if task['text'] == user_message:
-                user_todo_list[user_id].remove(task)  # 刪除匹配的待辦事項內容
-                AccessFile.write_user_data(user_id, user_todo_list[user_id]) # 將更新後的待辦清單寫入資料庫
-                reply_message = '已完成待辦事項：\n{}'.format(user_message)
-                break
-        else:
-            reply_message = '未找到待辦事項：\n{}'.format(user_message) # 如果沒有找到對應的待辦事項內容，則回傳此訊息
+        reply_message = '未找到待辦事項：\n{}'.format(user_message) # 如果沒有找到對應的待辦事項內容，則回傳此訊息
 
     return reply_message, user_todo_list

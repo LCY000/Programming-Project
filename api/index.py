@@ -72,14 +72,14 @@ def check_reminder_time(reminder_time):
         return False
 
 def check_reminder(user_id, reminder_time):
-    # 检查提醒时间并发送消息
+    # 檢查提醒時間並發送消息
     if check_reminder_time(reminder_time):
         message = '提醒：您有待辦事項需要處理！'
         line_bot_api.push_message(user_id, TextSendMessage(text=message))
 
 def start_reminder_check():
-    # 每隔一段时间执行一次检查
-    interval = 60  # 检查间隔（单位：秒）
+    # 每隔一段時間執行一次檢查
+    interval = 60  # 檢查間隔（單位：秒）
     threading.Timer(interval, start_reminder_check).start()
 
     for user_id in user_todo_list:

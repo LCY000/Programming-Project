@@ -47,10 +47,13 @@ def callback():
 @app.route("/requests_PM")
 def check_per_minute():
     try:
+        print("Running check_per_minute()")  # 除錯訊息
         check_reminders()
         return '提醒檢查完成'
-    except:
+    except Exception as e:
+        print("Error in check_per_minute():", str(e))  # 除錯訊息
         return '檢查失敗'
+
 #----------------------------------------- 分隔線 -----------------------------------------#
  
 

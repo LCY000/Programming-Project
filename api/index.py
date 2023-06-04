@@ -4,7 +4,8 @@ from api import AccessFile
 from api import Function
 
 from enum import Enum
-from datetime import datetime,timezone,timedelta
+# from datetime import datetime,timezone,timedelta
+import datetime
 import os
 
 from linebot import (
@@ -77,8 +78,8 @@ reminder_times = {}
 # 判斷當前時間是否為提醒時間
 def check_reminder_time(reminder_time):
     print('crt2 fn')
-    now = datetime.utcnow().replace(tzinfo=timezone.utc)
-    taiwan_now_time = now.astimezone(timezone(timedelta(hours=8))) # 轉換時區 -> 東八區
+    now = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
+    taiwan_now_time = now.astimezone(datetime.timezone(datetime.timedelta(hours=8))) # 轉換時區 -> 東八區
 
     if taiwan_now_time.time().hour >= reminder_time.hour and taiwan_now_time.time().minute >= reminder_time.minute:
         print('true')
@@ -199,12 +200,12 @@ def handle_message(event):
             try:
                 hour, minute = map(int, user_message.split(':'))
                 # reminder_time = datetime.time(hour, minute, second)
-                reminder_times[user_id] = datetime.time(hour, minute, 0)
+                reminder_times[user_id] = datetime.time(hour, minute)
                 reply_message = f'提醒時間已更新。{reminder_times[user_id].strftime("%H:%M")}'
                 # 更新提醒时间
                 check_reminder(user_id, reminder_times[user_id])
-            except Exception as e:
-                reply_message = f'輸入的時間格式不正確。Error: {e}'
+            except:
+                reply_message = f'輸入的時間格式不正確。'
 
             user_state[user_id] = UserState.NORMAL
 

@@ -83,6 +83,8 @@ def check_reminder(user_id, reminder_time):
     if check_reminder_time(reminder_time):
         message = '提醒：您有待辦事項需要處理！'
         line_bot_api.push_message(user_id, TextSendMessage(text=message))
+        
+    return message
 
 def check_reminders():
     for user_id in user_todo_list:
@@ -190,7 +192,7 @@ def handle_message(event):
                 reminder_times[user_id] = datetime.time(hour, minute)
                 reply_message = f'提醒時間已更新。{reminder_times[user_id].strftime("%H:%M")}'
                 # 更新提醒时间
-                check_reminder(user_id, reminder_times[user_id])
+                reply_message = check_reminder(user_id, reminder_times[user_id])
             except:
                 reply_message = '輸入的時間格式不正確。'
 

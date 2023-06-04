@@ -66,7 +66,7 @@ reminder_times = {}
 # 判斷當前時間是否為提醒時間
 def check_reminder_time(reminder_time):
     now = datetime.datetime.now().time()
-    if now >= reminder_time:
+    if now.hour == reminder_time.hour and now.minute == reminder_time.minute :
         return True
     else:
         return False
@@ -173,10 +173,10 @@ def handle_message(event):
 
     elif state == UserState.SETTING_REMIND_TIME:
             try:
-                hour, minute, second = map(int, user_message.split(':'))
+                hour, minute = map(int, user_message.split(':'))
                 # reminder_time = datetime.time(hour, minute, second)
-                reminder_times[user_id] = datetime.time(hour, minute, second)
-                reply_message = f'提醒時間已更新。{reminder_times[user_id].strftime("%H:%M:%S")}'
+                reminder_times[user_id] = datetime.time(hour, minute)
+                reply_message = f'提醒時間已更新。{reminder_times[user_id].strftime("%H:%M")}'
                 # 更新提醒时间
                 check_reminder(user_id, reminder_times[user_id])
             except:

@@ -76,11 +76,11 @@ reminder_times = {}
 # 判斷當前時間是否為提醒時間
 def check_reminder_time(reminder_time):
     now = datetime.datetime.now().time()
-    if now.hour == reminder_time.hour and now.minute == reminder_time.minute :
+    if now.hour >= reminder_time.hour and now.minute >= reminder_time.minute :
         print('true')
         return True
     else:
-        print('false')
+        print('false', f'now = {now}, now.hour = {now.hour}, now.minute = {now.minute}, reminder_time = {reminder_time}, reminder_time.hour = {reminder_time.hour}, reminder_time.minute = {reminder_time.minute}')
         return False
 
 def check_reminder(user_id, reminder_time):

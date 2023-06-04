@@ -199,7 +199,7 @@ def handle_message(event):
             try:
                 hour, minute = map(int, user_message.split(':'))
                 # reminder_time = datetime.time(hour, minute, second)
-                reminder_times[user_id] = datetime.time(hour, minute)
+                reminder_times[user_id] = datetime.time(hour, minute, 0)
                 reply_message = f'提醒時間已更新。{reminder_times[user_id].strftime("%H:%M")}'
                 # 更新提醒时间
                 check_reminder(user_id, reminder_times[user_id])

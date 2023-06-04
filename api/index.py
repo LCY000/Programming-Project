@@ -44,7 +44,7 @@ def callback():
 
     return 'OK'
 
-@app.route("/requests_PM", methods=['POST'])
+@app.route("/requests_PM")
 def check_per_minute():
 
     check_reminders()

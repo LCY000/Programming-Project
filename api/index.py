@@ -73,43 +73,29 @@ user_todo_list = {}
 # 追蹤使用者的狀態
 user_state = {}
 reminder_times = {}
-# reminder_time = datetime.time(0,0,0)
+
 
 # 判斷當前時間是否為提醒時間
 def check_reminder_time(reminder_time):
-    print('crt2 fn')
     now = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
     taiwan_now_time = now.astimezone(datetime.timezone(datetime.timedelta(hours=8))) # 轉換時區 -> 東八區
 
-    if taiwan_now_time.time().hour >= reminder_time.hour and taiwan_now_time.time().minute >= reminder_time.minute:
-        print('true')
+    if taiwan_now_time.time().hour == reminder_time.hour and taiwan_now_time.time().minute == reminder_time.minute:
         return True
     else:
-        print('false', f'taiwan_now_time = {taiwan_now_time}, now.hour = {taiwan_now_time.time().hour}, now.minute = {taiwan_now_time.time().minute}, reminder_time = {reminder_time}, reminder_time.hour = {reminder_time.hour}, reminder_time.minute = {reminder_time.minute}')
         return False
 
 def check_reminder(user_id, reminder_time):
     # 檢查提醒時間並發送消息
     if check_reminder_time(reminder_time):
-        print('in crt fn')
         message = '提醒：您有待辦事項需要處理！'
         line_bot_api.push_message(user_id, TextSendMessage(text=message))
 
 def check_reminders():
-    print('in crs fn')
     for user_id in user_todo_list:
         if user_id in reminder_times:
-            print('in for loop')
             check_reminder(user_id, reminder_times[user_id])
 
-# def start_reminder_check():
-#     # 每隔一段時間執行一次檢查
-#     interval = 60  # 檢查間隔（單位：秒）
-#     threading.Timer(interval, start_reminder_check).start()
-
-#     for user_id in user_todo_list:
-#         if user_id in reminder_times:
-#             check_reminder(user_id, reminder_times[user_id])
 
 
 # 處理在主選單下的訊息 (user_state=NORMAL)
@@ -187,22 +173,23 @@ def handle_message(event):
             reply_message,user_todo_list = Function.handle_add_todo_state(user_id, user_message,user_todo_list)
             user_state[user_id] = UserState.NORMAL
 
-    # (New) 刪除功能
+    # 刪除功能
     elif state == UserState.DEL_TODO:
             reply_message,user_todo_list = Function.handle_del_todo_state(user_id, user_message,user_todo_list)
             user_state[user_id] = UserState.NORMAL
 
+    # 設定功能
     elif state == UserState.SETTING:
             reply_message, user_state[user_id] = Function.setting_state(user_message, user_id, user_todo_list, user_state)
             # user_state[user_id] = UserState.NORMAL
 
+    # 設定提醒時間功能
     elif state == UserState.SETTING_REMIND_TIME:
             try:
                 hour, minute = map(int, user_message.split(':'))
-                # reminder_time = datetime.time(hour, minute, second)
                 reminder_times[user_id] = datetime.time(hour, minute)
                 reply_message = f'提醒時間已更新。{reminder_times[user_id].strftime("%H:%M")}'
-                # 更新提醒时间
+                # 更新提醒時間
                 check_reminder(user_id, reminder_times[user_id])
             except:
                 reply_message = f'輸入的時間格式不正確。'
@@ -225,10 +212,4 @@ def handle_message(event):
 
 
 if __name__ == "__main__":
-
-    # # 建立一個新的執行緒來執行 start_reminder_check() 函數
-    # reminder_thread = threading.Thread(target=start_reminder_check)
-    # reminder_thread.daemon = False  # 將執行緒設置為守護執行緒，以便在主執行緒結束時自動退出
-    # reminder_thread.start()  # 啟動執行緒
-
     app.run()   

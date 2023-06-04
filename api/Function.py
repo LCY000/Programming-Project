@@ -70,6 +70,7 @@ def handle_del_todo_state(user_id, user_message, user_todo_list):
 
     return reply_message, user_todo_list
 
+# 【設定】  設定功能
 def setting_state(user_message, user_id, user_todo_list, user_state):
 
     if user_message.isdigit():

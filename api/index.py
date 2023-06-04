@@ -77,8 +77,10 @@ reminder_times = {}
 def check_reminder_time(reminder_time):
     now = datetime.datetime.now().time()
     if now.hour == reminder_time.hour and now.minute == reminder_time.minute :
+        print('true')
         return True
     else:
+        print('false')
         return False
 
 def check_reminder(user_id, reminder_time):

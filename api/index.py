@@ -203,8 +203,8 @@ def handle_message(event):
                 reply_message = f'提醒時間已更新。{reminder_times[user_id].strftime("%H:%M")}'
                 # 更新提醒时间
                 check_reminder(user_id, reminder_times[user_id])
-            except:
-                reply_message = '輸入的時間格式不正確。'
+            except Exception as e:
+                reply_message = f'輸入的時間格式不正確。Error: {e}'
 
             user_state[user_id] = UserState.NORMAL
 

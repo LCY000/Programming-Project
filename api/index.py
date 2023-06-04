@@ -84,13 +84,15 @@ def check_reminder_time(reminder_time):
 def check_reminder(user_id, reminder_time):
     # 檢查提醒時間並發送消息
     if check_reminder_time(reminder_time):
-        print('我要進來這裡。')
+        print('in crt fn')
         message = '提醒：您有待辦事項需要處理！'
         line_bot_api.push_message(user_id, TextSendMessage(text=message))
 
 def check_reminders():
+    print('in crs fn')
     for user_id in user_todo_list:
         if user_id in reminder_times:
+            print('in for loop')
             check_reminder(user_id, reminder_times[user_id])
 
 # def start_reminder_check():

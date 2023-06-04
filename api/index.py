@@ -83,7 +83,8 @@ def start_reminder_check():
     threading.Timer(interval, start_reminder_check).start()
 
     for user_id in user_todo_list:
-        check_reminder(user_id, reminder_times[user_id])
+        if user_id in reminder_times:
+            check_reminder(user_id, reminder_times[user_id])
 
 
 # 處理在主選單下的訊息 (user_state=NORMAL)

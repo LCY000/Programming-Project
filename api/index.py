@@ -76,6 +76,7 @@ reminder_times = {}
 
 # 判斷當前時間是否為提醒時間
 def check_reminder_time(reminder_time):
+    print('crt2 fn')
     now = datetime.utcnow().replace(tzinfo=timezone.utc)
     taiwan_now_time = now.astimezone(timezone(timedelta(hours=8))) # 轉換時區 -> 東八區
 

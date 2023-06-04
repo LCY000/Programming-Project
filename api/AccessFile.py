@@ -90,16 +90,16 @@ def write_user_reminderTime(user_id, reminder_time):
 
 # 拿出所有用戶的時間
 
-def read_users_reminderTime(reminder_times):
-    # 建立 MongoDB 連線
-    client = create_mongodb_connection()
+# def read_users_reminderTime(reminder_times):
+#     # 建立 MongoDB 連線
+#     client = create_mongodb_connection()
     
-    # 選擇資料庫和集合
-    db = client['Project']
-    collection = db['UserData']
+#     # 選擇資料庫和集合
+#     db = client['Project']
+#     collection = db['UserData']
     
-    # 尋找所有用戶
-    users = collection.find()
+#     # 尋找所有用戶
+#     users = collection.find()
 
-    # for user in users:
-    # user_id = user['_id']
+#     for user in users:
+#     user_id = user['_id']

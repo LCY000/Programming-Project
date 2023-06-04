@@ -44,6 +44,11 @@ def callback():
 
     return 'OK'
 
+@app.route("/requests_PM", methods=['POST'])
+def check_per_minute():
+
+    
+    return
 #----------------------------------------- 分隔線 -----------------------------------------#
  
 

@@ -101,5 +101,5 @@ def read_users_reminderTime(reminder_times):
     # 尋找所有用戶
     users = collection.find()
 
-    for user in users:
-    user_id = user['_id']
+    # for user in users:
+    # user_id = user['_id']

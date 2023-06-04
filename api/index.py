@@ -4,7 +4,8 @@ from api import AccessFile
 from api import Function
 
 from enum import Enum
-import os, datetime, threading
+from datetime import datetime,timezone,timedelta
+import os
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -75,12 +76,14 @@ reminder_times = {}
 
 # 判斷當前時間是否為提醒時間
 def check_reminder_time(reminder_time):
-    now = datetime.datetime.now().time()
-    if now.hour >= reminder_time.hour and now.minute >= reminder_time.minute :
+    now = datetime.utcnow().replace(tzinfo=timezone.utc)
+    taiwan_now_time = now.astimezone(timezone(timedelta(hours=8))) # 轉換時區 -> 東八區
+
+    if taiwan_now_time.time().hour >= reminder_time.hour and taiwan_now_time.time().minute >= reminder_time.minute:
         print('true')
         return True
     else:
-        print('false', f'now = {now}, now.hour = {now.hour}, now.minute = {now.minute}, reminder_time = {reminder_time}, reminder_time.hour = {reminder_time.hour}, reminder_time.minute = {reminder_time.minute}')
+        print('false', f'taiwan_now_time = {taiwan_now_time}, now.hour = {taiwan_now_time.time().hour}, now.minute = {taiwan_now_time.time().minute}, reminder_time = {reminder_time}, reminder_time.hour = {reminder_time.hour}, reminder_time.minute = {reminder_time.minute}')
         return False
 
 def check_reminder(user_id, reminder_time):

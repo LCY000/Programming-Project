@@ -47,8 +47,8 @@ def callback():
 @app.route("/requests_PM", methods=['POST'])
 def check_per_minute():
 
-    
-    return 'OK'
+    check_reminders()
+    return '提醒檢查完成'
 #----------------------------------------- 分隔線 -----------------------------------------#
  
 
@@ -82,14 +82,19 @@ def check_reminder(user_id, reminder_time):
         message = '提醒：您有待辦事項需要處理！'
         line_bot_api.push_message(user_id, TextSendMessage(text=message))
 
-def start_reminder_check():
-    # 每隔一段時間執行一次檢查
-    interval = 60  # 檢查間隔（單位：秒）
-    threading.Timer(interval, start_reminder_check).start()
-
+def check_reminders():
     for user_id in user_todo_list:
         if user_id in reminder_times:
             check_reminder(user_id, reminder_times[user_id])
+
+# def start_reminder_check():
+#     # 每隔一段時間執行一次檢查
+#     interval = 60  # 檢查間隔（單位：秒）
+#     threading.Timer(interval, start_reminder_check).start()
+
+#     for user_id in user_todo_list:
+#         if user_id in reminder_times:
+#             check_reminder(user_id, reminder_times[user_id])
 
 
 # 處理在主選單下的訊息 (user_state=NORMAL)
@@ -206,9 +211,9 @@ def handle_message(event):
 
 if __name__ == "__main__":
 
-    # 建立一個新的執行緒來執行 start_reminder_check() 函數
-    reminder_thread = threading.Thread(target=start_reminder_check)
-    reminder_thread.daemon = False  # 將執行緒設置為守護執行緒，以便在主執行緒結束時自動退出
-    reminder_thread.start()  # 啟動執行緒
+    # # 建立一個新的執行緒來執行 start_reminder_check() 函數
+    # reminder_thread = threading.Thread(target=start_reminder_check)
+    # reminder_thread.daemon = False  # 將執行緒設置為守護執行緒，以便在主執行緒結束時自動退出
+    # reminder_thread.start()  # 啟動執行緒
 
     app.run()   

@@ -82,13 +82,13 @@ def setting_state(user_message, user_id, user_todo_list, user_state):
                 reply_message = '設定固定提醒時間。\n\n請輸入提醒時間 (hh:mm:ss)'
             else:
                 reply_message = '\u2757 目前無待辦事項 \u2757\n\n已回到主選單狀態。'
-                index.UserState.NORMAL
+                user_state[user_id] = index.UserState.NORMAL
         else:
             reply_message = f'\u2757 未找到此設定選項 \u2757\n\n已回到主選單狀態。'
-            index.UserState.NORMAL
+            user_state[user_id] = index.UserState.NORMAL
 
     else:
         reply_message = '\u2757 請輸入正確的數字編號 \u2757\n\n已回到主選單狀態。' # 如果沒有找到對應的待辦事項內容，則回傳此訊息
-        index.UserState.NORMAL
+        user_state[user_id] = index.UserState.NORMAL
 
     return reply_message, user_state[user_id]

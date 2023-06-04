@@ -84,6 +84,7 @@ def check_reminder_time(reminder_time):
 def check_reminder(user_id, reminder_time):
     # 檢查提醒時間並發送消息
     if check_reminder_time(reminder_time):
+        print('我要進來這裡。')
         message = '提醒：您有待辦事項需要處理！'
         line_bot_api.push_message(user_id, TextSendMessage(text=message))
 

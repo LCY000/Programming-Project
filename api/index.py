@@ -46,9 +46,11 @@ def callback():
 
 @app.route("/requests_PM")
 def check_per_minute():
-
-    check_reminders()
-    return '提醒檢查完成'
+    try:
+        check_reminders()
+        return '提醒檢查完成'
+    except:
+        return '檢查失敗'
 #----------------------------------------- 分隔線 -----------------------------------------#
  
 

@@ -159,10 +159,10 @@ def handle_normal_state(user_id, user_message, event):
             reply_message += f"\n{i}. {item}"
             i += 1
 
-    elif user_message == '是':
+    # elif user_message == '是':
  
-            reply_message = '\n請輸入此待辦事項的提醒時間 (hh:mm)。'
-            user_state[user_id] = UserState.SETTING_TODO_REMIND_TIME
+    #         reply_message = '請輸入此待辦事項的提醒時間 (hh:mm)。'
+    #         user_state[user_id] = UserState.SETTING_TODO_REMIND_TIME
 
     else:
         reply_message = f'無此指令\n請輸入正確的指令。'

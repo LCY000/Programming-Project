@@ -1,7 +1,11 @@
 from api import AccessFile
-from linebot.models import FlexSendMessage
-import datetime
+from linebot.models import FlexSendMessage,TextSendMessage
+from linebot import LineBotApi
+import os
 from api import index
+
+
+line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))
 
 # 【顯示清單】  回傳顯示清單的訊息
 def createTodoListMessage(user_id,user_todo_list):
@@ -37,7 +41,7 @@ def createTodoListMessage(user_id,user_todo_list):
 
 
 # 【新增】  新增待辦事項狀態下的訊息
-def handle_add_todo_state(user_id, user_message,user_todo_list):
+def handle_add_todo_state(user_id, user_message,user_todo_list, user_state):
     reply_message = '' # 提供預設值
     
     # 創建一個新的待辦事項
@@ -45,9 +49,17 @@ def handle_add_todo_state(user_id, user_message,user_todo_list):
     user_todo_list[user_id].append(new_task)
     reply_message = '\u2705 已新增待辦事項 \u2705\n{}\n\n已回到主選單'.format(user_message)
 
-    AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
+    confirm_message = '是否為此待辦事項新增提醒時間？'
+    line_bot_api.push_message(user_id, TextSendMessage(text=confirm_message))
 
-    return reply_message, user_todo_list
+    if user_message == '是' or user_message == '1':
+        user_state[user_id] = index.UserState.SETTING_TODO_REMIND_TIME
+        reply_message = '請輸入此待辦事項的提醒時間 (hh:mm)。'
+    else:
+        AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
+        user_state[user_id] = index.UserState.NORMAL
+
+    return reply_message, user_todo_list, user_state
 
 # 【完成】  完成待辦事項狀態下的訊息
 def handle_del_todo_state(user_id, user_message, user_todo_list):

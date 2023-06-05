@@ -66,14 +66,15 @@ class UserState(Enum):
     DEL_TODO = 2
     SETTING = 3
     SETTING_REMIND_TIME = 4
+    SETTING_TODO_REMIND_TIME = 5
 
 # 用戶的待辦事項
 user_todo_list = {}
 
 # 追蹤使用者的狀態
 user_state = {}
-reminder_times = {}
-
+fixed_reminder_times = {}
+user_reminder_times = {}
 
 # 判斷當前時間是否為提醒時間
 def check_reminder_time(reminder_time):
@@ -85,7 +86,7 @@ def check_reminder_time(reminder_time):
     else:
         return False
 
-def check_reminder(user_id, reminder_time):
+def check_fixed_reminder(user_id, reminder_time):
     # 檢查提醒時間並發送消息
     if check_reminder_time(reminder_time):
         message = '提醒：您有待辦事項需要處理！'
@@ -93,8 +94,30 @@ def check_reminder(user_id, reminder_time):
 
 def check_reminders():
     for user_id in user_todo_list:
-        if user_id in reminder_times:
-            check_reminder(user_id, reminder_times[user_id])
+        if user_id in fixed_reminder_times:
+            check_fixed_reminder(user_id, fixed_reminder_times[user_id])
+
+# def check_reminder(user_id, remind_time):
+#     for todo in user_todo_list[user_id]:
+#         if todo.remind_time == remind_time and todo.reminded == False and (user_state[user_id] == UserState.NORMAL or user_state[user_id] == UserState.SETTING_TODO_REMIND_TIME):
+#             # 發送提醒訊息
+#             send_reminder_message(user_id, todo)
+#             todo.reminded = True
+
+
+#----------------------------------- 處理個別使用者待辦事項 ----------------------------------------#
+
+def set_todo_remind_time(user_id, user_message):
+    try:
+        hour, minute = map(int, user_message.split(":"))
+        user_reminder_times[user_id] = {'remind_time' : datetime.time(hour, minute)}
+        reply_message = f"待辦事項提醒時間已更新為 {user_reminder_times[user_id].strftime('%H:%M')}"
+        # check_reminder(user_id, user_reminder_times[user_id])
+    except:
+        reply_message = "輸入的時間格式不正確。"
+
+    user_state[user_id] = UserState.NORMAL
+    return reply_message
 
 
 
@@ -145,7 +168,7 @@ def handle_normal_state(user_id, user_message, event):
 # 接收訊息 
 @webhook_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    global user_todo_list, user_state, reminder_times
+    global user_todo_list, user_state, fixed_reminder_times
     reply_message="初始預設1"
 
     user_id = event.source.user_id
@@ -170,8 +193,8 @@ def handle_message(event):
     state = user_state[user_id]
     # 新增功能
     if state == UserState.ADD_TODO:
-            reply_message,user_todo_list = Function.handle_add_todo_state(user_id, user_message,user_todo_list)
-            user_state[user_id] = UserState.NORMAL
+            reply_message,user_todo_list = Function.handle_add_todo_state(user_id, user_message,user_todo_list, user_state)
+            # user_state[user_id] = UserState.NORMAL
 
     # 刪除功能
     elif state == UserState.DEL_TODO:
@@ -187,14 +210,18 @@ def handle_message(event):
     elif state == UserState.SETTING_REMIND_TIME:
             try:
                 hour, minute = map(int, user_message.split(':'))
-                reminder_times[user_id] = datetime.time(hour, minute)
-                reply_message = f'提醒時間已更新。{reminder_times[user_id].strftime("%H:%M")}'
+                fixed_reminder_times[user_id] = datetime.time(hour, minute)
+                reply_message = f'提醒時間已更新。{fixed_reminder_times[user_id].strftime("%H:%M")}'
                 # 更新提醒時間
-                check_reminder(user_id, reminder_times[user_id])
+                check_fixed_reminder(user_id, fixed_reminder_times[user_id])
             except:
                 reply_message = f'輸入的時間格式不正確。'
 
             user_state[user_id] = UserState.NORMAL
+
+    elif state == UserState.SETTING_TODO_REMIND_TIME:
+            
+            set_todo_remind_time(user_id, user_message)
 
     else:
         reply_message = handle_normal_state(user_id, user_message, event)

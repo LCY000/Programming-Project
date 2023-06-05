@@ -159,6 +159,11 @@ def handle_normal_state(user_id, user_message, event):
             reply_message += f"\n{i}. {item}"
             i += 1
 
+    elif user_message == '是':
+ 
+            reply_message = '\n請輸入此待辦事項的提醒時間 (hh:mm)。'
+            user_state[user_id] = UserState.SETTING_TODO_REMIND_TIME
+
     else:
         reply_message = f'無此指令\n請輸入正確的指令。'
 
@@ -195,14 +200,7 @@ def handle_message(event):
     # 新增功能
     if state == UserState.ADD_TODO: 
             reply_message, user_todo_list = Function.handle_add_todo_state(user_id, user_message,user_todo_list)
-            # user_state[user_id] = UserState.NORMAL
-            user_message = ''
-            if user_message == '是':    
-                reply_message = '\n請輸入此待辦事項的提醒時間 (hh:mm)。'
-                user_state[user_id] = UserState.SETTING_TODO_REMIND_TIME
-            else:
-                AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
-                user_state[user_id] = UserState.NORMAL
+            user_state[user_id] = UserState.NORMAL
         
     # 刪除功能
     elif state == UserState.DEL_TODO:

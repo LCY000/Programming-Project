@@ -198,10 +198,10 @@ def handle_message(event):
             # user_state[user_id] = UserState.NORMAL
             if user_message == '是':    
                 reply_message = '\n請輸入此待辦事項的提醒時間 (hh:mm)。'
-                user_state = UserState.SETTING_TODO_REMIND_TIME
+                user_state[user_id] = UserState.SETTING_TODO_REMIND_TIME
             else:
                 AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
-                user_state = UserState.NORMAL
+                user_state[user_id] = UserState.NORMAL
         
     # 刪除功能
     elif state == UserState.DEL_TODO:

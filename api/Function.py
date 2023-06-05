@@ -43,10 +43,9 @@ def handle_add_todo_state(user_id, user_message,user_todo_list):
     # 創建一個新的待辦事項
     new_task = {'text' : user_message}
     user_todo_list[user_id].append(new_task)
+    reply_message = '\u2705 已新增待辦事項 \u2705\n{}\n\n已回到主選單'.format(user_message)
 
     AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
-
-    reply_message = '\u2705 已新增待辦事項 \u2705\n{}\n\n已回到主選單'.format(user_message)
 
     return reply_message, user_todo_list
 

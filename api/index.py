@@ -110,7 +110,8 @@ def check_reminders():
 def set_todo_remind_time(user_id, user_message):
     try:
         hour, minute = map(int, user_message.split(":"))
-        user_reminder_times[user_id] = {'remind_time' : datetime.time(hour, minute)}
+        user_reminder_times = {'remind_time' : datetime.time(hour, minute)}
+        user_todo_list[user_id] = user_reminder_times
         reply_message = f"待辦事項提醒時間已更新為 {user_reminder_times[user_id].strftime('%H:%M')}"
         # check_reminder(user_id, user_reminder_times[user_id])
     except:

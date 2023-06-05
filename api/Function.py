@@ -49,7 +49,7 @@ def handle_add_todo_state(user_id, user_message,user_todo_list):
     user_todo_list[user_id].append(new_task)
     reply_message = '\u2705 已新增待辦事項 \u2705\n{}'.format(user_message) # \n\n已回到主選單
     
-    time.sleep(2)
+    time.sleep(5)
     confirm_message = '是否要為此待辦事項新增提醒功能？'
     line_bot_api.push_message(user_id, TextSendMessage(text=confirm_message))
 

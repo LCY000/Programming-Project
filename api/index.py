@@ -196,6 +196,7 @@ def handle_message(event):
     if state == UserState.ADD_TODO: 
             reply_message, user_todo_list = Function.handle_add_todo_state(user_id, user_message,user_todo_list)
             # user_state[user_id] = UserState.NORMAL
+            user_message = ''
             if user_message == '是':    
                 reply_message = '\n請輸入此待辦事項的提醒時間 (hh:mm)。'
                 user_state[user_id] = UserState.SETTING_TODO_REMIND_TIME

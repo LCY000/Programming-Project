@@ -50,13 +50,8 @@ def handle_add_todo_state(user_id, user_message,user_todo_list, user_state):
     reply_message = '\u2705 已新增待辦事項 \u2705\n{}'.format(user_message) # \n\n已回到主選單
     
     confirm_message = '是否要為此待辦事項新增提醒功能？'
-    quick_reply_items = [
-        QuickReplyButton(action=MessageAction(label='是', text='是')),
-        QuickReplyButton(action=MessageAction(label='否', text='否'))
-    ]
-    quick_reply = QuickReply(items=quick_reply_items)
-    line_bot_api.reply_message(user_id, TextSendMessage(text=confirm_message, quick_reply=quick_reply))
-    
+    line_bot_api.push_message(user_id, TextSendMessage(text=confirm_message))
+
     if user_message == '是':    
         reply_message += '\n請輸入此待辦事項的提醒時間 (hh:mm)。'
         user_state = index.UserState.SETTING_TODO_REMIND_TIME

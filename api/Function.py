@@ -47,7 +47,7 @@ def handle_add_todo_state(user_id, user_message,user_todo_list):
     # 創建一個新的待辦事項
     new_task = {'text' : user_message}
     user_todo_list[user_id].append(new_task)
-    reply_message = '\u2705 已新增待辦事項 \u2705\n{}\n\n是否為此待辦事項新增提醒功能?'.format(user_message) # \n\n已回到主選單
+    reply_message = '\u2705 已新增待辦事項 \u2705\n{}\n\n已回到主選單'.format(user_message) # \n\n是否為此待辦事項新增提醒功能?
     AccessFile.write_user_data(user_id,user_todo_list[user_id])
 
     return reply_message, user_todo_list
@@ -96,7 +96,7 @@ def setting_state(user_message, user_id, user_todo_list, user_state):
 
     return reply_message, user_state[user_id]
 
-def handle_setting_todo_remind_time(user_id, user_message):
+# def handle_setting_todo_remind_time(user_id, user_message):
 
-    reply_message = '請輸入此待辦事項的提醒時間 (hh:mm)。'
-    return reply_message
+#     reply_message = '請輸入此待辦事項的提醒時間 (hh:mm)。'
+#     return reply_message

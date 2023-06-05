@@ -41,7 +41,7 @@ def createTodoListMessage(user_id,user_todo_list):
 
 
 # 【新增】  新增待辦事項狀態下的訊息
-def handle_add_todo_state(user_id, user_message,user_todo_list, user_state):
+def handle_add_todo_state(user_id, user_message,user_todo_list):
     reply_message = '' # 提供預設值
     
     # 創建一個新的待辦事項
@@ -52,14 +52,7 @@ def handle_add_todo_state(user_id, user_message,user_todo_list, user_state):
     confirm_message = '是否要為此待辦事項新增提醒功能？'
     line_bot_api.push_message(user_id, TextSendMessage(text=confirm_message))
 
-    if user_message == '是':    
-        reply_message += '\n請輸入此待辦事項的提醒時間 (hh:mm)。'
-        user_state = index.UserState.SETTING_TODO_REMIND_TIME
-    else:
-        AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
-        user_state = index.UserState.NORMAL
-
-    return reply_message, user_todo_list, user_state
+    return reply_message, user_todo_list
 
 # 【完成】  完成待辦事項狀態下的訊息
 def handle_del_todo_state(user_id, user_message, user_todo_list):

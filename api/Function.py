@@ -1,5 +1,5 @@
 from api import AccessFile
-from linebot.models import FlexSendMessage,TextSendMessage
+from linebot.models import FlexSendMessage,TextSendMessage,QuickReply,QuickReplyButton,MessageAction
 from linebot import LineBotApi
 import os
 from api import index
@@ -47,16 +47,22 @@ def handle_add_todo_state(user_id, user_message,user_todo_list, user_state):
     # 創建一個新的待辦事項
     new_task = {'text' : user_message}
     user_todo_list[user_id].append(new_task)
-    reply_message = '\u2705 已新增待辦事項 \u2705\n{}\n\n已回到主選單'.format(user_message)
-
-    reply_message = '是否為此待辦事項新增提醒時間？'
-
-    if user_message == '是' or user_message == '1':
-        user_state[user_id] = index.UserState.SETTING_TODO_REMIND_TIME
-        reply_message = '請輸入此待辦事項的提醒時間 (hh:mm)。'
+    reply_message = '\u2705 已新增待辦事項 \u2705\n{}'.format(user_message) # \n\n已回到主選單
+    
+    confirm_message = '是否要為此待辦事項新增提醒功能？'
+    quick_reply_items = [
+        QuickReplyButton(action=MessageAction(label='是', text='是')),
+        QuickReplyButton(action=MessageAction(label='否', text='否'))
+    ]
+    quick_reply = QuickReply(items=quick_reply_items)
+    line_bot_api.reply_message(user_id, TextSendMessage(text=confirm_message, quick_reply=quick_reply))
+    
+    if user_message == '是':    
+        reply_message += '\n請輸入此待辦事項的提醒時間 (hh:mm)。'
+        user_state = index.UserState.SETTING_TODO_REMIND_TIME
     else:
         AccessFile.write_user_data(user_id,user_todo_list[user_id])     # 將資料寫入檔案
-        user_state[user_id] = index.UserState.NORMAL
+        user_state = index.UserState.NORMAL
 
     return reply_message, user_todo_list, user_state
 
@@ -103,3 +109,8 @@ def setting_state(user_message, user_id, user_todo_list, user_state):
         user_state[user_id] = index.UserState.NORMAL
 
     return reply_message, user_state[user_id]
+
+def handle_setting_todo_remind_time(user_id, user_message):
+
+    reply_message = '請輸入此待辦事項的提醒時間 (hh:mm)。'
+    return reply_message

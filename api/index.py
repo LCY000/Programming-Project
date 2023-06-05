@@ -193,10 +193,10 @@ def handle_message(event):
     # 檢查使用者的狀態 (處於哪個功能狀態下)
     state = user_state[user_id]
     # 新增功能
-    if state == UserState.ADD_TODO:
+    if state == UserState.ADD_TODO: 
             reply_message, user_todo_list, user_state[user_id] = Function.handle_add_todo_state(user_id, user_message,user_todo_list, user_state)
             # user_state[user_id] = UserState.NORMAL
-
+        
     # 刪除功能
     elif state == UserState.DEL_TODO:
             reply_message,user_todo_list = Function.handle_del_todo_state(user_id, user_message,user_todo_list)

@@ -194,7 +194,7 @@ def handle_message(event):
     state = user_state[user_id]
     # 新增功能
     if state == UserState.ADD_TODO:
-            reply_message,user_todo_list = Function.handle_add_todo_state(user_id, user_message,user_todo_list, user_state)
+            reply_message, user_todo_list, user_state[user_id] = Function.handle_add_todo_state(user_id, user_message,user_todo_list, user_state)
             # user_state[user_id] = UserState.NORMAL
 
     # 刪除功能

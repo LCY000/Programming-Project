@@ -79,7 +79,7 @@ user_reminder_times = {}
 # 建立快速回覆按鈕
 quick_buttons_setting = [
     QuickReplyButton(action=MessageAction(label="設定每天提醒時間", text="設定每天提醒時間")),
-    QuickReplyButton(action=MessageAction(label="說明文件", text="顯示說明文件")),
+    QuickReplyButton(action=MessageAction(label="說明文件", text="顯示 說明文件")),
     QuickReplyButton(action=MessageAction(label="新增特定待辦事項提醒時間", text="新增特定待辦事項提醒時間")),
 ]
 # 建立快速回覆的 QuickReply 物件

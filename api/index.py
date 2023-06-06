@@ -121,31 +121,14 @@ def check_reminders():
 def set_todo_remind_time(user_id, user_message):
     try:
         hour, minute = map(int, user_message.split(":"))
-        remind_time = datetime.time(hour, minute)
-        # user_todo_list[user_id].append(user_reminder_times)
-        # reply_message = f"此待辦事項提醒時間已更新為 {user_todo_list['remind_time'].strftime('%H:%M')}"
-        # # check_reminder(user_id, user_reminder_times[user_id])
+        user_remind_time = {'remind_time' : datetime.time(hour, minute)}
+        user_todo_list[user_id].append(user_remind_time)
 
-        # AccessFile.write_user_reminderTime(user_id, user_reminder_times)
-
-        # 獲取用戶待辦事項清單
-        todo_list = user_todo_list[user_id]
-
-        # 確保待辦事項清單不為空
-        if todo_list:
-            # 獲取最後一個待辦事項
-            last_todo_item = todo_list[-1]
-            
-            # 將提醒時間設定給最後一個待辦事項
-            last_todo_item.append(remind_time)
-            
-            # 更新資料庫中的用戶數據
-            AccessFile.write_user_data(user_id, remind_time)
-
-            reply_message = f"此待辦事項提醒時間已更新為 {remind_time.strftime('%H:%M')}"
-        else:
-            reply_message = "用戶的待辦事項清單為空。"
+        reply_message = f"此待辦事項提醒時間已更新為 {user_remind_time['remind_time'].strftime('%H:%M')}"
+        # 更新資料庫中的用戶數據
+        AccessFile.write_user_data(user_id, user_remind_time['remind_time'])
         
+        # check_reminder(user_id, user_reminder_times[user_id])
     except:
         reply_message = "輸入的時間格式不正確。\n\n已回到主選單。"
 

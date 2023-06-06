@@ -258,7 +258,7 @@ def handle_message(event):
     
     # 輸出回覆訊息 (預防突發意外，保險偵錯)
     if reply_message:
-        if state == UserState.SETTING:
+        if user_state[user_id] == UserState.SETTING:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message,quick_reply =quick_reply_quick_buttons_setting))
         else:    
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))

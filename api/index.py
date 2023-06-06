@@ -126,11 +126,11 @@ def set_todo_remind_time(user_id, user_message):
     global user_options , user_todo_list
 
     if user_message == '關閉提醒':
-        if user_id in fixed_reminder_times:
-            del fixed_reminder_times[user_id]
-            reply_message = '此事項提醒已關閉'
+        if 'remind_time' in user_todo_list[user_id][user_options[user_id]-1]:
+            del user_todo_list[user_id][user_options[user_id]-1]
+            reply_message = '\u2705此事項提醒已關閉\u2705\n\n已回到主選單。'
         else:
-            reply_message = '尚未設定提醒'
+            reply_message = '\u2757此事項尚未設定提醒\u2757\n\n已回到主選單。'
             return reply_message
 
     try:
@@ -139,13 +139,13 @@ def set_todo_remind_time(user_id, user_message):
         # 時間儲存到使用者的清單(陣列)的單個事項字典裡，存為字串
         user_todo_list[user_id][user_options[user_id]-1]['remind_time']=datetime.time(hour, minute).strftime('%H:%M')
 
-        reply_message = f"\u2757此事項提醒時間已更新為{user_todo_list[user_id][user_options[user_id]-1]['remind_time']}\u2757\n\n已回到主選單。"
+        reply_message = f"\u2705此事項提醒時間已更新為{user_todo_list[user_id][user_options[user_id]-1]['remind_time']}\u2705\n\n已回到主選單。"
         # 更新資料庫中的用戶數據
         AccessFile.write_user_data(user_id, user_todo_list[user_id])
         
         # check_reminder(user_id, user_reminder_times[user_id])
     except Exception as e:
-        reply_message = "輸入的時間格式不正確。\n\n已回到主選單。"
+        reply_message = "\u2757輸入的時間格式不正確。\u2757\n\n已回到主選單。"
         print(f"錯誤訊息：{str(e)}")  # 輸出錯誤訊息到控制台
 
     # 清除輸入編號的記憶體
@@ -252,7 +252,7 @@ def handle_message(event):
             try:
                 hour, minute = map(int, user_message.split(':'))
                 fixed_reminder_times[user_id] = datetime.time(hour, minute)
-                reply_message = f'\u2757提醒時間已更新為 {fixed_reminder_times[user_id].strftime("%H:%M")}\u2757\n\n已回到主選單。'
+                reply_message = f'\u2705提醒時間已更新為 {fixed_reminder_times[user_id].strftime("%H:%M")}\u2705\n\n已回到主選單。'
                 # 更新提醒時間
                 check_fixed_reminder(user_id, fixed_reminder_times[user_id])
             except:

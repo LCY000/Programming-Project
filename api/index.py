@@ -222,7 +222,21 @@ def handle_message(event):
 
     elif state == UserState.SETTING_TODO_REMIND_TIME:
             
-            set_todo_remind_time(user_id, user_message)
+            # set_todo_remind_time(user_id, user_message)
+            if user_message.isdigit():
+                number_remind = int(user_message)
+                if number_remind > 0 and number_remind <= len(user_todo_list[user_id]):
+                    reply_message = f"\u2705 0 \u2705\n\n已回到主選單"
+
+                    # del user_todo_list[user_id][number-1]  # 刪除匹配的待辦事項內容
+                    # AccessFile.write_user_data(user_id,user_todo_list[user_id]) # 將數據傳入資料庫
+
+                else:
+                    reply_message = f'\u2757 未找到此待辦事項 \u2757\n\n已回到主選單。'
+                    user_state[user_id] = UserState.NORMAL
+            else:
+                reply_message = '\u2757 請輸入正確的數字編號 \u2757\n\n已回到主選單。'
+                user_state[user_id] = UserState.NORMAL
 
     else:
         reply_message = handle_normal_state(user_id, user_message, event)

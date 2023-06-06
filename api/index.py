@@ -136,6 +136,7 @@ def set_todo_remind_time(user_id, user_message):
     except:
         reply_message = "輸入的時間格式不正確。\n\n已回到主選單。"
 
+    del user_options[user_id]
     user_state[user_id] = UserState.NORMAL
     return reply_message
 

@@ -122,7 +122,7 @@ def check_reminders():
 #----------------------------------- 處理個別使用者待辦事項 ----------------------------------------#
 
 def set_todo_remind_time(user_id, user_message):
-    global user_options
+    global user_options , user_todo_list
     try:
         hour, minute = map(int, user_message.split(":"))
         

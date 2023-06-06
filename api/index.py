@@ -153,16 +153,11 @@ def handle_normal_state(user_id, user_message, event):
         # 進入設定狀態
         user_state[user_id] = UserState.SETTING
         reply_message = f'\u2699\ufe0f 設定'
-        setting_items = ['設定固定提醒時間','說明文件']
+        setting_items = ['設定固定提醒時間','說明文件','新增特定待辦事項提醒時間']
         i = 1
         for item in setting_items:
             reply_message += f"\n{i}. {item}"
             i += 1
-
-    # elif user_message == '是':
- 
-    #         reply_message = '請輸入此待辦事項的提醒時間 (hh:mm)。'
-    #         user_state[user_id] = UserState.SETTING_TODO_REMIND_TIME
 
     else:
         reply_message = f'無此指令\n請輸入正確的指令。'

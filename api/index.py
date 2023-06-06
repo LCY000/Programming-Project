@@ -66,7 +66,8 @@ class UserState(Enum):
     DEL_TODO = 2
     SETTING = 3
     SETTING_REMIND_TIME = 4
-    SETTING_TODO_REMIND_TIME = 5
+    SETTING_TODO_REMIND_TIME_1 = 5
+    SETTING_TODO_REMIND_TIME_2 = 6
 
 # 用戶的待辦事項
 user_todo_list = {}
@@ -76,9 +77,10 @@ user_state = {}
 fixed_reminder_times = {}
 user_reminder_times = {}
 
+
 # 建立快速回覆按鈕
 quick_buttons_setting = [
-    QuickReplyButton(action=MessageAction(label="設定每天提醒時間", text="設定每天提醒時間")),
+    QuickReplyButton(action=MessageAction(label="設定每日提醒時間", text="設定每天提醒時間")),
     QuickReplyButton(action=MessageAction(label="說明文件", text="顯示 說明文件")),
     QuickReplyButton(action=MessageAction(label="新增特定待辦事項提醒時間", text="新增特定待辦事項提醒時間")),
 ]
@@ -168,7 +170,7 @@ def handle_normal_state(user_id, user_message, event):
         # 進入設定狀態
         user_state[user_id] = UserState.SETTING
         reply_message = f'\u2699\ufe0f 設定'
-        setting_items = ['設定固定提醒時間','說明文件','新增特定待辦事項提醒時間']
+        setting_items = ['設定每日提醒時間','說明文件','新增特定待辦事項提醒時間']
         i = 1
         for item in setting_items:
             reply_message += f"\n{i}. {item}"
@@ -224,10 +226,17 @@ def handle_message(event):
 
     # 設定提醒時間功能
     elif state == UserState.SETTING_REMIND_TIME:
+            
+            if user_message == '關閉提醒':
+                if user_id in fixed_reminder_times:
+                    del fixed_reminder_times[user_id]
+                    reply_message = '每日提醒已關閉'
+                else:
+                    reply_message = '尚未設定提醒'
             try:
                 hour, minute = map(int, user_message.split(':'))
                 fixed_reminder_times[user_id] = datetime.time(hour, minute)
-                reply_message = f'提醒時間已更新。{fixed_reminder_times[user_id].strftime("%H:%M")}'
+                reply_message = f'提醒時間已更新為 {fixed_reminder_times[user_id].strftime("%H:%M")}'
                 # 更新提醒時間
                 check_fixed_reminder(user_id, fixed_reminder_times[user_id])
             except:
@@ -235,13 +244,12 @@ def handle_message(event):
 
             user_state[user_id] = UserState.NORMAL
 
-    elif state == UserState.SETTING_TODO_REMIND_TIME:
+    elif state == UserState.SETTING_TODO_REMIND_TIME_1:
 
             if user_message.isdigit():
                 number_remind = int(user_message)
                 if number_remind > 0 and number_remind <= len(user_todo_list[user_id]):
                     reply_message = '設定此事項提醒時間。\n\n請輸入提醒時間 (hh:mm)'
-                    set_todo_remind_time(user_id, user_message)
 
                 else:
                     reply_message = f'\u2757 未找到此待辦事項 \u2757\n\n已回到主選單。'
@@ -250,6 +258,8 @@ def handle_message(event):
                 reply_message = '\u2757 請輸入正確的數字編號 \u2757\n\n已回到主選單。'
                 user_state[user_id] = UserState.NORMAL
 
+    elif state == UserState.SETTING_TODO_REMIND_TIME_2:
+            set_todo_remind_time(user_id, user_message)
     else:
         reply_message = handle_normal_state(user_id, user_message, event)
         # 要是已輸出待辦清單，則直接結束

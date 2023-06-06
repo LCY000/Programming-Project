@@ -86,8 +86,8 @@ quick_buttons_setting = [
     QuickReplyButton(action=MessageAction(label="新增特定待辦事項提醒時間", text="新增特定待辦事項提醒時間")),
 ]
 # 建立快速回覆的 QuickReply 物件
-quick_reply_quick_buttons_setting = QuickReply(items=quick_buttons_setting)
-
+quick_reply_buttons_setting = QuickReply(items=quick_buttons_setting)
+quick_reply_buttons_remind_time = QuickReply(items=QuickReplyButton(action=MessageAction(label="關閉提醒", text="關閉提醒")))
 
 
 # 判斷當前時間是否為提醒時間
@@ -131,7 +131,7 @@ def set_todo_remind_time(user_id, user_message):
         # 時間儲存到使用者的清單(陣列)的單個事項字典裡，存為字串
         user_todo_list[user_id][user_options[user_id]-1]['remind_time']=datetime.time(hour, minute).strftime('%H:%M')
 
-        reply_message = f"此待辦事項提醒時間已更新為 {user_todo_list[user_id][user_options[user_id]-1]['remind_time']}"
+        reply_message = f"\u2757此事項提醒時間已更新為{user_todo_list[user_id][user_options[user_id]-1]['remind_time']}\u2757\n\n已回到主選單。"
         # 更新資料庫中的用戶數據
         AccessFile.write_user_data(user_id, user_todo_list[user_id])
         
@@ -185,7 +185,7 @@ def handle_normal_state(user_id, user_message, event):
             i += 1
 
     else:
-        reply_message = f'無此指令\n請輸入正確的指令。'
+        reply_message = f'\u2757無此指令\u2757\n請輸入正確的指令。'
 
     return reply_message
 
@@ -244,7 +244,7 @@ def handle_message(event):
             try:
                 hour, minute = map(int, user_message.split(':'))
                 fixed_reminder_times[user_id] = datetime.time(hour, minute)
-                reply_message = f'提醒時間已更新為 {fixed_reminder_times[user_id].strftime("%H:%M")}'
+                reply_message = f'\u2757提醒時間已更新為 {fixed_reminder_times[user_id].strftime("%H:%M")}\u2757\n\n已回到主選單。'
                 # 更新提醒時間
                 check_fixed_reminder(user_id, fixed_reminder_times[user_id])
             except:
@@ -282,7 +282,9 @@ def handle_message(event):
     # 輸出回覆訊息 (預防突發意外，保險偵錯)
     if reply_message:
         if user_state[user_id] == UserState.SETTING:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message,quick_reply =quick_reply_quick_buttons_setting))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message,quick_reply =quick_reply_buttons_setting))
+        elif user_state[user_id] == UserState.SETTING_REMIND_TIME or user_state[user_id] == UserState.SETTING_TODO_REMIND_TIME_2:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message,quick_reply =quick_reply_buttons_remind_time))
         else:    
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
     else:

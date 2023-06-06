@@ -129,8 +129,13 @@ def set_todo_remind_time(user_id, user_message):
         if 'remind_time' in user_todo_list[user_id][user_options[user_id]-1]:
             del user_todo_list[user_id][user_options[user_id]-1]
             reply_message = '\u2705此事項提醒已關閉\u2705\n\n已回到主選單。'
+            del user_options[user_id]
+            user_state[user_id] = UserState.NORMAL
+            return reply_message
         else:
             reply_message = '\u2757此事項尚未設定提醒\u2757\n\n已回到主選單。'
+            del user_options[user_id]
+            user_state[user_id] = UserState.NORMAL
             return reply_message
 
     try:

@@ -100,7 +100,7 @@ def setting_state(user_message, user_id, user_todo_list, user_state):
                 reply_message += f"\n{i}. {todo['text']}"
                 i+= 1
             
-            index.UserState.SETTING_TODO_REMIND_TIME
+            user_state[user_id] = index.UserState.SETTING_TODO_REMIND_TIME
             
         else:
             reply_message = f'\u2757 未找到此設定選項 \u2757\n\n已回到主選單狀態。'

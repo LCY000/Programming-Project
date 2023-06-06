@@ -193,7 +193,7 @@ def handle_normal_state(user_id, user_message, event):
 # 接收訊息 
 @webhook_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    global user_todo_list, user_state, fixed_reminder_times
+    global user_todo_list, user_state, fixed_reminder_times, user_options
     reply_message="初始預設1"
 
     user_id = event.source.user_id

@@ -93,10 +93,11 @@ def setting_state(user_message, user_id, user_todo_list, user_state):
         
         elif number == 3:
 
-            reply_message = f'請輸入要新增提醒時間的待辦事項編號'
+            message = f'請輸入要新增提醒時間的待辦事項編號'
+            line_bot_api.push_message(user_id, TextSendMessage(text=message))
             i = 1
             for todo in user_todo_list[user_id]:
-                reply_message += f"\n{i}. {todo['text']}"
+                line_bot_api.push_message += f"\n{i}. {todo['text']}"
                 i+= 1
 
             if user_message.isdigit():

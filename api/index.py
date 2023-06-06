@@ -15,7 +15,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, RichMenu
+    MessageEvent, TextMessage, TextSendMessage, RichMenu, QuickReply, QuickReplyButton, MessageAction
 )
 
 app = Flask(__name__)
@@ -75,6 +75,17 @@ user_todo_list = {}
 user_state = {}
 fixed_reminder_times = {}
 user_reminder_times = {}
+
+# 建立快速回覆按鈕
+quick_buttons_setting = [
+    QuickReplyButton(action=MessageAction(label="設定每天提醒時間", text="設定每天提醒時間")),
+    QuickReplyButton(action=MessageAction(label="說明文件", text="顯示說明文件")),
+    QuickReplyButton(action=MessageAction(label="新增特定待辦事項提醒時間", text="新增特定待辦事項提醒時間")),
+]
+# 建立快速回覆的 QuickReply 物件
+quick_reply_quick_buttons_setting = QuickReply(items=quick_buttons_setting)
+
+
 
 # 判斷當前時間是否為提醒時間
 def check_reminder_time(reminder_time):
@@ -264,7 +275,10 @@ def handle_message(event):
     
     # 輸出回覆訊息 (預防突發意外，保險偵錯)
     if reply_message:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
+        if state == UserState.SETTING:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message,quick_reply =quick_reply_quick_buttons_setting))
+        else:    
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
     else:
         # 處理空訊息的情況
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="空訊息"))

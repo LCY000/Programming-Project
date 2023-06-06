@@ -136,6 +136,7 @@ def set_todo_remind_time(user_id, user_message):
     except:
         reply_message = "輸入的時間格式不正確。\n\n已回到主選單。"
 
+    # 清除輸入編號的記憶體
     del user_options[user_id]
     user_state[user_id] = UserState.NORMAL
     return reply_message
@@ -255,7 +256,7 @@ def handle_message(event):
                     reply_message = '設定此事項提醒時間。\n\n請輸入提醒時間 (hh:mm)'
                     # 紀錄輸入的編號
                     user_options[user_id] = number_remind
-
+                    user_state[user_id] = UserState.SETTING_TODO_REMIND_TIME_2
                 else:
                     reply_message = f'\u2757 未找到此待辦事項 \u2757\n\n已回到主選單。'
                     user_state[user_id] = UserState.NORMAL

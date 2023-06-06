@@ -76,6 +76,7 @@ user_todo_list = {}
 user_state = {}
 fixed_reminder_times = {}
 user_reminder_times = {}
+user_options = {}
 
 
 # 建立快速回覆按鈕
@@ -121,14 +122,15 @@ def check_reminders():
 #----------------------------------- 處理個別使用者待辦事項 ----------------------------------------#
 
 def set_todo_remind_time(user_id, user_message):
+    global user_options
     try:
         hour, minute = map(int, user_message.split(":"))
-        user_remind_time = {'remind_time' : datetime.time(hour, minute)}
-        user_todo_list[user_id].append(user_remind_time)
+        
+        user_todo_list[user_id][user_options[user_id]-1]['remind_time']=datetime.time(hour, minute)
 
-        reply_message = f"此待辦事項提醒時間已更新為 {user_remind_time['remind_time'].strftime('%H:%M')}"
+        reply_message = f"此待辦事項提醒時間已更新為 {user_todo_list[user_id][user_options[user_id]-1]['remind_time'].strftime('%H:%M')}"
         # 更新資料庫中的用戶數據
-        AccessFile.write_user_data(user_id, user_remind_time['remind_time'])
+        AccessFile.write_user_data(user_id, user_todo_list[user_id])
         
         # check_reminder(user_id, user_reminder_times[user_id])
     except:
@@ -250,6 +252,8 @@ def handle_message(event):
                 number_remind = int(user_message)
                 if number_remind > 0 and number_remind <= len(user_todo_list[user_id]):
                     reply_message = '設定此事項提醒時間。\n\n請輸入提醒時間 (hh:mm)'
+                    # 紀錄輸入的編號
+                    user_options[user_id] = number_remind
 
                 else:
                     reply_message = f'\u2757 未找到此待辦事項 \u2757\n\n已回到主選單。'
@@ -259,7 +263,9 @@ def handle_message(event):
                 user_state[user_id] = UserState.NORMAL
 
     elif state == UserState.SETTING_TODO_REMIND_TIME_2:
-            set_todo_remind_time(user_id, user_message)
+            reply_message = set_todo_remind_time(user_id, user_message)
+
+    # 主選單
     else:
         reply_message = handle_normal_state(user_id, user_message, event)
         # 要是已輸出待辦清單，則直接結束

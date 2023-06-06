@@ -128,7 +128,7 @@ def set_todo_remind_time(user_id, user_message):
     try:
         hour, minute = map(int, user_message.split(":"))
         
-        user_todo_list[user_id][user_options[user_id]-1]['remind_time']=datetime.time(hour, minute)
+        user_todo_list[user_id][user_options[user_id]-1]['remind_time']=datetime.time(hour, minute).strftime('%H:%M')
 
         reply_message = f"此待辦事項提醒時間已更新為 {user_todo_list[user_id][user_options[user_id]-1]['remind_time'].strftime('%H:%M')}"
         # 更新資料庫中的用戶數據

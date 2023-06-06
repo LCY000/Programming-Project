@@ -87,8 +87,7 @@ quick_buttons_setting = [
 ]
 # 建立快速回覆的 QuickReply 物件
 quick_reply_buttons_setting = QuickReply(items=quick_buttons_setting)
-quick_reply_buttons_remind_time = QuickReply(items=QuickReplyButton(action=MessageAction(label="關閉提醒", text="關閉提醒")))
-
+quick_reply_buttons_remind_time = QuickReply(items=[QuickReplyButton(action=MessageAction(label="關閉提醒", text="關閉提醒"))])
 
 # 判斷當前時間是否為提醒時間
 def check_reminder_time(reminder_time):
@@ -125,6 +124,15 @@ def check_reminders():
 
 def set_todo_remind_time(user_id, user_message):
     global user_options , user_todo_list
+
+    if user_message == '關閉提醒':
+        if user_id in fixed_reminder_times:
+            del fixed_reminder_times[user_id]
+            reply_message = '此事項提醒已關閉'
+        else:
+            reply_message = '尚未設定提醒'
+            return reply_message
+
     try:
         hour, minute = map(int, user_message.split(":"))
         

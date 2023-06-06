@@ -74,40 +74,33 @@ def handle_del_todo_state(user_id, user_message, user_todo_list):
 # 【設定】  設定功能
 def setting_state(user_message, user_id, user_todo_list, user_state):
 
-    if user_message.isdigit():
-        number = int(user_message)
-
-        if number == 1:
-            
-            if len(user_todo_list[user_id]) > 0:
-                user_state[user_id] = index.UserState.SETTING_REMIND_TIME
-                reply_message = '設定固定提醒時間。\n\n請輸入提醒時間 (hh:mm)'
-            else:
-                reply_message = '\u2757 目前無待辦事項 \u2757\n\n已回到主選單狀態。'
-                user_state[user_id] = index.UserState.NORMAL
-
-        elif number == 2:
-
-            reply_message = '目前尚未設置說明文件\n\n已回到主選單狀態。'
-            user_state[user_id] = index.UserState.NORMAL
+    if user_message == '設定每天提醒時間':
         
-        elif number == 3:
-
-            reply_message = f'請輸入要新增提醒時間的待辦事項編號'
-
-            i = 1
-            for todo in user_todo_list[user_id]:
-                reply_message += f"\n{i}. {todo['text']}"
-                i+= 1
-            
-            user_state[user_id] = index.UserState.SETTING_TODO_REMIND_TIME
-            
+        if len(user_todo_list[user_id]) > 0:
+            user_state[user_id] = index.UserState.SETTING_REMIND_TIME
+            reply_message = '設定固定提醒時間。\n\n請輸入提醒時間 (hh:mm)'
         else:
-            reply_message = f'\u2757 未找到此設定選項 \u2757\n\n已回到主選單狀態。'
+            reply_message = '\u2757 目前無待辦事項 \u2757\n\n已回到主選單狀態。'
             user_state[user_id] = index.UserState.NORMAL
 
+    elif user_message == '顯示 說明文件':
+
+        reply_message = '目前尚未設置說明文件\n\n已回到主選單狀態。'
+        user_state[user_id] = index.UserState.NORMAL
+    
+    elif user_message == '新增特定待辦事項提醒時間':
+
+        reply_message = f'請輸入要新增提醒時間的待辦事項編號'
+
+        i = 1
+        for todo in user_todo_list[user_id]:
+            reply_message += f"\n{i}. {todo['text']}"
+            i+= 1
+        
+        user_state[user_id] = index.UserState.SETTING_TODO_REMIND_TIME
+        
     else:
-        reply_message = '\u2757 請輸入正確的數字編號 \u2757\n\n已回到主選單狀態。' # 如果沒有找到對應的待辦事項內容，則回傳此訊息
+        reply_message = f'\u2757 未找到此設定選項 \u2757\n\n已回到主選單狀態。'
         user_state[user_id] = index.UserState.NORMAL
 
     return reply_message, user_state[user_id]

@@ -110,6 +110,8 @@ def check_reminders():
     for user_id in user_todo_list:
         if user_id in fixed_reminder_times:
             check_fixed_reminder(user_id, fixed_reminder_times[user_id])
+        # 預計提醒個別事項function可以做這裡##
+
 
 # def check_reminder(user_id, remind_time):
 #     for todo in user_todo_list[user_id]:
@@ -133,8 +135,9 @@ def set_todo_remind_time(user_id, user_message):
         AccessFile.write_user_data(user_id, user_todo_list[user_id])
         
         # check_reminder(user_id, user_reminder_times[user_id])
-    except:
+    except Exception as e:
         reply_message = "輸入的時間格式不正確。\n\n已回到主選單。"
+        print(f"錯誤訊息：{str(e)}")  # 輸出錯誤訊息到控制台
 
     # 清除輸入編號的記憶體
     del user_options[user_id]
@@ -245,6 +248,7 @@ def handle_message(event):
                 check_fixed_reminder(user_id, fixed_reminder_times[user_id])
             except:
                 reply_message = f'輸入的時間格式不正確。'
+               
 
             user_state[user_id] = UserState.NORMAL
 

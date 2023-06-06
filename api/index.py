@@ -131,7 +131,7 @@ def set_todo_remind_time(user_id, user_message):
         # 時間儲存到使用者的清單(陣列)的單個事項字典裡，存為字串
         user_todo_list[user_id][user_options[user_id]-1]['remind_time']=datetime.time(hour, minute).strftime('%H:%M')
 
-        reply_message = f"此待辦事項提醒時間已更新為 {user_todo_list[user_id][user_options[user_id]-1]['remind_time'].strftime('%H:%M')}"
+        reply_message = f"此待辦事項提醒時間已更新為 {user_todo_list[user_id][user_options[user_id]-1]['remind_time']}"
         # 更新資料庫中的用戶數據
         AccessFile.write_user_data(user_id, user_todo_list[user_id])
         

@@ -137,6 +137,9 @@ def set_todo_remind_time(user_id, user_message):
             del user_todo_list[user_id][user_options[user_id]-1]['remind_time']
             reply_message = '\u2705此事項提醒已關閉\u2705\n\n已回到主選單。'
             del user_options[user_id]
+            # 將更新後的資料寫回資料庫
+            AccessFile.write_user_data(user_id, user_todo_list[user_id])
+
             user_state[user_id] = UserState.NORMAL
             return reply_message
         else:

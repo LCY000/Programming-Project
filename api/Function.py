@@ -81,7 +81,6 @@ line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))
 
     # return flex_message
 
-
 def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
     fixed_reminder_times_text = ''
     remind_time_text = ''
@@ -133,6 +132,7 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
                     ]
                 }
 
+            
                 
             list_items.append(item)
             i += 1

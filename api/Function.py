@@ -48,7 +48,7 @@ def createTodoListMessage(user_id,user_todo_list, fixed_reminder_times):
                 }
             }
         ) 
-
+    # 如果沒有每日固定提醒時間則顯示：
     else: 
         flex_message = FlexSendMessage(
             alt_text = "待辦事項清單",
@@ -57,8 +57,18 @@ def createTodoListMessage(user_id,user_todo_list, fixed_reminder_times):
                 "body" : {
                     "type" : "box",
                     "layout" : "vertical",
+                    "spacing" : "md",
                     "contents" : [
-                        {"type": "text", "text": "待辦事項清單", "weight": "bold", "size": "lg"},
+                        {
+                            "type": "text",
+                            "text": "待辦事項清單",
+                            "weight": "bold", 
+                            "size": "xl"
+                        },
+                        {
+                        "type": "separator"
+                        },
+                        
                         *list_items # 將條列項目展開添加到 "contents" 中
                     ]
                 }

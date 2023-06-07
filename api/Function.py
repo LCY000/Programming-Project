@@ -7,7 +7,7 @@ from api import index
 line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))
 
 # 【顯示清單】  回傳顯示清單的訊息
-def createTodoListMessage(user_id,user_todo_list):
+def createTodoListMessage(user_id,user_todo_list, fixed_reminder_times):
     if user_todo_list[user_id] == []:
         list_items = [{"type" : "text", "text" : "無待辦事項"}]
     else:
@@ -20,6 +20,10 @@ def createTodoListMessage(user_id,user_todo_list):
             item = {"type": "text", "text": str(str(i) + '. ' + todo['text'] + '\t' + '\u23f0 預計提醒時間: ' + todo['remind_time']) if 'remind_time' in todo else str(str(i) + '. ' + todo['text'])}
             list_items.append(item)
             i += 1
+
+        if user_id in fixed_reminder_times:
+            fixed_reminder_times_items = {"type" : "text", "text" : str(fixed_reminder_times[user_id].strftime("%H:%M"))}
+            list_items.append(fixed_reminder_times_items)
 
     # 建立Flex Message物件，用於顯示待辦事項清單
     flex_message = FlexSendMessage(

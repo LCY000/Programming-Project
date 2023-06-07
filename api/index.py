@@ -177,7 +177,7 @@ def handle_normal_state(user_id, user_message, event):
         reply_message = f'請輸入待辦事項內容。'
 
     elif user_message == '顯示 待辦清單':
-        message = Function.createTodoListMessage(user_id,user_todo_list)
+        message = Function.createTodoListMessage(user_id,user_todo_list, fixed_reminder_times)
         line_bot_api.reply_message(event.reply_token, message)
         reply_message = None
     
@@ -266,7 +266,7 @@ def handle_message(event):
                 fixed_reminder_times[user_id] = datetime.time(hour, minute)
                 reply_message = f'\u2705提醒時間已更新為 {fixed_reminder_times[user_id].strftime("%H:%M")}\u2705\n\n已回到主選單。'
                 # 更新提醒時間
-                check_fixed_reminder(user_id, fixed_reminder_times[user_id])
+                check_fixed_reminder(user_id, +[user_id])
             except:
                 reply_message = f'輸入的時間格式不正確。'
                

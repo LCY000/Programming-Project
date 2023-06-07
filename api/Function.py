@@ -20,8 +20,7 @@ def createTodoListMessage(user_id,user_todo_list, fixed_reminder_times):
             item = {"type": "text", "text": str(str(i) + '. ' + todo['text'] + '\t' + ' 預計提醒時間: ' + todo['remind_time']) if 'remind_time' in todo else str(str(i) + '. ' + todo['text'])}
             list_items.append(item)
             i += 1
-            
-        list_items.append('\n\n')
+
         if user_id in fixed_reminder_times:
             fixed_reminder_times_text = str('\ud83d\udd5b 每日提醒時間: ' + fixed_reminder_times[user_id].strftime("%H:%M"))
             fixed_reminder_times_items = {"type" : "text", "text" : fixed_reminder_times_text}

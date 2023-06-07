@@ -88,7 +88,7 @@ quick_buttons_setting = [
 # 建立快速回覆的 QuickReply 物件
 quick_reply_buttons_setting = QuickReply(items=quick_buttons_setting)
 quick_reply_buttons_remind_time = QuickReply(items=[QuickReplyButton(action=MessageAction(label="關閉提醒", text="關閉提醒"))])
-
+quick_reply_buttons_fixed_remind_time = QuickReply(items=[QuickReplyButton(action=MessageAction(label="關閉每日提醒", text="關閉每日提醒"))])
 # 判斷當前時間是否為提醒時間
 def check_reminder_time(reminder_time):
     now = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
@@ -111,7 +111,7 @@ def check_fixed_reminder(user_id, reminder_time):
 
 def check_reminders():
     print('in crs')
-    for user_id in user_todo_list:
+    for user_id in user_todo_list: # <-- bug
         if user_id in fixed_reminder_times:
             print('in for loop')
             check_fixed_reminder(user_id, fixed_reminder_times[user_id])
@@ -303,7 +303,9 @@ def handle_message(event):
     if reply_message:
         if user_state[user_id] == UserState.SETTING:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message,quick_reply =quick_reply_buttons_setting))
-        elif user_state[user_id] == UserState.SETTING_REMIND_TIME or user_state[user_id] == UserState.SETTING_TODO_REMIND_TIME_2:
+        elif user_state[user_id] == UserState.SETTING_TODO_REMIND_TIME_2:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message,quick_reply =quick_reply_buttons_remind_time))
+        elif user_state[user_id] == UserState.SETTING_REMIND_TIME:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message,quick_reply =quick_reply_buttons_remind_time))
         else:    
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))

@@ -170,9 +170,9 @@ def set_todo_remind_time(user_id, user_message):
         year, month, day, hour, minute = map(int, user_message.split(" "))
         
         # 時間儲存到使用者的清單(陣列)的單個事項字典裡，存為字串
-        user_todo_list[user_id][user_options[user_id]-1]['remind_time']=datetime.datetime(year, month, day ,hour, minute).strftime('%Y-%m-%d %H:%M')
+        user_todo_list[user_id][user_options[user_id]-1]['remind_time']=datetime.datetime(year, month, day ,hour, minute)
 
-        reply_message = f"\u2705此事項提醒時間已更新為{user_todo_list[user_id][user_options[user_id]-1]['remind_time']}\u2705\n\n已回到主選單。"
+        reply_message = f"\u2705此事項提醒時間已更新為{user_todo_list[user_id][user_options[user_id]-1]['remind_time'].strftime('%Y-%m-%d %H:%M')}\u2705\n\n已回到主選單。"
         
         check_todo_reminder(user_id, user_todo_list[user_id][user_options[user_id]-1]['remind_time'], user_todo_list[user_id][user_options[user_id]-1]['text'])
 

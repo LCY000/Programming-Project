@@ -115,7 +115,7 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
                         },
                         {
                             "type": "text",
-                            "text": f'{remind_time_text}',
+                            "text": remind_time_text,
                             "size": "sm",
                             "color": "#888888",
                             "wrap": True

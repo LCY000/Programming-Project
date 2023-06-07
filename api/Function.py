@@ -98,7 +98,7 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
         for todo in todoList:
 
             if 'remind_time' in todo:
-                remind_time_text = f"預計提醒時間: {todo['remind_time']}"
+                remind_time_text = f"   提醒: {todo['remind_time']}"
             else:
                 remind_time_text = " "
 
@@ -169,7 +169,7 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
                                 "type": "text",
                                 "text": " ",
                                 "size": "sm"
-                            },  # 添加空白文本项
+                            },  # 添加空白行
                             {
                                 "type": "text",
                                 "text": "待辦事項清單",

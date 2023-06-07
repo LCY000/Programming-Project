@@ -181,7 +181,7 @@ def set_todo_remind_time(user_id, user_message):
             return reply_message
 
     try:
-        year, month, day, hour, minute = map(int, user_message.split(" "))
+        year, month, day, hour, minute = map(int, user_message.split("-"))
         
         # 將時間儲存到使用者的清單(陣列)的單個事項字典裡，存為字串
         remind_time = datetime.datetime(year, month, day, hour, minute)
@@ -237,7 +237,7 @@ def handle_normal_state(user_id, user_message, event):
         # 進入設定狀態
         user_state[user_id] = UserState.SETTING
         reply_message = f'\u2699\ufe0f 設定'
-        setting_items = ['設定每日提醒時間','說明文件','新增特定待辦事項提醒時間']
+        setting_items = ['設定每日提醒時間','設定特定待辦事項提醒時間', '說明文件']
         i = 1
         for item in setting_items:
             reply_message += f"\n{i}. {item}"
@@ -318,7 +318,7 @@ def handle_message(event):
             if user_message.isdigit():
                 number_remind = int(user_message)
                 if number_remind > 0 and number_remind <= len(user_todo_list[user_id]):
-                    reply_message = '設定此事項提醒時間。\n\n請輸入提醒時間，以空白分隔 (yyyy mm dd hh mm)'
+                    reply_message = '設定此事項提醒時間。\n\n請輸入提醒時間，以-分隔 (yyyy-mm-dd-hh-mm)'
                     # 紀錄輸入的編號
                     user_options[user_id] = number_remind
                     user_state[user_id] = UserState.SETTING_TODO_REMIND_TIME_2

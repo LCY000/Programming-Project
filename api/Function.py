@@ -102,25 +102,26 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
             else:
                 remind_time_text = ''
 
-            item = {
-                "type": "box",
-                "layout": "vertical",
-                "spacing": "sm",
-                "contents": [
-                    {
-                        "type": "text",
-                        "text": f"[{i}] {todo['text']}",
-                        "wrap": True
-                    },
-                    {
-                        "type": "text",
-                        "text": f'{remind_time_text}',
-                        "size": "sm",
-                        "color": "#888888",
-                        "wrap": True
-                    }
-                ]
-            }
+            if 'text' in todo and todo['text']:
+                item = {
+                    "type": "box",
+                    "layout": "vertical",
+                    "spacing": "sm",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": f"[{i}] {todo['text']}",
+                            "wrap": True
+                        },
+                        {
+                            "type": "text",
+                            "text": f'{remind_time_text}',
+                            "size": "sm",
+                            "color": "#888888",
+                            "wrap": True
+                        }
+                    ]
+                }
             list_items.append(item)
             i += 1
 
@@ -231,7 +232,7 @@ def setting_state(user_message, user_id, user_todo_list, user_state):
 
     elif user_message == '顯示 說明文件':
 
-        reply_message = '1. 在任何情況下輸入「取消」或「0」\n   即可中斷、跳出當下功能\n\n已回到主選單狀態。'
+        reply_message = '1. 在任何情況下輸入「取消」或「0」\n    即可中斷、跳出當下功能\n\n已回到主選單狀態。'
         user_state[user_id] = index.UserState.NORMAL
     
     elif user_message == '設定特定待辦事項提醒時間':

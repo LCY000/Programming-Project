@@ -98,7 +98,7 @@ def check_reminder_time(reminder_time):
         return True
     else:
         # debug
-        print('false' + f'fixed_remind_time {fixed_reminder_times} remind_hour = {fixed_reminder_times.hour} remind_minute = {fixed_reminder_times.minute}  now = {taiwan_now_time.time()} now.hour = {taiwan_now_time.time().hour} now.minute = {taiwan_now_time.time().minute}')
+        print('false' + f'fixed_remind_time {reminder_time} remind_hour = {reminder_time.hour} remind_minute = {reminder_time.minute}  now = {taiwan_now_time.time()} now.hour = {taiwan_now_time.time().hour} now.minute = {taiwan_now_time.time().minute}')
         return False
         
 

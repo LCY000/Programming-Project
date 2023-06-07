@@ -146,7 +146,7 @@ def check_reminders_todo():
                 print('in for loop')
                 check_todo_reminder(user_id, user_todo_list[user_id][user_options[user_id]-1]['remind_time'], user_todo_list[user_id][user_options[user_id]-1]['text'])
     except Exception as e:
-        print("Error: " + str(e))
+        print("Error in crt: " + str(e))
 
 # 處理個別使用者待辦事項
 def set_todo_remind_time(user_id, user_message):

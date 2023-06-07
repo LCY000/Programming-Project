@@ -102,7 +102,7 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
             else:
                 remind_time_text = ''
 
-            if 'text' in todo and todo['text']:
+            if todo['text']:
                 item = {
                     "type": "box",
                     "layout": "vertical",

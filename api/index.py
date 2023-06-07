@@ -50,7 +50,7 @@ def callback():
 def check_per_minute():
     try:
         print("Running check_per_minute()")  # 除錯訊息
-        print('使用者清單' + user_todo_list)
+        print(user_todo_list)
         check_reminders()
         return '提醒檢查完成'
     except Exception as e:

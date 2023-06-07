@@ -97,7 +97,10 @@ def check_reminder_time(reminder_time):
     if taiwan_now_time.time().hour == reminder_time.hour and taiwan_now_time.time().minute == reminder_time.minute:
         return True
     else:
+        # debug
+        print('false' + f'fixed_remind_time {fixed_reminder_times} remind_hour = {fixed_reminder_times.hour} remind_minute = {fixed_reminder_times.minute}  now = {taiwan_now_time.time()} now.hour = {taiwan_now_time.time().hour} now.minute = {taiwan_now_time.time().minute}')
         return False
+        
 
 def check_fixed_reminder(user_id, reminder_time):
     # 檢查提醒時間並發送消息

@@ -124,12 +124,12 @@ def check_reminders():
 def check_todo_reminder_time(reminder_time):
     print('in ctrt')
     # 將提醒時間的字符串轉回datetime時間物件。
-    # format_string = "%Y-%m-%d %H:%M"
-    # reminder_time = datetime.datetime.strptime(reminder_time, format_string)
+    format_string = "%Y-%m-%d %H:%M"
+    reminder_time_f = datetime.datetime.strptime(reminder_time, format_string)
 
     now = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
     taiwan_now_time = now.astimezone(datetime.timezone(datetime.timedelta(hours=8))) # 轉換時區 -> 東八區
-    if taiwan_now_time.year == reminder_time.year and taiwan_now_time.month == reminder_time.month and taiwan_now_time.day == reminder_time.day and taiwan_now_time.time().hour == reminder_time.hour and taiwan_now_time.time().minute == reminder_time.minute:
+    if taiwan_now_time.year == reminder_time_f.year and taiwan_now_time.month == reminder_time_f.month and taiwan_now_time.day == reminder_time_f.day and taiwan_now_time.time().hour == reminder_time_f.hour and taiwan_now_time.time().minute == reminder_time_f.minute:
         return True
     else:
         print('False ' + f'now time = {taiwan_now_time} reminder_time = {reminder_time}')

@@ -30,24 +30,24 @@ line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))
 #             i += 1
 
 
-    # # 建立Flex Message物件，用於顯示待辦事項清單
-    # if user_id in fixed_reminder_times:
-    #     flex_message = FlexSendMessage(
-    #         alt_text = "待辦事項清單",
-    #         contents = {
-    #             "type" : "bubble",
-    #             "body" : {
-    #                 "type" : "box",
-    #                 "layout" : "vertical",
-    #                 "contents" : [
-    #                     {"type": "text", "text": f'\ud83d\udd5b 每日提醒時間: {fixed_reminder_times_text}' , "size": "sm", "color": "#888888"},
-    #                     {"type": "text", "text": " ", "size": "sm"},  # 添加空白文本项
-    #                     {"type": "text", "text": "待辦事項清單", "weight": "bold", "size": "lg"},
-    #                     *list_items # 將條列項目展開添加到 "contents" 中
-    #                 ]
-    #             }
-    #         }
-    #     ) 
+        # # 建立Flex Message物件，用於顯示待辦事項清單
+        # if user_id in fixed_reminder_times:
+        #     flex_message = FlexSendMessage(
+        #         alt_text = "待辦事項清單",
+        #         contents = {
+        #             "type" : "bubble",
+        #             "body" : {
+        #                 "type" : "box",
+        #                 "layout" : "vertical",
+        #                 "contents" : [
+        #                     {"type": "text", "text": f'\ud83d\udd5b 每日提醒時間: {fixed_reminder_times_text}' , "size": "sm", "color": "#888888"},
+        #                     {"type": "text", "text": " ", "size": "sm"},  # 添加空白文本项
+        #                     {"type": "text", "text": "待辦事項清單", "weight": "bold", "size": "lg"},
+        #                     *list_items # 將條列項目展開添加到 "contents" 中
+        #                 ]
+        #             }
+        #         }
+        #     ) 
     # # 如果沒有每日固定提醒時間則顯示：
     # else: 
     #     flex_message = FlexSendMessage(
@@ -165,9 +165,8 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
                              "size": "sm",
                              "color": "#888888"
                             },
-                            {"type": "text",
-                             "text": " ",
-                             "size": "sm"
+                            {
+                                "type": "separator"
                             },  # 添加空白文本项
                             {
                                 "type": "text",

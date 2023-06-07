@@ -106,11 +106,12 @@ def check_fixed_reminder(user_id, reminder_time):
         line_bot_api.push_message(user_id, TextSendMessage(text=message))
 
 def check_reminders():
-
+    print(user_todo_list[user_id])
     for user_id in user_todo_list:
         if user_id in fixed_reminder_times:
             check_fixed_reminder(user_id, fixed_reminder_times[user_id])
         # 預計提醒個別事項function可以做這裡##
+
 
 
 # def check_reminder(user_id, remind_time):

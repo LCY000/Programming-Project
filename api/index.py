@@ -266,7 +266,7 @@ def handle_message(event):
                 fixed_reminder_times[user_id] = datetime.time(hour, minute)
                 reply_message = f'\u2705提醒時間已更新為 {fixed_reminder_times[user_id].strftime("%H:%M")}\u2705\n\n已回到主選單。'
                 # 更新提醒時間
-                check_fixed_reminder(user_id, +[user_id])
+                check_fixed_reminder(user_id, fixed_reminder_times[user_id])
             except:
                 reply_message = f'輸入的時間格式不正確。'
                

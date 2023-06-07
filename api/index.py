@@ -55,7 +55,7 @@ def check_per_minute():
         check_reminders_todo()
         return '提醒檢查完成'
     except Exception as e:
-        print("Error in check_per_minute():", str(e))  # 除錯訊息
+        print("Error:", str(e))  # 除錯訊息
         return '檢查失敗'
 
 #----------------------------------------- 分隔線 -----------------------------------------#
@@ -103,21 +103,6 @@ def check_reminder_time(reminder_time):
         print('false' + f'fixed_remind_time {reminder_time} remind_hour = {reminder_time.hour} remind_minute = {reminder_time.minute}  now = {taiwan_now_time.time()} now.hour = {taiwan_now_time.time().hour} now.minute = {taiwan_now_time.time().minute}')
         return False
 
-
-def check_todo_reminder_time(reminder_time):
-    now = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
-    taiwan_now_time = now.astimezone(datetime.timezone(datetime.timedelta(hours=8))) # 轉換時區 -> 東八區
-    if taiwan_now_time == reminder_time:
-        return True
-    else:
-        return False
-
-def check_todo_reminder(user_id, reminder_time, todo):
-    # 檢查特定事項的提醒時間並發送消息
-    if check_todo_reminder_time(reminder_time):
-        message = f'提醒: {todo} 需要完成'
-        line_bot_api.push_message(user_id, TextSendMessage(text=message))
-
 def check_fixed_reminder(user_id, reminder_time):
     print('in cfr')
     # 檢查提醒時間並發送消息
@@ -133,11 +118,30 @@ def check_reminders():
             check_fixed_reminder(user_id, fixed_reminder_times[user_id])
         # 預計提醒個別事項function可以做這裡##
 
-def check_reminders_todo():
 
+def check_todo_reminder_time(reminder_time):
+    print('in ctrt')
+    now = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
+    taiwan_now_time = now.astimezone(datetime.timezone(datetime.timedelta(hours=8))) # 轉換時區 -> 東八區
+    if taiwan_now_time == reminder_time:
+        return True
+    else:
+        print('False ' + f'now time = {taiwan_now_time} reminder_time = {reminder_time}')
+        return False
+
+def check_todo_reminder(user_id, reminder_time, todo):
+    # 檢查特定事項的提醒時間並發送消息
+    print('in ctr')
+    if check_todo_reminder_time(reminder_time):
+        message = f'提醒: {todo} 需要完成'
+        line_bot_api.push_message(user_id, TextSendMessage(text=message))
+
+
+def check_reminders_todo():
+    print('in crt')
     for user_id in user_todo_list:
         if 'remind_time' in user_todo_list[user_id][user_options[user_id]-1]:
-            
+            print('in for loop')
             check_todo_reminder(user_id, user_todo_list[user_id][user_options[user_id]-1]['remind_time'], user_todo_list[user_id][user_options[user_id]-1]['text'])
 
 

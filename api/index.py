@@ -101,11 +101,11 @@ def check_reminder_time(reminder_time):
         return True
     else:
         # debug
-        print('false' + f'fixed_remind_time {reminder_time} remind_hour = {reminder_time.hour} remind_minute = {reminder_time.minute}  now = {taiwan_now_time.time()} now.hour = {taiwan_now_time.time().hour} now.minute = {taiwan_now_time.time().minute}')
+        # print('false' + f'fixed_remind_time {reminder_time} remind_hour = {reminder_time.hour} remind_minute = {reminder_time.minute}  now = {taiwan_now_time.time()} now.hour = {taiwan_now_time.time().hour} now.minute = {taiwan_now_time.time().minute}')
         return False
 
 def check_fixed_reminder(user_id, reminder_time):
-    print('in cfr')
+    # print('in cfr')
     # 檢查提醒時間並發送消息
     if check_reminder_time(reminder_time):
         message = '提醒：您有待辦事項需要處理！'
@@ -124,8 +124,8 @@ def check_reminders():
 def check_todo_reminder_time(reminder_time):
     print('in ctrt')
     # 將提醒時間的字符串轉回datetime時間物件。
-    format_string = "%Y-%m-%d %H:%M"
-    reminder_time = datetime.datetime.strptime(reminder_time, format_string)
+    # format_string = "%Y-%m-%d %H:%M"
+    # reminder_time = datetime.datetime.strptime(reminder_time, format_string)
 
     now = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
     taiwan_now_time = now.astimezone(datetime.timezone(datetime.timedelta(hours=8))) # 轉換時區 -> 東八區

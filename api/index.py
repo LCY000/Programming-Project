@@ -261,15 +261,16 @@ def handle_message(event):
                     reply_message = '每日提醒已關閉'
                 else:
                     reply_message = '尚未設定提醒'
-            try:
-                hour, minute = map(int, user_message.split(':'))
-                fixed_reminder_times[user_id] = datetime.time(hour, minute)
-                reply_message = f'\u2705提醒時間已更新為 {fixed_reminder_times[user_id].strftime("%H:%M")}\u2705\n\n已回到主選單。'
-                # 更新提醒時間
-                check_fixed_reminder(user_id, fixed_reminder_times[user_id])
-            except:
-                reply_message = f'輸入的時間格式不正確。'
-               
+            else:
+                try:
+                    hour, minute = map(int, user_message.split(':'))
+                    fixed_reminder_times[user_id] = datetime.time(hour, minute)
+                    reply_message = f'\u2705提醒時間已更新為 {fixed_reminder_times[user_id].strftime("%H:%M")}\u2705\n\n已回到主選單。'
+                    # 更新提醒時間
+                    check_fixed_reminder(user_id, fixed_reminder_times[user_id])
+                except:
+                    reply_message = f'輸入的時間格式不正確。'
+                    
 
             user_state[user_id] = UserState.NORMAL
 

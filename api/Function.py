@@ -81,7 +81,6 @@ line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))
 
     # return flex_message
 
-
 def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
     fixed_reminder_times_text = ''
     remind_time_text = ''
@@ -99,7 +98,11 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
         for todo in todoList:
 
             if 'remind_time' in todo:
-                remind_time_text = f"   提醒: {todo['remind_time']}"
+                remind_time_text = f"   提醒時間: {todo['remind_time']}"
+            else:
+                remind_time_text = " "
+
+            if todo['text']:
                 item = {
                     "type": "box",
                     "layout": "vertical",
@@ -119,21 +122,6 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
                         }
                     ]
                 }
-            else:
-                item = {
-                    "type": "box",
-                    "layout": "vertical",
-                    "spacing": "sm",
-                    "contents": [
-                        {
-                            "type": "text",
-                            "text": f"[{i}] {todo['text']}",
-                            "wrap": True
-                        }
-                    ]
-                }
-
-                
             list_items.append(item)
             i += 1
 

@@ -100,7 +100,7 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
             if 'remind_time' in todo:
                 remind_time_text = f"預計提醒時間: {todo['remind_time']}"
             else:
-                remind_time_text = '尚未設置提醒時間'
+                remind_time_text = " "
 
             if todo['text']:
                 item = {

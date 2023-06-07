@@ -55,7 +55,7 @@ def check_per_minute():
         check_reminders_todo()
         return '提醒檢查完成'
     except Exception as e:
-        print("Error:", str(e))  # 除錯訊息
+        print("Error in cpm:", str(e))  # 除錯訊息
         return '檢查失敗'
 
 #----------------------------------------- 分隔線 -----------------------------------------#

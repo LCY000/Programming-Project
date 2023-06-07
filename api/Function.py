@@ -43,6 +43,7 @@ def createTodoListMessage(user_id,user_todo_list, fixed_reminder_times):
                 "contents" : [
                     {"type": "text", "text": f'\ud83d\udd5b 每日提醒時間: {fixed_reminder_times_text}' , "size": "sm", "color": "#888888"},
                     # {"type": "text", "text": " ", "weight": "bold", "size": "lg"},
+                    {"type": "text", "text": " ", "size": "sm"},  # 添加空白文本项
                     {"type": "text", "text": "待辦事項清單", "weight": "bold", "size": "lg"},
                     *list_items # 將條列項目展開添加到 "contents" 中
                 ]

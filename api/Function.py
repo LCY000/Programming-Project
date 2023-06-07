@@ -94,7 +94,7 @@ def setting_state(user_message, user_id, user_todo_list, user_state):
         reply_message = '1. 在任何情況下輸入「取消」或「0」\n   即可中斷、跳出當下功能\n\n已回到主選單狀態。'
         user_state[user_id] = index.UserState.NORMAL
     
-    elif user_message == '新增特定待辦事項提醒時間':
+    elif user_message == '設定特定待辦事項提醒時間':
 
         reply_message = f'請輸入要新增提醒時間的待辦事項編號'
 

@@ -22,7 +22,7 @@ def createTodoListMessage(user_id,user_todo_list, fixed_reminder_times):
             i += 1
 
         if user_id in fixed_reminder_times:
-            fixed_reminder_times_items = {"type" : "text", "text" : str('\n\n\ud83d\udd5b 每日提醒時間: ' + fixed_reminder_times[user_id].strftime("%H:%M"))}
+            fixed_reminder_times_items = {"type" : "text", "text" : str('\n\n' + '\ud83d\udd5b 每日提醒時間: ' + fixed_reminder_times[user_id].strftime("%H:%M"))}
             list_items.append(fixed_reminder_times_items)
 
     # 建立Flex Message物件，用於顯示待辦事項清單

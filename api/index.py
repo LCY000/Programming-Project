@@ -103,15 +103,17 @@ def check_reminder_time(reminder_time):
         
 
 def check_fixed_reminder(user_id, reminder_time):
+    print('in cfr')
     # 檢查提醒時間並發送消息
     if check_reminder_time(reminder_time):
         message = '提醒：您有待辦事項需要處理！'
         line_bot_api.push_message(user_id, TextSendMessage(text=message))
 
 def check_reminders():
-
+    print('in crs')
     for user_id in user_todo_list:
         if user_id in fixed_reminder_times:
+            print('in for loop')
             check_fixed_reminder(user_id, fixed_reminder_times[user_id])
         # 預計提醒個別事項function可以做這裡##
 

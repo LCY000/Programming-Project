@@ -303,7 +303,7 @@ def handle_message(event):
             if user_message.isdigit():
                 number_remind = int(user_message)
                 if number_remind > 0 and number_remind <= len(user_todo_list[user_id]):
-                    reply_message = '設定此事項提醒時間。\n\n請輸入提醒時間 (hh:mm)'
+                    reply_message = '設定此事項提醒時間。\n\n請輸入提醒時間，以空白分隔 (yyyy mm dd hh mm)'
                     # 紀錄輸入的編號
                     user_options[user_id] = number_remind
                     user_state[user_id] = UserState.SETTING_TODO_REMIND_TIME_2

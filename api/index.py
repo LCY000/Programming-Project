@@ -303,10 +303,10 @@ def handle_message(event):
     if reply_message:
         if user_state[user_id] == UserState.SETTING:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message,quick_reply =quick_reply_buttons_setting))
-        elif user_state[user_id] == UserState.SETTING_TODO_REMIND_TIME_2:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message,quick_reply =quick_reply_buttons_remind_time))
         elif user_state[user_id] == UserState.SETTING_REMIND_TIME:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message,quick_reply =quick_reply_buttons_fixed_remind_time))
+        elif user_state[user_id] == UserState.SETTING_TODO_REMIND_TIME_2:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message,quick_reply =quick_reply_buttons_remind_time))
         else:    
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
     else:

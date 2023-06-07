@@ -141,7 +141,7 @@ def check_todo_reminder(user_id, reminder_time, todo):
 def check_reminders_todo():
     print('in crt')
     for user_id in user_todo_list:
-        if 'remind_time' in user_todo_list[user_id]:
+        if 'remind_time' in user_todo_list[user_id][user_options[user_id]-1]:
             print('in for loop')
             check_todo_reminder(user_id, user_todo_list[user_id][user_options[user_id]-1]['remind_time'], user_todo_list[user_id][user_options[user_id]-1]['text'])
 

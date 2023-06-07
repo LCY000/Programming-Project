@@ -118,12 +118,13 @@ def check_reminders():
             check_fixed_reminder(user_id, fixed_reminder_times[user_id])
         # 預計提醒個別事項function可以做這裡##
 
+# ----------------------------- 處理特定待辦事項的提醒功能 ----------------------------- #
 
 def check_todo_reminder_time(reminder_time):
     print('in ctrt')
     now = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
     taiwan_now_time = now.astimezone(datetime.timezone(datetime.timedelta(hours=8))) # 轉換時區 -> 東八區
-    if taiwan_now_time == reminder_time:
+    if taiwan_now_time.year == reminder_time.year and taiwan_now_time.month == reminder_time.month and taiwan_now_time.day == reminder_time.day and taiwan_now_time.time().hour == reminder_time.hour and taiwan_now_time.time().minute == reminder_time.minute:
         return True
     else:
         print('False ' + f'now time = {taiwan_now_time} reminder_time = {reminder_time}')
@@ -140,13 +141,12 @@ def check_todo_reminder(user_id, reminder_time, todo):
 def check_reminders_todo():
     print('in crt')
     for user_id in user_todo_list:
-        if 'remind_time' in user_todo_list[user_id][user_options[user_id]-1]:
+        if 'remind_time' in user_todo_list[user_id]:
             print('in for loop')
             check_todo_reminder(user_id, user_todo_list[user_id][user_options[user_id]-1]['remind_time'], user_todo_list[user_id][user_options[user_id]-1]['text'])
 
 
-#----------------------------------- 處理個別使用者待辦事項 ----------------------------------------#
-
+# 處理個別使用者待辦事項
 def set_todo_remind_time(user_id, user_message):
     global user_options , user_todo_list
 
@@ -167,10 +167,10 @@ def set_todo_remind_time(user_id, user_message):
             return reply_message
 
     try:
-        year, mouth, day, hour, minute = map(int, user_message.split(" "))
+        year, month, day, hour, minute = map(int, user_message.split(" "))
         
         # 時間儲存到使用者的清單(陣列)的單個事項字典裡，存為字串
-        user_todo_list[user_id][user_options[user_id]-1]['remind_time']=datetime.datetime(year, mouth, day ,hour, minute).strftime('%Y-%m-%d %H:%M')
+        user_todo_list[user_id][user_options[user_id]-1]['remind_time']=datetime.datetime(year, month, day ,hour, minute).strftime('%Y-%m-%d %H:%M')
 
         reply_message = f"\u2705此事項提醒時間已更新為{user_todo_list[user_id][user_options[user_id]-1]['remind_time']}\u2705\n\n已回到主選單。"
         

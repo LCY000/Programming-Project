@@ -19,9 +19,11 @@ def createTodoListMessage(user_id,user_todo_list, fixed_reminder_times):
 
         
         if user_id in fixed_reminder_times:
-            fixed_reminder_times_text = str('\ud83d\udd5b 每日提醒時間: ' + fixed_reminder_times[user_id].strftime("%H:%M"))
+            fixed_reminder_times_text = str(fixed_reminder_times[user_id].strftime("%H:%M"))
             # fixed_reminder_times_items = {"type" : "text", "text" : fixed_reminder_times_text}
             # list_items.append(fixed_reminder_times_items)
+        else:
+            fixed_reminder_times_text = '尚未設置'
 
         for todo in todoList:
             # 印出所有待辦事項內容，如果有設定時間，將會印出預計提醒時間的文字。
@@ -39,7 +41,7 @@ def createTodoListMessage(user_id,user_todo_list, fixed_reminder_times):
                 "type" : "box",
                 "layout" : "vertical",
                 "contents" : [
-                    {"type": "text", "text": f'{fixed_reminder_times_text}' , "size": "sm", "color": "#888888"},
+                    {"type": "text", "text": f'\ud83d\udd5b 每日提醒時間: {fixed_reminder_times_text}' , "size": "sm", "color": "#888888"},
                     # {"type": "text", "text": " ", "weight": "bold", "size": "lg"},
                     {"type": "text", "text": "待辦事項清單", "weight": "bold", "size": "lg"},
                     *list_items # 將條列項目展開添加到 "contents" 中

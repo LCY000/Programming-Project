@@ -52,7 +52,7 @@ def check_per_minute():
         print("Running check_per_minute()")  # 除錯訊息
         check_reminders()
         #-----#
-        check_todo_reminder()
+        check_reminders_todo()
         return '提醒檢查完成'
     except Exception as e:
         print("Error in check_per_minute():", str(e))  # 除錯訊息
@@ -133,7 +133,7 @@ def check_reminders():
             check_fixed_reminder(user_id, fixed_reminder_times[user_id])
         # 預計提醒個別事項function可以做這裡##
 
-def check_todo_reminders():
+def check_reminders_todo():
 
     for user_id in user_todo_list:
         if 'remind_time' in user_todo_list[user_id][user_options[user_id]-1]:

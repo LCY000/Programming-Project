@@ -50,7 +50,6 @@ def callback():
 def check_per_minute():
     try:
         print("Running check_per_minute()")  # 除錯訊息
-        print(user_todo_list)
         check_reminders()
         return '提醒檢查完成'
     except Exception as e:
@@ -107,6 +106,7 @@ def check_fixed_reminder(user_id, reminder_time):
         line_bot_api.push_message(user_id, TextSendMessage(text=message))
 
 def check_reminders():
+    print(user_todo_list) # debug用
     for user_id in user_todo_list:
         if user_id in fixed_reminder_times:
             check_fixed_reminder(user_id, fixed_reminder_times[user_id])

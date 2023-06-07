@@ -293,7 +293,7 @@ def handle_message(event):
 
     # 設定提醒時間功能
     elif state == UserState.SETTING_REMIND_TIME:
-            # 此程式片段有問題!!
+            
             if user_message == '關閉每日提醒':
                 if user_id in fixed_reminder_times:
                     del fixed_reminder_times[user_id]

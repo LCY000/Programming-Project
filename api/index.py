@@ -255,7 +255,7 @@ def handle_message(event):
     # 設定提醒時間功能
     elif state == UserState.SETTING_REMIND_TIME:
             
-            if user_message == '關閉提醒':
+            if user_message == '關閉每日提醒':
                 if user_id in fixed_reminder_times:
                     del fixed_reminder_times[user_id]
                     reply_message = '每日提醒已關閉'
@@ -306,7 +306,7 @@ def handle_message(event):
         elif user_state[user_id] == UserState.SETTING_TODO_REMIND_TIME_2:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message,quick_reply =quick_reply_buttons_remind_time))
         elif user_state[user_id] == UserState.SETTING_REMIND_TIME:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message,quick_reply =quick_reply_buttons_remind_time))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message,quick_reply =quick_reply_buttons_fixed_remind_time))
         else:    
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply_message))
     else:

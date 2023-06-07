@@ -99,7 +99,7 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
         for todo in todoList:
 
             if 'remind_time' in todo:
-                remind_time_text = f"　　提醒: {todo['remind_time']}"
+                remind_time_text = f"　　　提醒: {todo['remind_time']}"
                 item = {
                     "type": "box",
                     "layout": "vertical",

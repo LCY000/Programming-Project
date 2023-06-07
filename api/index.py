@@ -134,7 +134,7 @@ def set_todo_remind_time(user_id, user_message):
 
     if user_message == '關閉提醒':
         if 'remind_time' in user_todo_list[user_id][user_options[user_id]-1]:
-            del user_todo_list[user_id][user_options[user_id]-1]
+            del user_todo_list[user_id][user_options[user_id]-1]['remind_time']
             reply_message = '\u2705此事項提醒已關閉\u2705\n\n已回到主選單。'
             del user_options[user_id]
             user_state[user_id] = UserState.NORMAL
@@ -254,7 +254,7 @@ def handle_message(event):
 
     # 設定提醒時間功能
     elif state == UserState.SETTING_REMIND_TIME:
-            
+            # 此程式片段有問題!!
             if user_message == '關閉每日提醒':
                 if user_id in fixed_reminder_times:
                     del fixed_reminder_times[user_id]

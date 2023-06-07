@@ -83,6 +83,8 @@ line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))
 
 def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
     fixed_reminder_times_text = ''
+    remind_time_text = ''
+
     if user_todo_list[user_id] == []:
         list_items = [{"type": "text", "text": "無待辦事項"}]
     else:
@@ -96,9 +98,9 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
         for todo in todoList:
 
             if 'remind_time' in todo:
-                remind_time = f"預計提醒時間: {remind_time}"
+                remind_time_text = f"預計提醒時間: {remind_time_text}"
             else:
-                remind_time = ''
+                remind_time_text = ''
 
             item = {
                 "type": "box",
@@ -112,7 +114,7 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
                     },
                     {
                         "type": "text",
-                        "text": f'[{remind_time}]',
+                        "text": f'{remind_time_text}',
                         "size": "sm",
                         "color": "#888888",
                         "wrap": True

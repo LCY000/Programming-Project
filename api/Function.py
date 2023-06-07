@@ -17,7 +17,7 @@ def createTodoListMessage(user_id,user_todo_list, fixed_reminder_times):
         list_items = []
         for todo in todoList:
             # 印出所有待辦事項內容，如果有設定時間，將會印出預計提醒時間的文字。
-            item = {"type": "text", "text": str(str(i) + '. ' + todo['text'] + '\t' + ' 預計提醒時間: ' + todo['remind_time']) if 'remind_time' in todo else str(str(i) + '. ' + todo['text'])}
+            item = {"type": "text", "text": str(str(i) + '. ' + todo['text'] + '\t\t' + ' 預計提醒時間: ' + todo['remind_time']) if 'remind_time' in todo else str(str(i) + '. ' + todo['text'])}
             list_items.append(item)
             i += 1
 

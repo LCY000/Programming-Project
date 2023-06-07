@@ -136,15 +136,22 @@ def check_todo_reminder(user_id, reminder_time, todo):
     if check_todo_reminder_time(reminder_time):
         message = f'提醒: {todo} 需要完成'
         line_bot_api.push_message(user_id, TextSendMessage(text=message))
+        return True
+    return False
 
 
 def check_reminders_todo():
     print('in crt')
     try:
         for user_id in user_todo_list:
-            if 'remind_time' in user_todo_list[user_id]:
-                print('in for loop')
-                check_todo_reminder(user_id, user_todo_list[user_id][user_options[user_id]-1]['remind_time'], user_todo_list[user_id][user_options[user_id]-1]['text'])
+            for i in range(len(user_todo_list[user_id])):
+                if 'remind_time' in user_todo_list[user_id][i]:
+                    print('in for loop')
+                    isTodoReminded = check_todo_reminder(user_id, user_todo_list[user_id][i]['remind_time'], user_todo_list[user_id][i]['text'])
+                    
+                    if isTodoReminded :
+                        del user_todo_list[user_id][i]['remind_time']
+                        AccessFile.write_user_data(user_id, user_todo_list[user_id])
     except Exception as e:
         print("Error in crt: " + str(e))
 

@@ -114,7 +114,7 @@ def check_fixed_reminder(user_id, reminder_time):
 def check_reminders():
     # print('in crs')
     for user_id in user_todo_list: 
-        if user_id in fixed_reminder_times:
+        if user_id in fixed_reminder_times and user_todo_list[user_id] != []:
             # print('in for loop')
             check_fixed_reminder(user_id, fixed_reminder_times[user_id])
         # 預計提醒個別事項function可以做這裡##

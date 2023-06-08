@@ -96,6 +96,27 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
             fixed_reminder_times_text = str(fixed_reminder_times[user_id].strftime("%H:%M"))
 
         for todo in todoList:
+            item_number_box = {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [
+                                {
+                                    "type": "text",
+                                    "text": str(i),
+                                    "flex": 0,
+                                    "align": "center",
+                                    "size": "xxs",
+                                    "color": "#ffffff",
+                                    "offsetTop": "1px"
+                                }
+                            ],
+                            "backgroundColor": "#905C44",
+                            "cornerRadius": "3px",
+                            "margin": "xl",
+                            "width": "18px",
+                            "height": "18px",
+                            "offsetTop": "12px"
+                        }
             
             if 'remind_time' in todo:
                 remind_time_text = f"      提醒: {todo['remind_time']}"
@@ -104,6 +125,7 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
                     "layout": "vertical",
                     "spacing": "sm",
                     "contents": [
+                        item_number_box,
                         {
                             "type": "text",
                             "text": f"[{i}] {todo['text']}",
@@ -124,6 +146,7 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
                     "layout": "vertical",
                     "spacing": "sm",
                     "contents": [
+                        item_number_box, # 新增的編號元素
                         {
                             "type": "text",
                             "text": f"[{i}] {todo['text']}",

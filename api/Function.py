@@ -176,9 +176,7 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
                              "color": "#888888"
                             },
                             {
-                                "type": "text",
-                                "text": " ",
-                                "size": "sm"
+                                "type": "separator"
                             },  # 添加空白行
                             {
                                 "type": "text",

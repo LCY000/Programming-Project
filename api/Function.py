@@ -128,7 +128,7 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
                         item_number_box,
                         {
                             "type": "text",
-                            "text": f"[{i}] {todo['text']}",
+                            "text": f" {todo['text']}",
                             "wrap": True
                         },
                         {
@@ -149,7 +149,7 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
                         item_number_box, # 新增的編號元素
                         {
                             "type": "text",
-                            "text": f"[{i}] {todo['text']}",
+                            "text": f" {todo['text']}",
                             "wrap": True
                         }
                     ]

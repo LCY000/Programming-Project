@@ -96,6 +96,7 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
             fixed_reminder_times_text = str(fixed_reminder_times[user_id].strftime("%H:%M"))
 
         for todo in todoList:
+            
             if 'remind_time' in todo:
                 remind_time_text = f"   提醒: {todo['remind_time']}"
                 item = {

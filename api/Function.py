@@ -135,63 +135,63 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
             list_items.append(item)
             i += 1
 
-        if user_id not in fixed_reminder_times:
-            flex_message = FlexSendMessage(
-                alt_text="待辦事項清單",
-                contents={
-                    "type": "bubble",
-                    "body": {
-                        "type": "box",
-                        "layout": "vertical",
-                        "spacing": "md",
-                        "contents": [
-                            {
-                                "type": "text",
-                                "text": "待辦事項清單",
-                                "weight": "bold",
-                                "size": "xl"
-                            },
-                            {
-                                "type": "separator"
-                            },
-                            *list_items
-                        ]
-                    }
+    if user_id not in fixed_reminder_times:
+        flex_message = FlexSendMessage(
+            alt_text="待辦事項清單",
+            contents={
+                "type": "bubble",
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "spacing": "md",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "待辦事項清單",
+                            "weight": "bold",
+                            "size": "xl"
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        *list_items
+                    ]
                 }
-            )
+            }
+        )
 
-        else:
-            flex_message = FlexSendMessage(
-                alt_text="待辦事項清單",
-                contents={
-                    "type": "bubble",
-                    "body": {
-                        "type": "box",
-                        "layout": "vertical",
-                        "spacing": "md",
-                        "contents": [
-                            {"type": "text",
-                             "text": f'\ud83d\udd5b 每日提醒時間: {fixed_reminder_times_text}' ,
-                             "size": "sm",
-                             "color": "#888888"
-                            },
-                            {
-                                "type": "separator"
-                            },  # 添加空白行
-                            {
-                                "type": "text",
-                                "text": "待辦事項清單",
-                                "weight": "bold",
-                                "size": "xl"
-                            },
-                            {
-                                "type": "separator"
-                            },
-                            *list_items
-                        ]
-                    }
+    else:
+        flex_message = FlexSendMessage(
+            alt_text="待辦事項清單",
+            contents={
+                "type": "bubble",
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "spacing": "md",
+                    "contents": [
+                        {"type": "text",
+                            "text": f'\ud83d\udd5b 每日提醒時間: {fixed_reminder_times_text}' ,
+                            "size": "sm",
+                            "color": "#888888"
+                        },
+                        {
+                            "type": "separator"
+                        },  # 添加空白行
+                        {
+                            "type": "text",
+                            "text": "待辦事項清單",
+                            "weight": "bold",
+                            "size": "xl"
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        *list_items
+                    ]
                 }
-            )
+            }
+        )
 
     return flex_message
 

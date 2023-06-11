@@ -283,7 +283,7 @@ def handle_message(event):
         
     # 刪除功能
     elif state == UserState.DEL_TODO:
-            reply_message,user_todo_list = Function.handle_del_todo_state(user_id, user_message,user_todo_list, fixed_remind_times)
+            reply_message,user_todo_list = Function.handle_del_todo_state(user_id, user_message,user_todo_list)
             user_state[user_id] = UserState.NORMAL
 
     # 設定功能

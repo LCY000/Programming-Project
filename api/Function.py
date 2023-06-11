@@ -139,7 +139,8 @@ def handle_add_todo_state(user_id, user_message,user_todo_list):
     return reply_message, user_todo_list
 
 # 【完成】  完成待辦事項狀態下的訊息
-def handle_del_todo_state(user_id, user_message, user_todo_list, fixed_remind_times):
+def handle_del_todo_state(user_id, user_message, user_todo_list):
+ 
     reply_message = '' # 提供預設值
 
     # 驗證是否是輸入編號
@@ -149,9 +150,6 @@ def handle_del_todo_state(user_id, user_message, user_todo_list, fixed_remind_ti
         if number > 0 and number <= len(user_todo_list[user_id]):
             reply_message = f"\u2705 已完成: {user_todo_list[user_id][number-1]['text']} \u2705\n\n已回到主選單"
             del user_todo_list[user_id][number-1]  # 刪除匹配的待辦事項內容
-            
-            if user_id in fixed_remind_times:
-                del fixed_remind_times[user_id]
             
             AccessFile.write_user_data(user_id,user_todo_list[user_id]) # 將數據傳入資料庫
         else:

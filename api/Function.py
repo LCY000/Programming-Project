@@ -174,12 +174,12 @@ def setting_state(user_message, user_id, user_todo_list, user_state):
 
     if user_message == '設定每天提醒時間':
         
-        if len(user_todo_list[user_id]) > 0:
-            user_state[user_id] = index.UserState.SETTING_REMIND_TIME
-            reply_message = '設定每日提醒時間。\n\n請輸入提醒時間 (hh:mm)'
-        else:
-            reply_message = '\u2757 目前無待辦事項 \u2757\n\n已回到主選單狀態。'
-            user_state[user_id] = index.UserState.NORMAL
+        # if len(user_todo_list[user_id]) >= 0:
+        user_state[user_id] = index.UserState.SETTING_REMIND_TIME
+        reply_message = '設定每日提醒時間。\n\n請輸入提醒時間 (hh:mm)'
+        # else:
+        #     reply_message = '\u2757 目前無待辦事項 \u2757\n\n已回到主選單狀態。'
+        #     user_state[user_id] = index.UserState.NORMAL
 
     elif user_message == '顯示 說明文件':
 

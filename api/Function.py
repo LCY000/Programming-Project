@@ -12,14 +12,23 @@ def createTodoListMessage(user_id, user_todo_list, fixed_remind_times):
     # 提供預設值
     fixed_remind_time_text = ''
     remind_time_text = ''
+    list_items = []
 
     # 如果紀錄事項的列表為空:
     if user_todo_list[user_id] == []:
+        if user_id in fixed_remind_times:
+            fixed_remind_time_text = str(fixed_remind_times[user_id].strftime("%H:%M"))
+            list_items.append({
+                "type": "text",
+                "text": f'每日提醒時間: {fixed_remind_time_text}',
+                "size": "sm",
+                "color": "#888888"
+            })
         list_items = [{"type": "text", "text": "無待辦事項"}]
+
     else:
         i = 1
         todoList = user_todo_list[user_id]
-        list_items = []
 
         if user_id in fixed_remind_times:
             fixed_remind_time_text = str(fixed_remind_times[user_id].strftime("%H:%M"))

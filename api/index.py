@@ -1,4 +1,3 @@
-import dateutil
 from flask import Flask, request, abort
 # from api.ToDotask import ToDotask, ToDotaskEncoder
 from api import AccessFile
@@ -16,7 +15,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, RichMenu, QuickReply, QuickReplyButton, MessageAction
+    MessageEvent, TextMessage, TextSendMessage, QuickReply, QuickReplyButton, MessageAction
 )
 
 app = Flask(__name__)
@@ -47,13 +46,13 @@ def callback():
 
     return 'OK'
 
+# 每分鐘會進行一次偵測，偵測是否到了提醒時間
 @app.route("/requests_PM")
 def check_per_minute():
     try:
         print("Running check_per_minute()")  # 除錯訊息
-        check_reminders()
-        #-----#
-        check_reminders_todo()
+        check_reminder_fixed() # 每日固定提醒
+        check_reminder_eachTodo() # 特定事項提醒
         return '提醒檢查完成'
     except Exception as e:
         print("Error in cpm:", str(e))  # 除錯訊息
@@ -77,8 +76,11 @@ user_todo_list = {}
 
 # 追蹤使用者的狀態
 user_state = {}
-fixed_reminder_times = {}
-user_reminder_times = {}
+
+# 紀錄每個使用者的固定提醒時間
+fixed_remind_times = {}
+
+# 記錄使用者的當前選項
 user_options = {}
 
 
@@ -92,22 +94,20 @@ quick_buttons_setting = [
 quick_reply_buttons_setting = QuickReply(items=quick_buttons_setting)
 quick_reply_buttons_remind_time = QuickReply(items=[QuickReplyButton(action=MessageAction(label="關閉提醒", text="關閉提醒"))])
 quick_reply_buttons_fixed_remind_time = QuickReply(items=[QuickReplyButton(action=MessageAction(label="關閉每日提醒", text="關閉每日提醒"))])
+
 # 判斷當前時間是否為提醒時間
-def check_reminder_time(reminder_time):
+def isFixedRemindTime(remind_time):
     now = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
     taiwan_now_time = now.astimezone(datetime.timezone(datetime.timedelta(hours=8))) # 轉換時區 -> 東八區
 
-    if taiwan_now_time.time().hour == reminder_time.hour and taiwan_now_time.time().minute == reminder_time.minute:
+    if taiwan_now_time.time().hour == remind_time.hour and taiwan_now_time.time().minute == remind_time.minute:
         return True
     else:
-        # debug
-        # print('false' + f'fixed_remind_time {reminder_time} remind_hour = {reminder_time.hour} remind_minute = {reminder_time.minute}  now = {taiwan_now_time.time()} now.hour = {taiwan_now_time.time().hour} now.minute = {taiwan_now_time.time().minute}')
         return False
 
-def check_fixed_reminder(user_id, reminder_time):
-    # print('in cfr')
+def check_fixed_remind_time(user_id, remind_time):
     # 檢查提醒時間並發送消息
-    if check_reminder_time(reminder_time):
+    if isFixedRemindTime(remind_time):
         if user_todo_list[user_id] != []:
             message = '提醒：您有待辦事項需要處理！'
             line_bot_api.push_message(user_id, TextSendMessage(text=message))
@@ -115,54 +115,49 @@ def check_fixed_reminder(user_id, reminder_time):
             message = '目前事情都已經處理完囉!'
             line_bot_api.push_message(user_id, TextSendMessage(text=message))
 
-def check_reminders():
-    # print('in crs')
+def check_reminder_fixed():
     for user_id in user_todo_list: 
-        if user_id in fixed_reminder_times:
-            # print('in for loop')
-            check_fixed_reminder(user_id, fixed_reminder_times[user_id])
-        # 預計提醒個別事項function可以做這裡##
+        if user_id in fixed_remind_times:
+            check_fixed_remind_time(user_id, fixed_remind_times[user_id])
+
 
 # ----------------------------- 處理特定待辦事項的提醒功能 ----------------------------- #
 
-def check_todo_reminder_time(reminder_time):
-    print('in ctrt')
+def isEachTodoRemindTime(remind_time_str):
+
     # 將提醒時間的字符串轉回datetime時間物件。
     format_string = "%Y-%m-%d %H:%M"
-    reminder_time_f = datetime.datetime.strptime(reminder_time, format_string)
+    remind_time = datetime.datetime.strptime(remind_time_str, format_string)
 
     now = datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
     taiwan_now_time = now.astimezone(datetime.timezone(datetime.timedelta(hours=8))) # 轉換時區 -> 東八區
-    if taiwan_now_time.year == reminder_time_f.year and taiwan_now_time.month == reminder_time_f.month and taiwan_now_time.day == reminder_time_f.day and taiwan_now_time.time().hour == reminder_time_f.hour and taiwan_now_time.time().minute == reminder_time_f.minute:
+    if taiwan_now_time.year == remind_time.year and taiwan_now_time.month == remind_time.month and taiwan_now_time.day == remind_time.day and taiwan_now_time.time().hour == remind_time.hour and taiwan_now_time.time().minute == remind_time.minute:
         return True
     else:
-        print('False ' + f'now time = {taiwan_now_time} reminder_time = {reminder_time}')
         return False
 
-def check_todo_reminder(user_id, reminder_time, todo):
+def check_todo_remind_time(user_id, remind_time, todo):
+
     # 檢查特定事項的提醒時間並發送消息
-    print('in ctr')
-    if check_todo_reminder_time(reminder_time):
+    if isEachTodoRemindTime(remind_time):
         message = f'提醒: {todo} 需要完成'
         line_bot_api.push_message(user_id, TextSendMessage(text=message))
         return True
     return False
 
 
-def check_reminders_todo():
-    print('in crt')
+def check_reminder_eachTodo():
     try:
         for user_id in user_todo_list:
             for i in range(len(user_todo_list[user_id])):
                 if 'remind_time' in user_todo_list[user_id][i]:
-                    print('in for loop')
-                    isTodoReminded = check_todo_reminder(user_id, user_todo_list[user_id][i]['remind_time'], user_todo_list[user_id][i]['text'])
-        
+                    isTodoReminded = check_todo_remind_time(user_id, user_todo_list[user_id][i]['remind_time'], user_todo_list[user_id][i]['text'])
+                    # 確認提醒事項是否提醒，提醒完後即把提醒時間刪除掉
                     if isTodoReminded :
                         del user_todo_list[user_id][i]['remind_time']
                         AccessFile.write_user_data(user_id, user_todo_list[user_id])
     except Exception as e:
-        print("Error in crt: " + str(e))
+        print("Error in cre: " + str(e))
 
 # 處理個別使用者待辦事項
 def set_todo_remind_time(user_id, user_message):
@@ -193,12 +188,11 @@ def set_todo_remind_time(user_id, user_message):
 
         reply_message = f"\u2705此事項提醒時間已更新為{user_todo_list[user_id][user_options[user_id]-1]['remind_time']}\u2705\n\n已回到主選單。"
         
-        check_todo_reminder(user_id, user_todo_list[user_id][user_options[user_id]-1]['remind_time'], user_todo_list[user_id][user_options[user_id]-1]['text'])
+        check_todo_remind_time(user_id, user_todo_list[user_id][user_options[user_id]-1]['remind_time'], user_todo_list[user_id][user_options[user_id]-1]['text'])
 
         # 更新資料庫中的用戶數據
         AccessFile.write_user_data(user_id, user_todo_list[user_id])
         
-        # check_reminder(user_id, user_reminder_times[user_id])
     except Exception as e:
         reply_message = "\u2757輸入的時間格式不正確。\u2757\n\n已回到主選單。"
         print(f"錯誤訊息：{str(e)}")  # 輸出錯誤訊息到控制台
@@ -220,11 +214,11 @@ def handle_normal_state(user_id, user_message, event):
         reply_message = f'請輸入待辦事項內容。'
 
     elif user_message == '顯示 待辦清單':
-        message = Function.createTodoListMessage(user_id,user_todo_list, fixed_reminder_times)
+        message = Function.createTodoListMessage(user_id,user_todo_list, fixed_remind_times)
         line_bot_api.reply_message(event.reply_token, message)
         reply_message = None
     
-    elif user_message == '完成 待辦事項':   # 刪除功能建立於 06-03 12:03 ver1
+    elif user_message == '完成 待辦事項':  
         # 待辦清單是空的情況
         if user_todo_list[user_id] == []:
             reply_message = "目前無待辦事項\n已回到主選單。"
@@ -253,11 +247,10 @@ def handle_normal_state(user_id, user_message, event):
     return reply_message
 
 
-
 # 接收訊息 
 @webhook_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    global user_todo_list, user_state, fixed_reminder_times, user_options
+    global user_todo_list, user_state, fixed_remind_times, user_options
     reply_message="初始預設1"
 
     user_id = event.source.user_id
@@ -280,6 +273,7 @@ def handle_message(event):
 
     # 檢查使用者的狀態 (處於哪個功能狀態下)
     state = user_state[user_id]
+
     # 新增功能
     if state == UserState.ADD_TODO: 
             reply_message, user_todo_list = Function.handle_add_todo_state(user_id, user_message,user_todo_list)
@@ -295,28 +289,29 @@ def handle_message(event):
             reply_message, user_state[user_id] = Function.setting_state(user_message, user_id, user_todo_list, user_state)
             # user_state[user_id] = UserState.NORMAL
 
-    # 設定提醒時間功能
+    # 設定固定提醒時間功能
     elif state == UserState.SETTING_REMIND_TIME:
             
             if user_message == '關閉每日提醒':
-                if user_id in fixed_reminder_times:
-                    del fixed_reminder_times[user_id]
+                if user_id in fixed_remind_times:
+                    del fixed_remind_times[user_id]
                     reply_message = '每日提醒已關閉'
                 else:
                     reply_message = '尚未設定提醒'
             else:
                 try:
                     hour, minute = map(int, user_message.split(':'))
-                    fixed_reminder_times[user_id] = datetime.time(hour, minute)
-                    reply_message = f'\u2705提醒時間已更新為 {fixed_reminder_times[user_id].strftime("%H:%M")}\u2705\n\n已回到主選單。'
+                    fixed_remind_times[user_id] = datetime.time(hour, minute)
+                    reply_message = f'\u2705提醒時間已更新為 {fixed_remind_times[user_id].strftime("%H:%M")}\u2705\n\n已回到主選單。'
                     # 更新提醒時間
-                    check_fixed_reminder(user_id, fixed_reminder_times[user_id])
+                    check_fixed_remind_time(user_id, fixed_remind_times[user_id])
                 except:
                     reply_message = f'輸入的時間格式不正確。'
                     
 
             user_state[user_id] = UserState.NORMAL
 
+    # 設定特定事項提醒時間功能
     elif state == UserState.SETTING_TODO_REMIND_TIME_1:
 
             if user_message.isdigit():
@@ -333,6 +328,7 @@ def handle_message(event):
                 reply_message = '\u2757 請輸入正確的數字編號 \u2757\n\n已回到主選單。'
                 user_state[user_id] = UserState.NORMAL
 
+    # 設定特定提醒時間功能主要執行的地方
     elif state == UserState.SETTING_TODO_REMIND_TIME_2:
             reply_message = set_todo_remind_time(user_id, user_message)
 

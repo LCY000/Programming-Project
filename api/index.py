@@ -57,8 +57,6 @@ def check_per_minute():
     except Exception as e:
         print("Error in cpm:", str(e))  # 除錯訊息
         return '檢查失敗'
-
-#----------------------------------------- 分隔線 -----------------------------------------#
  
 
 # 使用者狀態的列舉類型
@@ -104,7 +102,8 @@ def isFixedRemindTime(remind_time):
         return True
     else:
         return False
-
+    
+# 檢查是否已到提醒時間，是則發送提醒訊息，如果沒有事項則執行if中的else
 def check_fixed_remind_time(user_id, remind_time):
     # 檢查提醒時間並發送消息
     if isFixedRemindTime(remind_time):
@@ -115,14 +114,16 @@ def check_fixed_remind_time(user_id, remind_time):
             message = '目前事情都已經處理完囉!'
             line_bot_api.push_message(user_id, TextSendMessage(text=message))
 
+# 每分鐘會執行一次此函式，已確認是否已到提醒時間
 def check_reminder_fixed():
     for user_id in user_todo_list: 
         if user_id in fixed_remind_times:
             check_fixed_remind_time(user_id, fixed_remind_times[user_id])
 
 
-# ----------------------------- 處理特定待辦事項的提醒功能 ----------------------------- #
+#---處理特定待辦事項的提醒功能---
 
+# 判斷當前時間是否為特定事項的提醒時間
 def isEachTodoRemindTime(remind_time_str):
 
     # 將提醒時間的字符串轉回datetime時間物件。
@@ -136,6 +137,7 @@ def isEachTodoRemindTime(remind_time_str):
     else:
         return False
 
+# 檢查是否已到提醒時間，是則發送提醒訊息
 def check_todo_remind_time(user_id, remind_time, todo):
 
     # 檢查特定事項的提醒時間並發送消息
@@ -145,14 +147,14 @@ def check_todo_remind_time(user_id, remind_time, todo):
         return True
     return False
 
-
+# 每分鐘會執行一次此函式，已確認特定事項是否已到提醒時間
 def check_reminder_eachTodo():
     try:
         for user_id in user_todo_list:
             for i in range(len(user_todo_list[user_id])):
                 if 'remind_time' in user_todo_list[user_id][i]:
                     isTodoReminded = check_todo_remind_time(user_id, user_todo_list[user_id][i]['remind_time'], user_todo_list[user_id][i]['text'])
-                    # 確認提醒事項是否提醒，提醒完後即把提醒時間刪除掉
+                    # 確認提醒事項是否提醒，提醒完後即把該事項的提醒時間刪除
                     if isTodoReminded :
                         del user_todo_list[user_id][i]['remind_time']
                         AccessFile.write_user_data(user_id, user_todo_list[user_id])
@@ -281,7 +283,7 @@ def handle_message(event):
         
     # 刪除功能
     elif state == UserState.DEL_TODO:
-            reply_message,user_todo_list = Function.handle_del_todo_state(user_id, user_message,user_todo_list)
+            reply_message,user_todo_list = Function.handle_del_todo_state(user_id, user_message,user_todo_list, fixed_remind_times)
             user_state[user_id] = UserState.NORMAL
 
     # 設定功能

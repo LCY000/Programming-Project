@@ -8,10 +8,12 @@ line_bot_api = LineBotApi(os.environ.get('CHANNEL_ACCESS_TOKEN'))
 
  
 # 【顯示清單】  回傳顯示清單的訊息
-def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
-    fixed_reminder_times_text = ''
+def createTodoListMessage(user_id, user_todo_list, fixed_remind_times):
+    # 提供預設值
+    fixed_remind_time_text = ''
     remind_time_text = ''
 
+    # 如果紀錄事項的列表為空:
     if user_todo_list[user_id] == []:
         list_items = [{"type": "text", "text": "無待辦事項"}]
     else:
@@ -19,11 +21,12 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
         todoList = user_todo_list[user_id]
         list_items = []
 
-        if user_id in fixed_reminder_times:
-            fixed_reminder_times_text = str(fixed_reminder_times[user_id].strftime("%H:%M"))
+        if user_id in fixed_remind_times:
+            fixed_remind_time_text = str(fixed_remind_times[user_id].strftime("%H:%M"))
 
         for todo in todoList:
             
+            # 如果使用者有設定特定事項的提醒時間，執行if沒有則執行else
             if 'remind_time' in todo:
                 remind_time_text = f"      提醒: {todo['remind_time']}"
                 item = {
@@ -62,7 +65,8 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
             list_items.append(item)
             i += 1
 
-    if user_id not in fixed_reminder_times:
+    # 判斷使用者是否有固定提醒時間，有則顯示出來
+    if user_id not in fixed_remind_times:
         flex_message = FlexSendMessage(
             alt_text="待辦事項清單",
             contents={
@@ -98,7 +102,7 @@ def createTodoListMessage(user_id, user_todo_list, fixed_reminder_times):
                     "spacing": "md",
                     "contents": [
                         {"type": "text",
-                            "text": f'\ud83d\udd5b 每日提醒時間: {fixed_reminder_times_text}' ,
+                            "text": f'\ud83d\udd5b 每日提醒時間: {fixed_remind_time_text}' ,
                             "size": "sm",
                             "color": "#888888"
                         },
@@ -135,7 +139,7 @@ def handle_add_todo_state(user_id, user_message,user_todo_list):
     return reply_message, user_todo_list
 
 # 【完成】  完成待辦事項狀態下的訊息
-def handle_del_todo_state(user_id, user_message, user_todo_list):
+def handle_del_todo_state(user_id, user_message, user_todo_list, fixed_remind_times):
     reply_message = '' # 提供預設值
 
     # 驗證是否是輸入編號
@@ -145,6 +149,10 @@ def handle_del_todo_state(user_id, user_message, user_todo_list):
         if number > 0 and number <= len(user_todo_list[user_id]):
             reply_message = f"\u2705 已完成: {user_todo_list[user_id][number-1]['text']} \u2705\n\n已回到主選單"
             del user_todo_list[user_id][number-1]  # 刪除匹配的待辦事項內容
+            
+            if user_id in fixed_remind_times:
+                del fixed_remind_times[user_id]
+            
             AccessFile.write_user_data(user_id,user_todo_list[user_id]) # 將數據傳入資料庫
         else:
             reply_message = f'\u2757 未找到此待辦事項 \u2757\n\n已回到主選單。' # 如果沒有找到對應的待辦事項內容，則回傳此訊息
